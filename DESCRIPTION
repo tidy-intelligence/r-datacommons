@@ -1,0 +1,23 @@
+Package: datacommons
+Title: Client for the Google Data Commons API V2
+Version: 0.0.1
+Authors@R: 
+    person("Christoph", "Scheuch", email = "your.email@example.com", role = c("aut", "cre"))
+Description: An R client for accessing the Google Data Commons API V2, 
+    providing programmatic access to statistical and demographic data from
+    various sources. This package wraps the API endpoints described at 
+    https://docs.datacommons.org/api/rest/v2/.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    httr2,
+    jsonlite,
+    cli
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
