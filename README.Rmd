@@ -52,17 +52,19 @@ library(datacommons)
 Get all property labels for a given node:
 
 ```{r}
-dc_get_node(
+result <- dc_get_node(
     nodes = "country/USA", 
     property = "<-"
 )
+str(result)
 ```
 
 Find the DCID of a place by another known ID 
 
 ```{r}
-dc_get_resolve(
+result <- dc_get_resolve(
     nodes = "Q30",
     property = "<-wikidataId->dcid"
 )
+str(result)
 ```

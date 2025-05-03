@@ -48,55 +48,39 @@ library(datacommons)
 Get all property labels for a given node:
 
 ``` r
-dc_get_node(
+result <- dc_get_node(
     nodes = "country/USA", 
     property = "<-"
 )
-#> $data
-#> $data$`country/USA`
-#> $data$`country/USA`$properties
-#> $data$`country/USA`$properties[[1]]
-#> [1] "affectedPlace"
-#> 
-#> $data$`country/USA`$properties[[2]]
-#> [1] "comparisonRegion"
-#> 
-#> $data$`country/USA`$properties[[3]]
-#> [1] "containedInPlace"
-#> 
-#> $data$`country/USA`$properties[[4]]
-#> [1] "exportDestination"
-#> 
-#> $data$`country/USA`$properties[[5]]
-#> [1] "importSource"
-#> 
-#> $data$`country/USA`$properties[[6]]
-#> [1] "lendingEntity"
-#> 
-#> $data$`country/USA`$properties[[7]]
-#> [1] "location"
-#> 
-#> $data$`country/USA`$properties[[8]]
-#> [1] "member"
-#> 
-#> $data$`country/USA`$properties[[9]]
-#> [1] "placeOfBirth"
+str(result)
+#> List of 1
+#>  $ data:List of 1
+#>   ..$ country/USA:List of 1
+#>   .. ..$ properties:List of 9
+#>   .. .. ..$ : chr "affectedPlace"
+#>   .. .. ..$ : chr "comparisonRegion"
+#>   .. .. ..$ : chr "containedInPlace"
+#>   .. .. ..$ : chr "exportDestination"
+#>   .. .. ..$ : chr "importSource"
+#>   .. .. ..$ : chr "lendingEntity"
+#>   .. .. ..$ : chr "location"
+#>   .. .. ..$ : chr "member"
+#>   .. .. ..$ : chr "placeOfBirth"
 ```
 
 Find the DCID of a place by another known ID
 
 ``` r
-dc_get_resolve(
+result <- dc_get_resolve(
     nodes = "Q30",
     property = "<-wikidataId->dcid"
 )
-#> $entities
-#> $entities[[1]]
-#> $entities[[1]]$node
-#> [1] "Q30"
-#> 
-#> $entities[[1]]$candidates
-#> $entities[[1]]$candidates[[1]]
-#> $entities[[1]]$candidates[[1]]$dcid
-#> [1] "country/USA"
+str(result)
+#> List of 1
+#>  $ entities:List of 1
+#>   ..$ :List of 2
+#>   .. ..$ node      : chr "Q30"
+#>   .. ..$ candidates:List of 1
+#>   .. .. ..$ :List of 1
+#>   .. .. .. ..$ dcid: chr "country/USA"
 ```
