@@ -36,6 +36,7 @@ format_response <- function(data, method) {
 #' @keywords internal
 #' @noRd
 construct_request <- function(
+  request_type = "get",
   base_url,
   path,
   key,
@@ -47,7 +48,8 @@ construct_request <- function(
   entity_dcids = NULL,
   entity_expression = NULL,
   filter_facet_domains = NULL,
-  filter_facet_idsn = NULL
+  filter_facet_idsn = NULL,
+  query = NULL
 ) {
   query_params <- list(
     key = key,
@@ -59,17 +61,35 @@ construct_request <- function(
     "entity.dcids" = entity_dcids,
     "entity.expression" = entity_expression,
     "filter.facet_domains" = filter_facet_domains,
-    "filter.facet_idsn" = filter_facet_idsn
+    "filter.facet_idsn" = filter_facet_idsn,
+    query = query
   )
 
-  query_params <- Filter(Negate(is.null), query_params)
+  if (request_type == "get") {
+    query_params <- Filter(Negate(is.null), query_params)
 
-  request(base_url) |>
-    req_url_path_append(path) |>
-    req_url_query(!!!query_params, .multi = "explode") |>
-    req_user_agent(
-      "datacommons R package (https://github.com/tidy-intelligence/r-datacommons)"
+    request(base_url) |>
+      req_url_path_append(path) |>
+      req_url_query(!!!query_params, .multi = "explode") |>
+      req_user_agent(
+        "datacommons R package (https://github.com/tidy-intelligence/r-datacommons)"
+      )
+  } else if (request_type == "post") {
+    request(base_url) |>
+      req_url_path_append(path) |>
+      req_method("POST") |>
+      req_headers(
+        "X-API-Key" = key
+      ) |>
+      req_body_json(list(query = query)) |>
+      req_user_agent(
+        "datacommons R package (https://github.com/tidy-intelligence/r-datacommons)"
+      )
+  } else {
+    cli::cli_abort(
+      c("!" = "{.param request_type} must be 'get' or 'post'")
     )
+  }
 }
 
 #' @keywords internal

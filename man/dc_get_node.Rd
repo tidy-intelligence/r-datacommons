@@ -8,7 +8,8 @@ dc_get_node(
   nodes,
   property,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
-  base_url = "https://api.datacommons.org/v2/",
+  base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
+    "https://api.datacommons.org/v2/"),
   method = "list"
 )
 }

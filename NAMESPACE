@@ -2,6 +2,8 @@
 
 export(dc_get_node)
 export(dc_get_observation)
+export(dc_get_resolve)
+export(dc_post_sparql)
 export(dc_set_api_key)
 import(cli)
 import(httr2)

@@ -37,7 +37,10 @@ dc_get_node <- function(
   nodes,
   property,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
-  base_url = "https://api.datacommons.org/v2/",
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
   method = "list"
 ) {
   validate_api_key(api_key)
@@ -45,8 +48,8 @@ dc_get_node <- function(
   validate_method(method)
 
   req <- construct_request(
-    base_url,
-    "node",
+    base_url = base_url,
+    path = "node",
     key = api_key,
     nodes = nodes,
     property = property

@@ -31,7 +31,10 @@ dc_get_observation <- function(
   filter_facet_domains = NULL,
   filter_facet_idsn = NULL,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
-  base_url = "https://api.datacommons.org/v2/",
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
   method = "list"
 ) {
   validate_api_key(api_key)
