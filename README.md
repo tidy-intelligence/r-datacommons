@@ -15,10 +15,6 @@ Check](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/R-CM
 coverage](https://codecov.io/gh/tidy-intelligence/r-datacommons/graph/badge.svg)](https://app.codecov.io/gh/tidy-intelligence/r-datacommons)
 <!-- badges: end -->
 
-The goal of datacommons is to …
-
-## Installation
-
 Retrieve data from the [Data Commons REST API
 V2](https://docs.datacommons.org/api/rest/v2/). Data Commons provides
 harmonized access to dozens of data sources and thousands of datasets
