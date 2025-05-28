@@ -15,7 +15,7 @@ dc_get_observation(
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
     "https://api.datacommons.org/v2/"),
-  method = "list"
+  return_type = "list"
 )
 }
 \arguments{
@@ -33,14 +33,17 @@ dc_get_observation(
 
 \item{filter_facet_idsn}{Optional. Vector of facet IDs to filter observations.}
 
-\item{api_key}{Your Data Commons API key. Defaults to the environment variable \code{DATACOMMONS_API_KEY}.}
+\item{api_key}{Your Data Commons API key. If not provided, uses the
+environment variable \code{DATACOMMONS_API_KEY}.}
 
-\item{base_url}{The base URL of the Data Commons API. Must end with \verb{/core/api/v2/} if customized.}
+\item{base_url}{The base URL of the Data Commons API. Defaults to the public
+endpoint. For custom deployments, must end with \verb{/core/api/v2/}.}
 
-\item{method}{Either \code{"list"} (parsed R object) or \code{"json"} (JSON string).}
+\item{return_type}{Return format: either \code{"list"} (parsed R object) or
+\code{"json"} (JSON string).}
 }
 \value{
-A list (if \code{method = "list"}) or JSON string (if \code{method = "json"}).
+A list or JSON string, depending on \code{return_type}.
 }
 \description{
 Retrieve Observation Data from Data Commons

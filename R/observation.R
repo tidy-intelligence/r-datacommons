@@ -7,11 +7,14 @@
 #' @param select Required. Character vector of fields to select. Must include `"entity"` and `"variable"`.
 #' @param filter_facet_domains Optional. Vector of domain names to filter facets.
 #' @param filter_facet_idsn Optional. Vector of facet IDs to filter observations.
-#' @param api_key Your Data Commons API key. Defaults to the environment variable `DATACOMMONS_API_KEY`.
-#' @param base_url The base URL of the Data Commons API. Must end with `/core/api/v2/` if customized.
-#' @param method Either `"list"` (parsed R object) or `"json"` (JSON string).
+#' @param api_key Your Data Commons API key. If not provided, uses the
+#' environment variable `DATACOMMONS_API_KEY`.
+#' @param base_url The base URL of the Data Commons API. Defaults to the public
+#' endpoint. For custom deployments, must end with `/core/api/v2/`.
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
 #'
-#' @return A list (if `method = "list"`) or JSON string (if `method = "json"`).
+#' @return A list or JSON string, depending on `return_type`.
 #'
 #' @examples
 #' # Look up the statistical variables available for a given entity (place)
@@ -35,11 +38,14 @@ dc_get_observation <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  method = "list"
+  return_type = "list"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)
-  validate_method(method, allowed_methods = c("json", "list", "data.frame"))
+  validate_return_type(
+    return_type,
+    allowed_return_types = c("json", "list", "data.frame")
+  )
   validate_date(date)
   validate_select(select)
   validate_entity(entity_dcids, entity_expression)
@@ -63,6 +69,6 @@ dc_get_observation <- function(
 
   successes <- handle_successes(resps)
 
-  # TODO: add formatting of data.frame method only for
-  format_response(successes, method)
+  # TODO: add formatting of data.frame return_type only for
+  format_response(successes, return_type)
 }

@@ -7,6 +7,15 @@ dc_set_api_key <- function(api_key) {
   Sys.setenv("DATACOMMONS_API_KEY" = api_key)
 }
 
+#' Set environment variable for Data Commons base URL
+#'
+#' @param base_url description
+#'
+#' @export
+dc_set_base_url <- function(base_url) {
+  Sys.setenv("DATACOMMONS_BASE_URL" = base_url)
+}
+
 #' @keywords internal
 #' @noRd
 next_req <- function(resp, req) {

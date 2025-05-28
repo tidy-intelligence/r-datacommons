@@ -1,60 +1,62 @@
-#' Resolve Nodes using Data Commons Resolve API
+#' Resolve Nodes from Data Commons
 #'
 #' @param nodes A character vector of terms to resolve.
-#' @param property A string defining the property expression (e.g., "<-description->dcid").
-#' @param api_key Your Data Commons API key. If not provided, will use the
+#' @param expression A string defining the property expression
+#' (e.g., "<-description->dcid").
+#' @param api_key Your Data Commons API key. If not provided, uses the
 #' environment variable `DATACOMMONS_API_KEY`.
 #' @param base_url The base URL of the Data Commons API. Defaults to the public
-#' endpoint for the resolve service.
-#' @param method Either `"list"` for a parsed R object or `"json"` for raw JSON.
+#' endpoint. For custom deployments, must end with `/core/api/v2/`.
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
 #'
-#' @return A list (if `method = "list"`) or a JSON string (if `method = "json"`).
+#' @return A list or JSON string, depending on `return_type`.
 #'
 #' @examples
 #' # Find the DCID of a place by another known ID
 #' dc_get_resolve(
 #'   nodes = "Q30",
-#'   property = "<-wikidataId->dcid"
+#'   expression = "<-wikidataId->dcid"
 #' )
 #'
 #' # Find the DCID of a place by coordinates
 #' dc_get_resolve(
 #'   nodes = "37.42#-122.08",
-#'   property = "<-geoCoordinate->dcid"
+#'   expression = "<-geoCoordinate->dcid"
 #' )
 #'
 #' # Find the DCID of a place by name
 #' dc_get_resolve(
 #'   nodes = "Georgia",
-#'   property = "<-description->dcid"
+#'   expression = "<-description->dcid"
 #' )
 #'
 #' # Find the DCID of a place by name, with a type filter
 #' dc_get_resolve(
 #'   nodes = "Georgia",
-#'   property = "<-description{typeOf:State}->dcid"
+#'   expression = "<-description{typeOf:State}->dcid"
 #' )
 #'
 #' # Find the DCID of multiple places by name, with a type filter
 #' dc_get_resolve(
 #'   nodes = "Mountain View, CA", "New York City",
-#'   property = "<-description{typeOf:City}->dcid"
+#'   expression = "<-description{typeOf:City}->dcid"
 #' )
 #'
 #' @export
 dc_get_resolve <- function(
   nodes,
-  property,
+  expression,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  method = "list"
+  return_type = "list"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)
-  validate_method(method)
+  validate_return_type(return_type)
 
   req <- construct_request(
     request_type = "get",
@@ -62,7 +64,7 @@ dc_get_resolve <- function(
     path = "resolve",
     key = api_key,
     nodes = nodes,
-    property = property
+    property = expression
   )
 
   resps <- perform_request(req)
@@ -71,5 +73,134 @@ dc_get_resolve <- function(
 
   successes <- handle_successes(resps)
 
-  format_response(successes, method)
+  format_response(successes, return_type)
+}
+
+#' Resolve DCIDs from Wikidata IDs via Data Commons
+#'
+#' Resolves Wikidata identifiers (e.g., `"Q30"` for the United States) to
+#' Data Commons DCIDs using the wikidataId property.
+#'
+#' @inheritParams dc_get_resolve
+#'
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
+#'
+#' @return A list or JSON string, depending on `return_type`.
+#'
+#' @examples
+#' # Get the DCID for the United States (Wikidata ID "Q30")
+#' dc_get_dcid_by_wikidata_id("Q30")
+#'
+#' # Batch query for multiple Wikidata IDs
+#' dc_get_dcid_by_wikidata_id(c("Q30", "Q60"))
+#'
+#' @export
+dc_get_dcid_by_wikidata_id <- function(
+  nodes,
+  api_key = Sys.getenv("DATACOMMONS_API_KEY"),
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
+  return_type = "list"
+) {
+  dc_get_resolve(
+    nodes,
+    expression = "<-wikidataId->dcid",
+    api_key = api_key,
+    base_url = base_url,
+    return_type = return_type
+  )
+}
+
+#' Resolve DCIDs from Coordinates via Data Commons
+#'
+#' Resolves geographic coordinates (in the format `"latitude#longitude"`) to
+#' Data Commons DCIDs using the geoCoordinate property.
+#'
+#' @inheritParams dc_get_resolve
+#'
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
+#'
+#' @return A list or JSON string, depending on `return_type`.
+#'
+#' @examples
+#' # Get the DCID for a coordinate
+#' dc_get_dcid_by_coordinates("37.42#-122.08")
+#'
+#' # Batch query for multiple coordinates
+#' dc_get_dcid_by_coordinates(c("34.05#-118.25", "40.71#-74.01"))
+#'
+#' @export
+dc_get_dcid_by_coordinates <- function(
+  nodes,
+  api_key = Sys.getenv("DATACOMMONS_API_KEY"),
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
+  return_type = "list"
+) {
+  dc_get_resolve(
+    nodes,
+    expression = "<-geoCoordinate->dcid",
+    api_key = api_key,
+    base_url = base_url,
+    return_type = return_type
+  )
+}
+
+#' Resolve DCIDs from Place Names via Data Commons
+#'
+#' Resolves a node (e.g., a place name) to its Data Commons DCID using the
+#' description property. Optionally filters results by entity type.
+#'
+#' @inheritParams dc_get_resolve
+#' @param entity_type Optional string to filter results by `typeOf`, such as
+#' `"State"` or `"City"`. If `NULL`, no filter is applied.
+#'
+#' @return A list or JSON string, depending on `return_type`.
+#'
+#' @examples
+#' # Get the DCID of "Georgia" (ambiguous without type)
+#' dc_get_dcid_by_name("Georgia")
+#'
+#' # Get the DCID of "Georgia" as a state
+#' dc_get_dcid_by_name("Georgia", entity_type = "State")
+#'
+#' # Get the DCID of "New York City" as a city
+#' dc_get_dcid_by_name("New York City", entity_type = "City")
+#'
+#' # Batch query multiple cities
+#' dc_get_dcid_by_name(
+#'   c("Mountain View, CA", "New York City"),
+#'   entity_type = "City"
+#' )
+#'
+#' @export
+dc_get_dcid_by_name <- function(
+  nodes,
+  entity_type = NULL,
+  api_key = Sys.getenv("DATACOMMONS_API_KEY"),
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
+  return_type = "list"
+) {
+  if (is.null(entity_type)) {
+    expression <- "<-description->dcid"
+  } else {
+    expression <- paste0("<-description{typeOf:", entity_type, "}->dcid")
+  }
+
+  dc_get_resolve(
+    nodes = nodes,
+    expression = expression,
+    api_key = api_key,
+    base_url = base_url,
+    return_type = return_type
+  )
 }

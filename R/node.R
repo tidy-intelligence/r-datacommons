@@ -1,58 +1,63 @@
 #' Retrieve Node Properties from Data Commons
 #'
-#' @param nodes A character vector of DCIDs.
-#' @param property A relation expression string (e.g., "<-*").
-#' @param api_key Your Data Commons API key. If not provided, will use the
+#' Queries the Data Commons API for specified property relationships of given
+#' nodes.
+#'
+#' @param nodes A character vector of terms to resolve.
+#' @param expression A relation expression string (e.g., `<-*`, `->name`, or
+#' `->[name, latitude]`).
+#' @param api_key Your Data Commons API key. If not provided, uses the
 #' environment variable `DATACOMMONS_API_KEY`.
 #' @param base_url The base URL of the Data Commons API. Defaults to the public
-#' endpoint. For custom deployments, it must end with "/core/api/v2/".
-#' @param method Either `"list"` (parsed R object) or `"json"` (JSON string).
+#' endpoint. For custom deployments, must end with `/core/api/v2/`.
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
 #'
-#' @return A list (if `method = "list"`) or JSON string (if `method = "json"`).
+#' @return A list or JSON string, depending on `return_type`.
 #'
 #' @examples
 #' # Get all property labels for a given node
-#' dc_get_node(nodes = "country/USA", property = "<-")
+#' dc_get_node(nodes = "country/USA", expression = "<-")
 #'
 #' # Get one property value for a given node
-#' dc_get_node(nodes = "dc/03lw9rhpendw5", property = "->name")
+#' dc_get_node(nodes = "dc/03lw9rhpendw5", expression = "->name")
 #'
 #' # Get multiple property values for multiple nodes
 #' dc_get_node(
 #'   nodes = c("geoId/06085", "geoId/06087"),
-#'   property = "->[name, latitude, longitude]"
+#'   expression = "->[name, latitude, longitude]"
 #' )
 #'
 #' # Get all property values for a node
-#' dc_get_node(nodes = "PowerPlant", property = "<-*")
+#' dc_get_node(nodes = "PowerPlant", expression = "<-*")
 #'
 #' # Get a list of all existing statistical variables
-#' dc_get_node(nodes = "StatisticalVariable", property = "<-typeOf")
+#' dc_get_node(nodes = "StatisticalVariable", expression = "<-typeOf")
 #'
 #' # Get a list of all existing entity types
-#' dc_get_node(nodes = "Class", property = "<-typeOf")
+#' dc_get_node(nodes = "Class", expression = "<-typeOf")
 #'
 #' @export
 dc_get_node <- function(
   nodes,
-  property,
+  expression,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  method = "list"
+  return_type = "list"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)
-  validate_method(method)
+  validate_return_type(return_type)
 
   req <- construct_request(
     base_url = base_url,
     path = "node",
     key = api_key,
     nodes = nodes,
-    property = property
+    property = expression
   )
 
   resps <- perform_request(req)
@@ -61,5 +66,138 @@ dc_get_node <- function(
 
   successes <- handle_successes(resps)
 
-  format_response(successes, method)
+  format_response(successes, return_type)
+}
+
+#' Get Property Labels for Data Commons Nodes
+#'
+#' A convenience wrapper around [dc_get_node()] to retrieve all property labels
+#' for the specified nodes. This is equivalent to calling [dc_get_node()] with
+#' `expression = "<-"`.
+#'
+#' @inheritParams dc_get_node
+#'
+#' @return A list containing the requested property values for each node.
+#'   The structure depends on the properties requested and follows the same
+#'   format as [dc_get_node()].
+#'
+#' @examples
+#' # Get the name property (default)
+#' dc_get_property_values(nodes = "country/USA")
+#'
+#' # Get a specific property
+#' dc_get_property_values(nodes = "country/USA", properties = "latitude")
+#'
+#' # Get multiple specific properties
+#' dc_get_property_values(
+#'   nodes = c("geoId/06085", "geoId/06087"),
+#'   properties = c("name", "latitude", "longitude")
+#' )
+#'
+#' # Get all properties
+#' dc_get_property_values(nodes = "PowerPlant", properties = "all")
+#'
+#' @export
+dc_get_property_values <- function(
+  nodes,
+  properties = "name",
+  api_key = Sys.getenv("DATACOMMONS_API_KEY"),
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
+  return_type = "list"
+) {
+  if (identical(properties, "all")) {
+    expression <- "<-*"
+  } else if (length(properties) == 1) {
+    expression <- paste0("->", properties)
+  } else {
+    props <- paste(properties, collapse = ", ")
+    expression <- paste0("->[", props, "]")
+  }
+  dc_get_node(
+    nodes = nodes,
+    expression = expression,
+    api_key = api_key,
+    base_url = base_url,
+    return_type = return_type
+  )
+}
+
+#' Get Available Statistical Variables from Data Commons
+#'
+#' A convenience wrapper around [dc_get_node()] to retrieve all available
+#' statistical variables in Data Commons. This is equivalent to calling
+#' [dc_get_node()] with `nodes = "StatisticalVariable"` and
+#' `expression = "<-typeOf"`.
+#'
+#' @param api_key Your Data Commons API key. If not provided, will use the
+#'   environment variable `DATACOMMONS_API_KEY`.
+#' @param base_url The base URL of the Data Commons API. Defaults to the public
+#'   endpoint. For custom deployments, it must end with "/core/api/v2/".
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
+#'
+#' @return A list (if `return_type = "list"`) or JSON string (if
+#' `return_type = "json"`) containing all available statistical variables.
+#'
+#' @examples
+#' # Get all statistical variables
+#' statistical_vars <- dc_get_available_statistical_variables()
+#'
+#' @export
+dc_get_available_statistical_variables <- function(
+  api_key = Sys.getenv("DATACOMMONS_API_KEY"),
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
+  return_type = "list"
+) {
+  dc_get_node(
+    nodes = "StatisticalVariable",
+    expression = "<-typeOf",
+    api_key = api_key,
+    base_url = base_url,
+    return_type = return_type
+  )
+}
+
+#' Get All Available Classes from Data Commons
+#'
+#' A convenience wrapper around [dc_get_node()] to retrieve all available
+#' entity classes in Data Commons. This is equivalent to calling [dc_get_node()]
+#' with `nodes = "Class"` and `expression = "<-typeOf"`.
+#'
+#' @param api_key Your Data Commons API key. If not provided, will use the
+#' environment variable `DATACOMMONS_API_KEY`.
+#' @param base_url The base URL of the Data Commons API. Defaults to the public
+#' endpoint. For custom deployments, it must end with "/core/api/v2/".
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
+#'
+#' @return A list (if `return_type = "list"`) or JSON string (if
+#' `return_type = "json"`) containing all available entity classes.
+#'
+#' @examples
+#' # Get all entity classes
+#' all_classes <- dc_get_all_classes()
+#'
+#' @export
+dc_get_all_classes <- function(
+  api_key = Sys.getenv("DATACOMMONS_API_KEY"),
+  base_url = Sys.getenv(
+    "DATACOMMONS_BASE_URL",
+    unset = "https://api.datacommons.org/v2/"
+  ),
+  return_type = "list"
+) {
+  dc_get_node(
+    nodes = "Class",
+    expression = "<-typeOf",
+    api_key = api_key,
+    base_url = base_url,
+    return_type = return_type
+  )
 }

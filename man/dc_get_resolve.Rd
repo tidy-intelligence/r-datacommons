@@ -2,65 +2,67 @@
 % Please edit documentation in R/resolve.R
 \name{dc_get_resolve}
 \alias{dc_get_resolve}
-\title{Resolve Nodes using Data Commons Resolve API}
+\title{Resolve Nodes from Data Commons}
 \usage{
 dc_get_resolve(
   nodes,
-  property,
+  expression,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
     "https://api.datacommons.org/v2/"),
-  method = "list"
+  return_type = "list"
 )
 }
 \arguments{
 \item{nodes}{A character vector of terms to resolve.}
 
-\item{property}{A string defining the property expression (e.g., "<-description->dcid").}
+\item{expression}{A string defining the property expression
+(e.g., "<-description->dcid").}
 
-\item{api_key}{Your Data Commons API key. If not provided, will use the
+\item{api_key}{Your Data Commons API key. If not provided, uses the
 environment variable \code{DATACOMMONS_API_KEY}.}
 
 \item{base_url}{The base URL of the Data Commons API. Defaults to the public
-endpoint for the resolve service.}
+endpoint. For custom deployments, must end with \verb{/core/api/v2/}.}
 
-\item{method}{Either \code{"list"} for a parsed R object or \code{"json"} for raw JSON.}
+\item{return_type}{Return format: either \code{"list"} (parsed R object) or
+\code{"json"} (JSON string).}
 }
 \value{
-A list (if \code{method = "list"}) or a JSON string (if \code{method = "json"}).
+A list or JSON string, depending on \code{return_type}.
 }
 \description{
-Resolve Nodes using Data Commons Resolve API
+Resolve Nodes from Data Commons
 }
 \examples{
 # Find the DCID of a place by another known ID
 dc_get_resolve(
   nodes = "Q30",
-  property = "<-wikidataId->dcid"
+  expression = "<-wikidataId->dcid"
 )
 
 # Find the DCID of a place by coordinates
 dc_get_resolve(
   nodes = "37.42#-122.08",
-  property = "<-geoCoordinate->dcid"
+  expression = "<-geoCoordinate->dcid"
 )
 
 # Find the DCID of a place by name
 dc_get_resolve(
   nodes = "Georgia",
-  property = "<-description->dcid"
+  expression = "<-description->dcid"
 )
 
 # Find the DCID of a place by name, with a type filter
 dc_get_resolve(
   nodes = "Georgia",
-  property = "<-description{typeOf:State}->dcid"
+  expression = "<-description{typeOf:State}->dcid"
 )
 
 # Find the DCID of multiple places by name, with a type filter
 dc_get_resolve(
   nodes = "Mountain View, CA", "New York City",
-  property = "<-description{typeOf:City}->dcid"
+  expression = "<-description{typeOf:City}->dcid"
 )
 
 }

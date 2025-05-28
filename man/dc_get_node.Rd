@@ -6,52 +6,55 @@
 \usage{
 dc_get_node(
   nodes,
-  property,
+  expression,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
     "https://api.datacommons.org/v2/"),
-  method = "list"
+  return_type = "list"
 )
 }
 \arguments{
-\item{nodes}{A character vector of DCIDs.}
+\item{nodes}{A character vector of terms to resolve.}
 
-\item{property}{A relation expression string (e.g., "<-*").}
+\item{expression}{A relation expression string (e.g., \verb{<-*}, \verb{->name}, or
+\verb{->[name, latitude]}).}
 
-\item{api_key}{Your Data Commons API key. If not provided, will use the
+\item{api_key}{Your Data Commons API key. If not provided, uses the
 environment variable \code{DATACOMMONS_API_KEY}.}
 
 \item{base_url}{The base URL of the Data Commons API. Defaults to the public
-endpoint. For custom deployments, it must end with "/core/api/v2/".}
+endpoint. For custom deployments, must end with \verb{/core/api/v2/}.}
 
-\item{method}{Either \code{"list"} (parsed R object) or \code{"json"} (JSON string).}
+\item{return_type}{Return format: either \code{"list"} (parsed R object) or
+\code{"json"} (JSON string).}
 }
 \value{
-A list (if \code{method = "list"}) or JSON string (if \code{method = "json"}).
+A list or JSON string, depending on \code{return_type}.
 }
 \description{
-Retrieve Node Properties from Data Commons
+Queries the Data Commons API for specified property relationships of given
+nodes.
 }
 \examples{
 # Get all property labels for a given node
-dc_get_node(nodes = "country/USA", property = "<-")
+dc_get_node(nodes = "country/USA", expression = "<-")
 
 # Get one property value for a given node
-dc_get_node(nodes = "dc/03lw9rhpendw5", property = "->name")
+dc_get_node(nodes = "dc/03lw9rhpendw5", expression = "->name")
 
 # Get multiple property values for multiple nodes
 dc_get_node(
   nodes = c("geoId/06085", "geoId/06087"),
-  property = "->[name, latitude, longitude]"
+  expression = "->[name, latitude, longitude]"
 )
 
 # Get all property values for a node
-dc_get_node(nodes = "PowerPlant", property = "<-*")
+dc_get_node(nodes = "PowerPlant", expression = "<-*")
 
 # Get a list of all existing statistical variables
-dc_get_node(nodes = "StatisticalVariable", property = "<-typeOf")
+dc_get_node(nodes = "StatisticalVariable", expression = "<-typeOf")
 
 # Get a list of all existing entity types
-dc_get_node(nodes = "Class", property = "<-typeOf")
+dc_get_node(nodes = "Class", expression = "<-typeOf")
 
 }

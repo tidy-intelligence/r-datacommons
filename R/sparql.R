@@ -1,20 +1,17 @@
 #' Execute a SPARQL Query via POST to the Data Commons API
 #'
-#' @description
-#' Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST request.
-#' The API key is passed in the header, and the query is included as JSON in the request body.
+#' Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST
+#' request.
 #'
 #' @param query A character string containing a valid SPARQL query.
-#' @param api_key Your Data Commons API key. If not provided, the function will
-#' use the `DATACOMMONS_API_KEY` environment variable.
-#' @param base_url The base URL for the Data Commons API. Defaults to the public
-#' endpoint \code{https://api.datacommons.org/v2/}. Can also be set via the
-#' `DATACOMMONS_BASE_URL` environment variable.
-#' @param method Specifies the response format: \code{"list"} for a parsed R object,
-#' or \code{"json"} for the raw JSON string.
+#' @param api_key Your Data Commons API key. If not provided, uses the
+#' environment variable `DATACOMMONS_API_KEY`.
+#' @param base_url The base URL of the Data Commons API. Defaults to the public
+#' endpoint. For custom deployments, must end with `/core/api/v2/`.
+#' @param return_type Return format: either `"list"` (parsed R object) or
+#' `"json"` (JSON string).
 #'
-#' @return A list (if `method = "list"`) or a JSON string (if `method = "json"`),
-#' representing the SPARQL query results.
+#' @return A list or JSON string, depending on `return_type`.
 #'
 #' @examples
 #'
@@ -47,11 +44,11 @@ dc_post_sparql <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  method = "list"
+  return_type = "list"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)
-  validate_method(method)
+  validate_return_type(return_type)
 
   req <- construct_request(
     request_type = "post",
@@ -67,5 +64,5 @@ dc_post_sparql <- function(
 
   successes <- handle_successes(resps)
 
-  format_response(successes, method)
+  format_response(successes, return_type)
 }

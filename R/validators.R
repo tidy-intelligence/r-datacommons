@@ -40,9 +40,12 @@ validate_base_url <- function(base_url) {
 
 #' @keywords internal
 #' @noRd
-validate_method <- function(method, allowed_methods = c("json", "list")) {
-  if (!method %in% allowed_methods) {
-    stop("Invalid method. Must be either 'json' or 'list'.")
+validate_return_type <- function(
+  return_type,
+  allowed_return_types = c("json", "list")
+) {
+  if (!return_type %in% allowed_return_types) {
+    stop("Invalid return_type. Must be either 'json' or 'list'.")
   }
   invisible(TRUE)
 }

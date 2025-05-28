@@ -9,29 +9,27 @@ dc_post_sparql(
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
     "https://api.datacommons.org/v2/"),
-  method = "list"
+  return_type = "list"
 )
 }
 \arguments{
 \item{query}{A character string containing a valid SPARQL query.}
 
-\item{api_key}{Your Data Commons API key. If not provided, the function will
-use the \code{DATACOMMONS_API_KEY} environment variable.}
+\item{api_key}{Your Data Commons API key. If not provided, uses the
+environment variable \code{DATACOMMONS_API_KEY}.}
 
-\item{base_url}{The base URL for the Data Commons API. Defaults to the public
-endpoint \code{https://api.datacommons.org/v2/}. Can also be set via the
-\code{DATACOMMONS_BASE_URL} environment variable.}
+\item{base_url}{The base URL of the Data Commons API. Defaults to the public
+endpoint. For custom deployments, must end with \verb{/core/api/v2/}.}
 
-\item{method}{Specifies the response format: \code{"list"} for a parsed R object,
-or \code{"json"} for the raw JSON string.}
+\item{return_type}{Return format: either \code{"list"} (parsed R object) or
+\code{"json"} (JSON string).}
 }
 \value{
-A list (if \code{method = "list"}) or a JSON string (if \code{method = "json"}),
-representing the SPARQL query results.
+A list or JSON string, depending on \code{return_type}.
 }
 \description{
-Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST request.
-The API key is passed in the header, and the query is included as JSON in the request body.
+Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST
+request.
 }
 \examples{
 
