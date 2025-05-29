@@ -16,6 +16,9 @@ dc_get_property_values(
 \arguments{
 \item{nodes}{A character vector of terms to resolve.}
 
+\item{properties}{A character vector of properties (e.g. "name", "latitude",
+"all")}
+
 \item{api_key}{Your Data Commons API key. If not provided, uses the
 environment variable \code{DATACOMMONS_API_KEY}.}
 

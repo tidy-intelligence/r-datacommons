@@ -76,6 +76,8 @@ dc_get_node <- function(
 #' `expression = "<-"`.
 #'
 #' @inheritParams dc_get_node
+#' @param properties A character vector of properties (e.g. "name", "latitude",
+#' "all")
 #'
 #' @return A list containing the requested property values for each node.
 #'   The structure depends on the properties requested and follows the same

@@ -50,7 +50,7 @@ Get all property labels for a given node:
 ``` r
 result <- dc_get_node(
     nodes = "country/USA", 
-    property = "<-"
+    expression = "<-"
 )
 str(result)
 #> List of 1
@@ -68,12 +68,12 @@ str(result)
 #>   .. .. ..$ : chr "placeOfBirth"
 ```
 
-Find the DCID of a place by another known ID
+Find the Data Commons ID (DCID) of a place by another known ID
 
 ``` r
 result <- dc_get_resolve(
     nodes = "Q30",
-    property = "<-wikidataId->dcid"
+    expression = "<-wikidataId->dcid"
 )
 str(result)
 #> List of 1
