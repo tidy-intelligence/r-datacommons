@@ -69,9 +69,9 @@ dc_get_node <- function(
   format_response(successes, return_type)
 }
 
-#' Get Property Labels for Data Commons Nodes
+#' Get Property Values for Data Commons Nodes
 #'
-#' A convenience wrapper around [dc_get_node()] to retrieve all property labels
+#' A convenience wrapper around [dc_get_node()] to retrieve all property values
 #' for the specified nodes. This is equivalent to calling [dc_get_node()] with
 #' `expression = "<-"`.
 #'

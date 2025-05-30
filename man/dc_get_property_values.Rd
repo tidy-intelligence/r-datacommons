@@ -2,7 +2,7 @@
 % Please edit documentation in R/node.R
 \name{dc_get_property_values}
 \alias{dc_get_property_values}
-\title{Get Property Labels for Data Commons Nodes}
+\title{Get Property Values for Data Commons Nodes}
 \usage{
 dc_get_property_values(
   nodes,
@@ -34,7 +34,7 @@ The structure depends on the properties requested and follows the same
 format as \code{\link[=dc_get_node]{dc_get_node()}}.
 }
 \description{
-A convenience wrapper around \code{\link[=dc_get_node]{dc_get_node()}} to retrieve all property labels
+A convenience wrapper around \code{\link[=dc_get_node]{dc_get_node()}} to retrieve all property values
 for the specified nodes. This is equivalent to calling \code{\link[=dc_get_node]{dc_get_node()}} with
 \code{expression = "<-"}.
 }

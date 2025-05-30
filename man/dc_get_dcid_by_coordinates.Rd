@@ -2,10 +2,11 @@
 % Please edit documentation in R/resolve.R
 \name{dc_get_dcid_by_coordinates}
 \alias{dc_get_dcid_by_coordinates}
-\title{Resolve DCIDs from Coordinates via Data Commons}
+\title{Resolve DCIDs from Latitude and Longitude via Data Commons}
 \usage{
 dc_get_dcid_by_coordinates(
-  nodes,
+  latitude,
+  longitude,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
     "https://api.datacommons.org/v2/"),
@@ -13,7 +14,9 @@ dc_get_dcid_by_coordinates(
 )
 }
 \arguments{
-\item{nodes}{A character vector of terms to resolve.}
+\item{latitude}{A numeric vector of latitude values.}
+
+\item{longitude}{A numeric vector of longitude values.}
 
 \item{api_key}{Your Data Commons API key. If not provided, uses the
 environment variable \code{DATACOMMONS_API_KEY}.}
@@ -28,14 +31,14 @@ endpoint. For custom deployments, must end with \verb{/core/api/v2/}.}
 A list or JSON string, depending on \code{return_type}.
 }
 \description{
-Resolves geographic coordinates (in the format \code{"latitude#longitude"}) to
+Resolves geographic coordinates (provided as latitude and longitude) to
 Data Commons DCIDs using the geoCoordinate property.
 }
 \examples{
 # Get the DCID for a coordinate
-dc_get_dcid_by_coordinates("37.42#-122.08")
+dc_get_dcid_by_coordinates(37.42, -122.08)
 
 # Batch query for multiple coordinates
-dc_get_dcid_by_coordinates(c("34.05#-118.25", "40.71#-74.01"))
+dc_get_dcid_by_coordinates(c(34.05, 40.71), c(-118.25, -74.01))
 
 }

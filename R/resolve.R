@@ -82,7 +82,7 @@ dc_get_resolve <- function(
 #' Data Commons DCIDs using the wikidataId property.
 #'
 #' @inheritParams dc_get_resolve
-#'
+#' @param wikidata_ids The Wikidata IDs of the entities to look up.
 #' @param return_type Return format: either `"list"` (parsed R object) or
 #' `"json"` (JSON string).
 #'
@@ -90,14 +90,14 @@ dc_get_resolve <- function(
 #'
 #' @examples
 #' # Get the DCID for the United States (Wikidata ID "Q30")
-#' dc_get_dcid_by_wikidata_id("Q30")
+#' dc_get_dcids_by_wikidata_id("Q30")
 #'
 #' # Batch query for multiple Wikidata IDs
-#' dc_get_dcid_by_wikidata_id(c("Q30", "Q60"))
+#' dc_get_dcids_by_wikidata_id(c("Q30", "Q60"))
 #'
 #' @export
-dc_get_dcid_by_wikidata_id <- function(
-  nodes,
+dc_get_dcids_by_wikidata_id <- function(
+  wikidata_ids,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
     "DATACOMMONS_BASE_URL",
@@ -106,7 +106,7 @@ dc_get_dcid_by_wikidata_id <- function(
   return_type = "list"
 ) {
   dc_get_resolve(
-    nodes,
+    nodes = wikidata_ids,
     expression = "<-wikidataId->dcid",
     api_key = api_key,
     base_url = base_url,
@@ -114,13 +114,14 @@ dc_get_dcid_by_wikidata_id <- function(
   )
 }
 
-#' Resolve DCIDs from Coordinates via Data Commons
+#' Resolve DCIDs from Latitude and Longitude via Data Commons
 #'
-#' Resolves geographic coordinates (in the format `"latitude#longitude"`) to
+#' Resolves geographic coordinates (provided as latitude and longitude) to
 #' Data Commons DCIDs using the geoCoordinate property.
 #'
 #' @inheritParams dc_get_resolve
-#'
+#' @param latitude A numeric vector of latitude values.
+#' @param longitude A numeric vector of longitude values.
 #' @param return_type Return format: either `"list"` (parsed R object) or
 #' `"json"` (JSON string).
 #'
@@ -128,14 +129,15 @@ dc_get_dcid_by_wikidata_id <- function(
 #'
 #' @examples
 #' # Get the DCID for a coordinate
-#' dc_get_dcid_by_coordinates("37.42#-122.08")
+#' dc_get_dcid_by_coordinates(37.42, -122.08)
 #'
 #' # Batch query for multiple coordinates
-#' dc_get_dcid_by_coordinates(c("34.05#-118.25", "40.71#-74.01"))
+#' dc_get_dcid_by_coordinates(c(34.05, 40.71), c(-118.25, -74.01))
 #'
 #' @export
 dc_get_dcid_by_coordinates <- function(
-  nodes,
+  latitude,
+  longitude,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
     "DATACOMMONS_BASE_URL",
@@ -143,6 +145,12 @@ dc_get_dcid_by_coordinates <- function(
   ),
   return_type = "list"
 ) {
+  if (length(latitude) != length(longitude)) {
+    stop("Latitude and longitude vectors must be the same length.")
+  }
+
+  nodes <- paste(latitude, longitude, sep = "#")
+
   dc_get_resolve(
     nodes,
     expression = "<-geoCoordinate->dcid",
@@ -158,6 +166,7 @@ dc_get_dcid_by_coordinates <- function(
 #' description property. Optionally filters results by entity type.
 #'
 #' @inheritParams dc_get_resolve
+#' @param names A vector of names or descriptions of the entities to look up.
 #' @param entity_type Optional string to filter results by `typeOf`, such as
 #' `"State"` or `"City"`. If `NULL`, no filter is applied.
 #'
@@ -165,23 +174,23 @@ dc_get_dcid_by_coordinates <- function(
 #'
 #' @examples
 #' # Get the DCID of "Georgia" (ambiguous without type)
-#' dc_get_dcid_by_name("Georgia")
+#' dc_get_dcids_by_name(names = "Georgia")
 #'
 #' # Get the DCID of "Georgia" as a state
-#' dc_get_dcid_by_name("Georgia", entity_type = "State")
+#' dc_get_dcids_by_name(names = "Georgia", entity_type = "State")
 #'
 #' # Get the DCID of "New York City" as a city
-#' dc_get_dcid_by_name("New York City", entity_type = "City")
+#' dc_get_dcids_by_name(names = "New York City", entity_type = "City")
 #'
-#' # Batch query multiple cities
-#' dc_get_dcid_by_name(
-#'   c("Mountain View, CA", "New York City"),
+#' # Query multiple cities
+#' dc_get_dcids_by_name(
+#'   names = c("Mountain View, CA", "New York City"),
 #'   entity_type = "City"
 #' )
 #'
 #' @export
-dc_get_dcid_by_name <- function(
-  nodes,
+dc_get_dcids_by_name <- function(
+  names,
   entity_type = NULL,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
@@ -197,7 +206,7 @@ dc_get_dcid_by_name <- function(
   }
 
   dc_get_resolve(
-    nodes = nodes,
+    nodes = names,
     expression = expression,
     api_key = api_key,
     base_url = base_url,
