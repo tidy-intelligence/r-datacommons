@@ -8,7 +8,7 @@ dc_get_available_statistical_variables(
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv("DATACOMMONS_BASE_URL", unset =
     "https://api.datacommons.org/v2/"),
-  return_type = "list"
+  return_type = "json"
 )
 }
 \arguments{

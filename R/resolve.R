@@ -52,7 +52,7 @@ dc_get_resolve <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)
@@ -103,7 +103,7 @@ dc_get_dcids_by_wikidata_id <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   dc_get_resolve(
     nodes = wikidata_ids,
@@ -143,7 +143,7 @@ dc_get_dcid_by_coordinates <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   if (length(latitude) != length(longitude)) {
     stop("Latitude and longitude vectors must be the same length.")
@@ -197,7 +197,7 @@ dc_get_dcids_by_name <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   if (is.null(entity_type)) {
     expression <- "<-description->dcid"

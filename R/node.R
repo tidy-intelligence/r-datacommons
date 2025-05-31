@@ -46,7 +46,7 @@ dc_get_node <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)
@@ -108,7 +108,7 @@ dc_get_property_values <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   if (identical(properties, "all")) {
     expression <- "<-*"
@@ -155,7 +155,7 @@ dc_get_available_statistical_variables <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   dc_get_node(
     nodes = "StatisticalVariable",
@@ -193,7 +193,7 @@ dc_get_all_classes <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   dc_get_node(
     nodes = "Class",

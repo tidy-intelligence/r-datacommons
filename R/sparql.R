@@ -43,7 +43,7 @@ dc_post_sparql <- function(
     "DATACOMMONS_BASE_URL",
     unset = "https://api.datacommons.org/v2/"
   ),
-  return_type = "list"
+  return_type = "json"
 ) {
   validate_api_key(api_key)
   validate_base_url(base_url)

@@ -46,7 +46,9 @@ next_req <- function(resp, req) {
 format_response <- function(data, method) {
   if (method == "json") {
     data |>
-      resps_data(\(resp) resp_body_string(resp))
+      resps_data(\(resp) resp_body_string(resp)) |>
+      fromJSON() |>
+      toJSON(pretty = TRUE)
   } else if (method == "list") {
     data |>
       resps_data(\(resp) resp_body_json(resp))
