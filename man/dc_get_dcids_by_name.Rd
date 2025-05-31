@@ -36,6 +36,7 @@ Resolves a node (e.g., a place name) to its Data Commons DCID using the
 description property. Optionally filters results by entity type.
 }
 \examples{
+\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get the DCID of "Georgia" (ambiguous without type)
 dc_get_dcids_by_name(names = "Georgia")
 
@@ -50,5 +51,5 @@ dc_get_dcids_by_name(
   names = c("Mountain View, CA", "New York City"),
   entity_type = "City"
 )
-
+\dontshow{\}) # examplesIf}
 }

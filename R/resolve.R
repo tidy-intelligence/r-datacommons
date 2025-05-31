@@ -12,7 +12,7 @@
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Find the DCID of a place by another known ID
 #' dc_get_resolve(
 #'   nodes = "Q30",
@@ -88,7 +88,7 @@ dc_get_resolve <- function(
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get the DCID for the United States (Wikidata ID "Q30")
 #' dc_get_dcids_by_wikidata_id("Q30")
 #'
@@ -127,7 +127,7 @@ dc_get_dcids_by_wikidata_id <- function(
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get the DCID for a coordinate
 #' dc_get_dcid_by_coordinates(37.42, -122.08)
 #'
@@ -172,7 +172,7 @@ dc_get_dcid_by_coordinates <- function(
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get the DCID of "Georgia" (ambiguous without type)
 #' dc_get_dcids_by_name(names = "Georgia")
 #'

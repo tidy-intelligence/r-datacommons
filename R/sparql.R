@@ -13,8 +13,7 @@
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examples
-#'
+#' @examplesIf dc_has_api_key()
 #' # Get a list of all cities with a particular property
 #' query <- c(
 #'   paste0(

@@ -15,7 +15,7 @@
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get all property labels for a given node
 #' dc_get_node(nodes = "country/USA", expression = "<-")
 #'
@@ -83,7 +83,7 @@ dc_get_node <- function(
 #'   The structure depends on the properties requested and follows the same
 #'   format as [dc_get_node()].
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get the name property (default)
 #' dc_get_property_values(nodes = "country/USA")
 #'
@@ -144,7 +144,7 @@ dc_get_property_values <- function(
 #' @return A list (if `return_type = "list"`) or JSON string (if
 #' `return_type = "json"`) containing all available statistical variables.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get all statistical variables
 #' statistical_vars <- dc_get_available_statistical_variables()
 #'
@@ -182,7 +182,7 @@ dc_get_available_statistical_variables <- function(
 #' @return A list (if `return_type = "list"`) or JSON string (if
 #' `return_type = "json"`) containing all available entity classes.
 #'
-#' @examples
+#' @examplesIf dc_has_api_key()
 #' # Get all entity classes
 #' all_classes <- dc_get_all_classes()
 #'

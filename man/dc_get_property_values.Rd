@@ -39,6 +39,7 @@ for the specified nodes. This is equivalent to calling \code{\link[=dc_get_node]
 \code{expression = "<-"}.
 }
 \examples{
+\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get the name property (default)
 dc_get_property_values(nodes = "country/USA")
 
@@ -53,5 +54,5 @@ dc_get_property_values(
 
 # Get all properties
 dc_get_property_values(nodes = "PowerPlant", properties = "all")
-
+\dontshow{\}) # examplesIf}
 }

@@ -32,7 +32,7 @@ Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST
 request.
 }
 \examples{
-
+\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get a list of all cities with a particular property
 query <- c(
   paste0(
@@ -53,5 +53,5 @@ query <- c(
   )
 )
 dc_post_sparql(query)
-
+\dontshow{\}) # examplesIf}
 }

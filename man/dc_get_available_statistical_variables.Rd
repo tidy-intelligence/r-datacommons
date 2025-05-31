@@ -32,7 +32,8 @@ statistical variables in Data Commons. This is equivalent to calling
 \code{expression = "<-typeOf"}.
 }
 \examples{
+\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get all statistical variables
 statistical_vars <- dc_get_available_statistical_variables()
-
+\dontshow{\}) # examplesIf}
 }

@@ -35,10 +35,11 @@ Resolves geographic coordinates (provided as latitude and longitude) to
 Data Commons DCIDs using the geoCoordinate property.
 }
 \examples{
+\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get the DCID for a coordinate
 dc_get_dcid_by_coordinates(37.42, -122.08)
 
 # Batch query for multiple coordinates
 dc_get_dcid_by_coordinates(c(34.05, 40.71), c(-118.25, -74.01))
-
+\dontshow{\}) # examplesIf}
 }

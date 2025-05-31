@@ -1,3 +1,14 @@
+#' Is a Data Commons API key avaiable?
+#'
+#' Used for examples/testing.
+#'
+#' @keywords internal
+#'
+#' @export
+dc_has_api_key <- function() {
+  Sys.getenv("DATACOMMONS_API_KEY") != ""
+}
+
 #' Set environment variable for Data Commons API key
 #'
 #' @param api_key description
@@ -39,6 +50,9 @@ format_response <- function(data, method) {
   } else if (method == "list") {
     data |>
       resps_data(\(resp) resp_body_json(resp))
+  } else if (method == "data.frame") {
+    data |>
+      resps_data(\(resp) resp_body_json(resp))
   }
 }
 
@@ -56,8 +70,8 @@ construct_request <- function(
   variable_dcids = NULL,
   entity_dcids = NULL,
   entity_expression = NULL,
-  filter_facet_domains = NULL,
-  filter_facet_idsn = NULL,
+  filter_domains = NULL,
+  filter_facet_ids = NULL,
   query = NULL
 ) {
   query_params <- list(
@@ -69,8 +83,8 @@ construct_request <- function(
     "variable.dcids" = variable_dcids,
     "entity.dcids" = entity_dcids,
     "entity.expression" = entity_expression,
-    "filter.facet_domains" = filter_facet_domains,
-    "filter.facet_idsn" = filter_facet_idsn,
+    "filter.domains" = filter_domains,
+    "filter.facet_ids" = filter_facet_ids,
     query = query
   )
 
