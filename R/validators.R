@@ -4,7 +4,7 @@ validate_api_key <- function(api_key = NULL) {
   if (is.null(api_key)) {
     key <- Sys.getenv("DATACOMMONS_API_KEY")
     if (key == "" || is.null(key)) {
-      stop(
+      cli::cli_abort(
         paste0(
           "API key not provided. Set it via the 'api_key' parameter or the ",
           "?set_api_key() helper."
@@ -24,7 +24,7 @@ validate_base_url <- function(base_url) {
     grepl("^https?://.+/core/api/v2/?$", base_url)
 
   if (!is_valid) {
-    stop(
+    cli::cli_abort(
       paste0(
         "Invalid base_url. It must be either:\n",
         " - '",
@@ -45,7 +45,7 @@ validate_return_type <- function(
   allowed_return_types = c("json", "list")
 ) {
   if (!return_type %in% allowed_return_types) {
-    stop("Invalid return_type. Must be either 'json' or 'list'.")
+    cli::cli_abort("Invalid return_type. Must be either 'json' or 'list'.")
   }
   invisible(TRUE)
 }
@@ -53,14 +53,14 @@ validate_return_type <- function(
 #' @keywords internal
 #' @noRd
 validate_date <- function(date) {
-  if (missing(date)) stop("Parameter `date` is required.")
+  if (missing(date)) cli::cli_abort("Parameter `date` is required.")
 }
 
 #' @keywords internal
 #' @noRd
 validate_select <- function(select) {
   if (missing(select) || !all(c("entity", "variable") %in% select)) {
-    stop("`select` must include both 'entity' and 'variable'.")
+    cli::cli_abort("`select` must include both 'entity' and 'variable'.")
   }
 }
 
@@ -68,6 +68,8 @@ validate_select <- function(select) {
 #' @noRd
 validate_entity <- function(entity_dcids, entity_expression) {
   if (is.null(entity_dcids) && is.null(entity_expression)) {
-    stop("Either `entity_dcids` or `entity_expression` must be provided.")
+    cli::cli_abort(
+      "Either `entity_dcids` or `entity_expression` must be provided."
+    )
   }
 }

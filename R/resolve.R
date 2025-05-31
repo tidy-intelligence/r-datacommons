@@ -146,7 +146,7 @@ dc_get_dcid_by_coordinates <- function(
   return_type = "json"
 ) {
   if (length(latitude) != length(longitude)) {
-    stop("Latitude and longitude vectors must be the same length.")
+    cli::cli_abort("Latitude and longitude vectors must be the same length.")
   }
 
   nodes <- paste(latitude, longitude, sep = "#")
