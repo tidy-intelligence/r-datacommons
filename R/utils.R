@@ -53,8 +53,49 @@ format_response <- function(data, method) {
     data |>
       resps_data(\(resp) resp_body_json(resp))
   } else if (method == "data.frame") {
-    data |>
+    raw <- data |>
       resps_data(\(resp) resp_body_json(resp))
+
+    rows <- list()
+
+    by_variable <- raw$byVariable
+    facets_info <- raw$facets
+
+    for (variable_name in names(by_variable)) {
+      by_entity <- by_variable[[variable_name]]$byEntity
+      for (entity_name in names(by_entity)) {
+        ordered_facets <- by_entity[[entity_name]]$orderedFacets
+        for (facet in ordered_facets) {
+          facet_id <- facet$facetId
+          observations <- facet$observations
+
+          if (!is.null(facets_info[[facet_id]]$importName)) {
+            facet_name <- facets_info[[facet_id]]$importName[[1]]
+          } else {
+            facet_name <- NA
+          }
+
+          for (obs in observations) {
+            row <- list(
+              entity_dcid = entity_name,
+              variable_dcid = variable_name,
+              date = obs$date,
+              value = obs$value,
+              facet_id = facet_id,
+              facet_name = facet_name
+            )
+            rows[[length(rows) + 1]] <- row
+          }
+        }
+      }
+    }
+
+    df <- as.data.frame(do.call(
+      rbind,
+      lapply(rows, as.data.frame, stringsAsFactors = FALSE)
+    ))
+
+    df
   }
 }
 

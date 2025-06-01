@@ -8,7 +8,8 @@
 #' @param entity_expression Optional. A relation expression string (used in
 #' place of `entity_dcids`). One of `entity_dcids` or `entity_` is required.
 #' @param select Required. Character vector of fields to select. Must include
-#' `"entity"` and `"variable"`.
+#' `"entity"` and `"variable"`. Defaults to
+#' `c("date", "entity", "value", "variable")`.
 #' @param filter_domains Optional. Vector of domain names to filter
 #' facets.
 #' @param filter_facet_ids Optional. Vector of facet IDs to filter
@@ -109,7 +110,7 @@ dc_get_observations <- function(
   variable_dcids = NULL,
   entity_dcids = NULL,
   entity_expression = NULL,
-  select,
+  select = c("date", "entity", "value", "variable"),
   filter_domains = NULL,
   filter_facet_ids = NULL,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
@@ -155,6 +156,5 @@ dc_get_observations <- function(
 
   successes <- handle_successes(resps)
 
-  # TODO: add formatting of data.frame return_type only for
   format_response(successes, return_type)
 }

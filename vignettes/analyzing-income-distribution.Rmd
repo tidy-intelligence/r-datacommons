@@ -1,0 +1,21 @@
+---
+title: "analyzing-income-distribution"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{analyzing-income-distribution}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!-- https://github.com/datacommonsorg/api-python/blob/master/notebooks/v2/analyzing_income_distribution.ipynb -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datacommons)
+```
