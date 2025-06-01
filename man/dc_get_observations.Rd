@@ -9,7 +9,7 @@ dc_get_observations(
   variable_dcids = NULL,
   entity_dcids = NULL,
   entity_expression = NULL,
-  select,
+  select = c("date", "entity", "value", "variable"),
   filter_domains = NULL,
   filter_facet_ids = NULL,
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
@@ -31,7 +31,8 @@ all dates.}
 place of \code{entity_dcids}). One of \code{entity_dcids} or \code{entity_} is required.}
 
 \item{select}{Required. Character vector of fields to select. Must include
-\code{"entity"} and \code{"variable"}.}
+\code{"entity"} and \code{"variable"}. Defaults to
+\code{c("date", "entity", "value", "variable")}.}
 
 \item{filter_domains}{Optional. Vector of domain names to filter
 facets.}

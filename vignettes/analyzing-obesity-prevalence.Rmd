@@ -24,11 +24,11 @@ library(datacommons)
 ```{r}
 us_county_observations <- dc_get_observations(
   variable_dcids = c(
-    "Percent_Person_Obesity", # Obesity prevalence from CDC
-    "Percent_Person_WithHighBloodPressure", # High blood pressure prevalence from CDC
-    "UnemploymentRate_Person", # Unemployment rate from BLS
-    "Count_Person_BelowPovertyLevelInThePast12Months", # Persons living below the poverty line from Census
-    "Count_Person" # Total population from Census
+    "Percent_Person_Obesity",
+    "Percent_Person_WithHighBloodPressure",
+    "UnemploymentRate_Person",
+    "Count_Person_BelowPovertyLevelInThePast12Months",
+    "Count_Person"
   ),
   date = 2021,
   entity_dcids = "country/USA",

@@ -46,9 +46,7 @@ next_req <- function(resp, req) {
 format_response <- function(data, method) {
   if (method == "json") {
     data |>
-      resps_data(\(resp) resp_body_string(resp)) |>
-      fromJSON() |>
-      toJSON(pretty = TRUE)
+      resps_data(\(resp) resp_body_string(resp))
   } else if (method == "list") {
     data |>
       resps_data(\(resp) resp_body_json(resp))
@@ -138,7 +136,10 @@ construct_request <- function(
       req_url_path_append(path) |>
       req_url_query(!!!query_params, .multi = "explode") |>
       req_user_agent(
-        "datacommons R package (https://github.com/tidy-intelligence/r-datacommons)"
+        paste(
+          "datacommons R package",
+          "(https://github.com/tidy-intelligence/r-datacommons)"
+        )
       )
   } else if (request_type == "post") {
     request(base_url) |>
@@ -149,7 +150,10 @@ construct_request <- function(
       ) |>
       req_body_json(list(query = query)) |>
       req_user_agent(
-        "datacommons R package (https://github.com/tidy-intelligence/r-datacommons)"
+        paste(
+          "datacommons R package",
+          "(https://github.com/tidy-intelligence/r-datacommons)"
+        )
       )
   } else {
     cli::cli_abort(
@@ -170,8 +174,8 @@ handle_failures <- function(resps) {
   failed_resps <- resps_failures(resps)
   if (length(failed_resps) > 0) {
     for (resp in failed_resps) {
-      url <- resp$request$url %||% "<unknown>"
-      status <- resp$status_code %||% "unknown"
+      url <- resp$request$url %||% "<unknown>" # nolint
+      status <- resp$status_code %||% "unknown" # nolint
       msg <- tryCatch(
         {
           content <- resp_body_string(resp)

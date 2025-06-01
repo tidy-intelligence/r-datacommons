@@ -146,10 +146,10 @@ dc_get_property_values <- function(
 #'
 #' @examplesIf dc_has_api_key()
 #' # Get all statistical variables
-#' statistical_vars <- dc_get_available_statistical_variables()
+#' statistical_vars <- dc_get_statistical_variables()
 #'
 #' @export
-dc_get_available_statistical_variables <- function(
+dc_get_statistical_variables <- function(
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
     "DATACOMMONS_BASE_URL",
@@ -184,10 +184,10 @@ dc_get_available_statistical_variables <- function(
 #'
 #' @examplesIf dc_has_api_key()
 #' # Get all entity classes
-#' all_classes <- dc_get_all_classes()
+#' all_classes <- dc_get_classes(return_type = "json")
 #'
 #' @export
-dc_get_all_classes <- function(
+dc_get_classes <- function(
   api_key = Sys.getenv("DATACOMMONS_API_KEY"),
   base_url = Sys.getenv(
     "DATACOMMONS_BASE_URL",

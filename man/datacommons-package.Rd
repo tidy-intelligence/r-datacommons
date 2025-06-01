@@ -6,10 +6,10 @@
 \alias{datacommons-package}
 \title{datacommons: Client for the Google Data Commons API V2}
 \description{
-An R client for accessing the Google Data Commons API V2, providing programmatic access to statistical and demographic data from various sources. This package wraps the API endpoints described at https://docs.datacommons.org/api/rest/v2/.
+An R client for accessing the Google Data Commons API V2, providing programmatic access to statistical and demographic data from various sources. This package wraps the API endpoints described at \url{https://docs.datacommons.org/api/rest/v2/}.
 }
 \author{
-\strong{Maintainer}: Christoph Scheuch \email{your.email@example.com}
+\strong{Maintainer}: Christoph Scheuch \email{christoph@tidy-intelligence.com}
 
 }
 \keyword{internal}
