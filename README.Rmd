@@ -49,22 +49,14 @@ Load the package:
 library(datacommons)
 ```
 
-Get all property labels for a given node:
+Get a data frame with US population data from World Development Indicators:
 
 ```{r}
-result <- dc_get_node(
-    nodes = "country/USA", 
-    expression = "<-"
+dc_get_observations(
+  date = "all",
+  variable_dcids = "Count_Person",
+  entity_dcids = "country/USA",
+  return_type = "data.frame",
+  filter_facet_id = 3981252704
 )
-str(result)
-```
-
-Find the Data Commons ID (DCID) of a place by another known ID 
-
-```{r}
-result <- dc_get_resolve(
-    nodes = "Q30",
-    expression = "<-wikidataId->dcid"
-)
-str(result)
 ```
