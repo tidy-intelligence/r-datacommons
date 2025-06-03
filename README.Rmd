@@ -52,11 +52,25 @@ library(datacommons)
 Get a data frame with US population data from World Development Indicators:
 
 ```{r}
-dc_get_observations(
+country_level <- dc_get_observations(
   date = "all",
   variable_dcids = "Count_Person",
   entity_dcids = "country/USA",
   return_type = "data.frame",
   filter_facet_id = 3981252704
 )
+head(country_level, 5)
+```
+
+If you want to get different population numbers on the state level:
+
+```{r}
+state_level <- dc_get_observations(
+  variable_dcids = c("Count_Person"),
+  date = 2021,
+  parent_entity = "country/USA",
+  entity_type = "State",
+  return_type = "data.frame"
+)
+head(state_level, 5)
 ```

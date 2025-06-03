@@ -9,6 +9,8 @@ dc_get_observations(
   variable_dcids = NULL,
   entity_dcids = NULL,
   entity_expression = NULL,
+  parent_entity = NULL,
+  entity_type = NULL,
   select = c("date", "entity", "value", "variable"),
   filter_domains = NULL,
   filter_facet_ids = NULL,
@@ -19,16 +21,24 @@ dc_get_observations(
 )
 }
 \arguments{
-\item{date}{A date string,\code{"latest"}, or \code{"all"} to return observations for
+\item{date}{A date string, \code{"latest"}, or \code{"all"} to return observations for
 all dates.}
 
 \item{variable_dcids}{Optional. Vector of statistical variable DCIDs.}
 
 \item{entity_dcids}{Optional. Vector of entity DCIDs (e.g., places). One of
-\code{entity_dcids} or \code{entity_expression} is required.}
+\code{entity_dcids}, \code{entity_expression}, or the combination of \code{parent_entity}
+and \code{entity_type} is required.}
 
 \item{entity_expression}{Optional. A relation expression string (used in
-place of \code{entity_dcids}). One of \code{entity_dcids} or \code{entity_} is required.}
+place of \code{entity_dcids}). One of \code{entity_dcids}, \code{entity_expression}, or the
+combination of \code{parent_entity} and \code{entity_type} is required.}
+
+\item{parent_entity}{Optional. A parent entity DCID to be used in combination
+with \code{entity_type} to construct an entity expression.}
+
+\item{entity_type}{Optional. A child entity type (e.g., \code{"County"}) to be
+used with \code{parent_entity} to construct an entity expression.}
 
 \item{select}{Required. Character vector of fields to select. Must include
 \code{"entity"} and \code{"variable"}. Defaults to
@@ -86,16 +96,14 @@ dc_get_observations(
 dc_get_observations(
   date = "latest",
   variable_dcids = c("Count_Person"),
-  entity_dcids = c("country/CAN"),
-  select = c("entity", "variable", "value", "date")
+  entity_dcids = c("country/CAN")
 )
 
 # Get the observations at a particular date for given entities by DCID
 dc_get_observations(
   date = 2015,
   variable_dcids = c("Count_Person"),
-  entity_dcids = c("country/CAN", "geoId/06"),
-  select = c("date", "entity", "value", "variable")
+  entity_dcids = c("country/CAN", "geoId/06")
 )
 
 # Get all observations for selected entities by DCID
@@ -106,16 +114,14 @@ dc_get_observations(
     "cCount_Person_EducationalAttainmentDoctorateDegree",
     "geoId/55",
     "geoId/55"
-  ),
-  select = c("date", "entity", "value", "variable")
+  )
 )
 
 # Get the latest observations for entities specified by expression
 dc_get_observations(
   date = "latest",
   variable_dcids = "Count_Person",
-  entity_expression = "geoId/06<-containedInPlace+{typeOf:County}",
-  select = c("date", "entity", "value", "variable")
+  entity_expression = "geoId/06<-containedInPlace+{typeOf:County}"
 )
 
 # Get the latest observations for a single entity, filtering by provenance
@@ -123,8 +129,7 @@ dc_get_observations(
   date = "latest",
   variable_dcids = "Count_Person",
   entity_dcids = "country/USA",
-  filter_domains = "www2.census.gov",
-  select = c("entity", "variable", "value", "date")
+  filter_domains = "www2.census.gov"
 )
 
 # Get the latest observations for a single entity, filtering for specific
@@ -133,8 +138,16 @@ dc_get_observations(
   date = "latest",
   variable_dcids = "Count_Person",
   entity_dcids = "country/BRA",
-  filter_facet_ids = "3981252704",
-  select = c("date", "entity", "value", "variable")
+  filter_facet_ids = "3981252704"
+)
+
+# Get observations for all states of a country
+dc_get_observations(
+  variable_dcids = c("Count_Person"),
+  date = 2021,
+  parent_entity = "country/USA",
+  entity_type = "State",
+  return_type = "data.frame"
 )
 \dontshow{\}) # examplesIf}
 }

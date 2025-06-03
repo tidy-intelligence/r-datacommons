@@ -66,10 +66,22 @@ validate_select <- function(select) {
 
 #' @keywords internal
 #' @noRd
-validate_entity <- function(entity_dcids, entity_expression) {
-  if (is.null(entity_dcids) && is.null(entity_expression)) {
+validate_entity <- function(
+  entity_dcids,
+  entity_expression,
+  parent_entity,
+  entity_type
+) {
+  if (
+    is.null(entity_dcids) &&
+      is.null(entity_expression) &&
+      (is.null(parent_entity) || is.null(entity_type))
+  ) {
     cli::cli_abort(
-      "Either `entity_dcids` or `entity_expression` must be provided."
+      paste(
+        "You must provide either `entity_dcids`, `entity_expression`,",
+        "or both `parent_entity` and `entity_type`."
+      )
     )
   }
 }

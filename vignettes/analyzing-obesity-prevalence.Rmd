@@ -23,15 +23,10 @@ library(datacommons)
 
 ```{r}
 us_county_observations <- dc_get_observations(
-  variable_dcids = c(
-    "Percent_Person_Obesity",
-    "Percent_Person_WithHighBloodPressure",
-    "UnemploymentRate_Person",
-    "Count_Person_BelowPovertyLevelInThePast12Months",
-    "Count_Person"
-  ),
+  variable_dcids = c("Count_Person"),
   date = 2021,
-  entity_dcids = "country/USA",
+  parent_entity = "country/USA",
+  entity_type = "State",
   return_type = "data.frame"
 )
 ```

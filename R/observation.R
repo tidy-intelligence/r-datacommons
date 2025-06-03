@@ -1,12 +1,18 @@
 #' Retrieve Observations from Data Commons
 #'
-#' @param date A date string,`"latest"`, or `"all"` to return observations for
+#' @param date A date string, `"latest"`, or `"all"` to return observations for
 #' all dates.
 #' @param variable_dcids Optional. Vector of statistical variable DCIDs.
 #' @param entity_dcids Optional. Vector of entity DCIDs (e.g., places). One of
-#' `entity_dcids` or `entity_expression` is required.
+#' `entity_dcids`, `entity_expression`, or the combination of `parent_entity`
+#' and `entity_type` is required.
 #' @param entity_expression Optional. A relation expression string (used in
-#' place of `entity_dcids`). One of `entity_dcids` or `entity_` is required.
+#' place of `entity_dcids`). One of `entity_dcids`, `entity_expression`, or the
+#' combination of `parent_entity` and `entity_type` is required.
+#' @param parent_entity Optional. A parent entity DCID to be used in combination
+#' with `entity_type` to construct an entity expression.
+#' @param entity_type Optional. A child entity type (e.g., `"County"`) to be
+#' used with `parent_entity` to construct an entity expression.
 #' @param select Required. Character vector of fields to select. Must include
 #' `"entity"` and `"variable"`. Defaults to
 #' `c("date", "entity", "value", "variable")`.
@@ -53,16 +59,14 @@
 #' dc_get_observations(
 #'   date = "latest",
 #'   variable_dcids = c("Count_Person"),
-#'   entity_dcids = c("country/CAN"),
-#'   select = c("entity", "variable", "value", "date")
+#'   entity_dcids = c("country/CAN")
 #' )
 #'
 #' # Get the observations at a particular date for given entities by DCID
 #' dc_get_observations(
 #'   date = 2015,
 #'   variable_dcids = c("Count_Person"),
-#'   entity_dcids = c("country/CAN", "geoId/06"),
-#'   select = c("date", "entity", "value", "variable")
+#'   entity_dcids = c("country/CAN", "geoId/06")
 #' )
 #'
 #' # Get all observations for selected entities by DCID
@@ -73,16 +77,14 @@
 #'     "cCount_Person_EducationalAttainmentDoctorateDegree",
 #'     "geoId/55",
 #'     "geoId/55"
-#'   ),
-#'   select = c("date", "entity", "value", "variable")
+#'   )
 #' )
 #'
 #' # Get the latest observations for entities specified by expression
 #' dc_get_observations(
 #'   date = "latest",
 #'   variable_dcids = "Count_Person",
-#'   entity_expression = "geoId/06<-containedInPlace+{typeOf:County}",
-#'   select = c("date", "entity", "value", "variable")
+#'   entity_expression = "geoId/06<-containedInPlace+{typeOf:County}"
 #' )
 #'
 #' # Get the latest observations for a single entity, filtering by provenance
@@ -90,8 +92,7 @@
 #'   date = "latest",
 #'   variable_dcids = "Count_Person",
 #'   entity_dcids = "country/USA",
-#'   filter_domains = "www2.census.gov",
-#'   select = c("entity", "variable", "value", "date")
+#'   filter_domains = "www2.census.gov"
 #' )
 #'
 #' # Get the latest observations for a single entity, filtering for specific
@@ -100,8 +101,16 @@
 #'   date = "latest",
 #'   variable_dcids = "Count_Person",
 #'   entity_dcids = "country/BRA",
-#'   filter_facet_ids = "3981252704",
-#'   select = c("date", "entity", "value", "variable")
+#'   filter_facet_ids = "3981252704"
+#' )
+#'
+#' # Get observations for all states of a country
+#' dc_get_observations(
+#'   variable_dcids = c("Count_Person"),
+#'   date = 2021,
+#'   parent_entity = "country/USA",
+#'   entity_type = "State",
+#'   return_type = "data.frame"
 #' )
 #'
 #' @export
@@ -110,6 +119,8 @@ dc_get_observations <- function(
   variable_dcids = NULL,
   entity_dcids = NULL,
   entity_expression = NULL,
+  parent_entity = NULL,
+  entity_type = NULL,
   select = c("date", "entity", "value", "variable"),
   filter_domains = NULL,
   filter_facet_ids = NULL,
@@ -128,13 +139,22 @@ dc_get_observations <- function(
   )
   validate_date(date)
   validate_select(select)
-  validate_entity(entity_dcids, entity_expression)
+  validate_entity(entity_dcids, entity_expression, parent_entity, entity_type)
 
   if (date == "all") {
     date <- ""
   }
   if (date == "latest") {
     date <- "LATEST"
+  }
+
+  if (!is.null(parent_entity) & !is.null(entity_type)) {
+    entity_expression <- paste0(
+      parent_entity,
+      "<-containedInPlace+{typeOf:",
+      entity_type,
+      "}"
+    )
   }
 
   req <- construct_request(
