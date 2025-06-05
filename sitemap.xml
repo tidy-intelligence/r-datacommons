@@ -1,0 +1,27 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/404.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/LICENSE-text.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/LICENSE.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/articles/analyzing-census-data.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/articles/analyzing-income-distribution.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/articles/analyzing-obesity-prevalence.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/articles/index.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/authors.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/index.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/datacommons-package.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_classes.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_dcid_by_coordinates.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_dcids_by_name.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_dcids_by_wikidata_id.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_node.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_observations.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_property_values.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_resolve.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_get_statistical_variables.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_has_api_key.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_post_sparql.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_set_api_key.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/dc_set_base_url.html</loc></url>
+<url><loc>https://tidy-intelligence.github.io/r-datacommons/reference/index.html</loc></url>
+</urlset>
+
