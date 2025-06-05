@@ -30,3 +30,5 @@ us_county_observations <- dc_get_observations(
   return_type = "data.frame"
 )
 ```
+
+Coming soon ...

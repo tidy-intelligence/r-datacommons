@@ -1,5 +1,5 @@
 ---
-title: "analyzing-census-data"
+title: "Analyzing Census Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{analyzing-census-data}
@@ -19,3 +19,5 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(datacommons)
 ```
+
+Coming soon ...

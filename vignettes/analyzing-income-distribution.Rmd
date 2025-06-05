@@ -1,5 +1,5 @@
 ---
-title: "analyzing-income-distribution"
+title: "Analyzing Income Distribution"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{analyzing-income-distribution}
@@ -19,3 +19,5 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(datacommons)
 ```
+
+Coming soon ...
