@@ -5,3 +5,5 @@
 .Renviron
 inst/doc
 docs
+/doc/
+/Meta/

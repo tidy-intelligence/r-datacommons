@@ -45,15 +45,19 @@ Load the package:
 library(datacommons)
 ```
 
-Set the Data Commons API key as an environment variable using the helper
+Get a free API key for Data Commons
+[here](https://apikeys.datacommons.org/). Set the Data Commons API key
+as the `DATACOMMONS_API_KEY` environment variable using the helper
 function and restart your R session to load the key:
 
 ``` r
 dc_set_api_key("YOUR_API_KEY")
 ```
 
-If you want to use a custom Data Commons instance, then you can also set
-the base URL on a project or global level via an environment variable:
+If you want to use a [custom Data Commons
+instance](https://docs.datacommons.org/api/rest/v2/#base-url-for-custom-instances),
+then you can also set the `DATACOMMONS_BASE_URL` environment varibale on
+the project or global level:
 
 ``` r
 dc_set_base_url("YOUR_BASE_URL")
