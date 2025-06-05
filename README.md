@@ -45,6 +45,20 @@ Load the package:
 library(datacommons)
 ```
 
+Set the Data Commons API key as an environment variable using the helper
+function and restart your R session to load the key:
+
+``` r
+dc_set_api_key("YOUR_API_KEY")
+```
+
+If you want to use a custom Data Commons instance, then you can also set
+the base URL on a project or global level via an environment variable:
+
+``` r
+dc_set_base_url("YOUR_BASE_URL")
+```
+
 Get a data frame with US population data from [World Development
 Indicators](https://datacommons.org/browser/dc/base/WorldDevelopmentIndicators):
 
@@ -57,18 +71,18 @@ country_level <- dc_get_observations(
   filter_facet_id = 3981252704
 )
 head(country_level, 5)
-#>   entity_dcid variable_dcid date     value   facet_id
-#> 1 country/USA  Count_Person 1960 180671000 3981252704
-#> 2 country/USA  Count_Person 1961 183691000 3981252704
-#> 3 country/USA  Count_Person 1962 186538000 3981252704
-#> 4 country/USA  Count_Person 1963 189242000 3981252704
-#> 5 country/USA  Count_Person 1964 191889000 3981252704
-#>                   facet_name
-#> 1 WorldDevelopmentIndicators
-#> 2 WorldDevelopmentIndicators
-#> 3 WorldDevelopmentIndicators
-#> 4 WorldDevelopmentIndicators
-#> 5 WorldDevelopmentIndicators
+#>   entity_dcid              entity_name variable_dcid    variable_name date
+#> 1 country/USA United States of America  Count_Person Total Population 1960
+#> 2 country/USA United States of America  Count_Person Total Population 1961
+#> 3 country/USA United States of America  Count_Person Total Population 1962
+#> 4 country/USA United States of America  Count_Person Total Population 1963
+#> 5 country/USA United States of America  Count_Person Total Population 1964
+#>       value   facet_id                 facet_name
+#> 1 180671000 3981252704 WorldDevelopmentIndicators
+#> 2 183691000 3981252704 WorldDevelopmentIndicators
+#> 3 186538000 3981252704 WorldDevelopmentIndicators
+#> 4 189242000 3981252704 WorldDevelopmentIndicators
+#> 5 191889000 3981252704 WorldDevelopmentIndicators
 ```
 
 If you want to get different population numbers from the [US
@@ -85,16 +99,16 @@ state_level <- dc_get_observations(
   filter_facet_id = 2176550201
 )
 head(state_level, 5)
-#>   entity_dcid variable_dcid date   value   facet_id
-#> 1    geoId/47  Count_Person 2021 6975218 2176550201
-#> 2    geoId/54  Count_Person 2021 1782959 2176550201
-#> 3    geoId/04  Count_Person 2021 7276316 2176550201
-#> 4    geoId/40  Count_Person 2021 3986639 2176550201
-#> 5    geoId/19  Count_Person 2021 3193079 2176550201
-#>                      facet_name
-#> 1 USCensusPEP_Annual_Population
-#> 2 USCensusPEP_Annual_Population
-#> 3 USCensusPEP_Annual_Population
-#> 4 USCensusPEP_Annual_Population
-#> 5 USCensusPEP_Annual_Population
+#>   entity_dcid entity_name variable_dcid    variable_name date    value
+#> 1    geoId/01     Alabama  Count_Person Total Population 2021  5039877
+#> 2    geoId/02      Alaska  Count_Person Total Population 2021   732673
+#> 3    geoId/04     Arizona  Count_Person Total Population 2021  7276316
+#> 4    geoId/05    Arkansas  Count_Person Total Population 2021  3025891
+#> 5    geoId/06  California  Count_Person Total Population 2021 39237836
+#>     facet_id                    facet_name
+#> 1 2176550201 USCensusPEP_Annual_Population
+#> 2 2176550201 USCensusPEP_Annual_Population
+#> 3 2176550201 USCensusPEP_Annual_Population
+#> 4 2176550201 USCensusPEP_Annual_Population
+#> 5 2176550201 USCensusPEP_Annual_Population
 ```

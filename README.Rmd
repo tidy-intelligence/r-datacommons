@@ -51,6 +51,18 @@ Load the package:
 library(datacommons)
 ```
 
+Set the Data Commons API key as an environment variable using the helper function and restart your R session to load the key: 
+
+```{r, eval=FALSE}
+dc_set_api_key("YOUR_API_KEY")
+```
+
+If you want to use a custom Data Commons instance, then you can also set the base URL on a project or global level via an environment variable:
+
+```{r, eval=FALSE}
+dc_set_base_url("YOUR_BASE_URL")
+```
+
 Get a data frame with US population data from [World Development Indicators](https://datacommons.org/browser/dc/base/WorldDevelopmentIndicators):
 
 ```{r}

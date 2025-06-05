@@ -93,6 +93,63 @@ format_response <- function(data, return_type) {
       lapply(rows, as.data.frame, stringsAsFactors = FALSE)
     ))
 
+    entity_names_raw <- dc_get_property_values(
+      unique(df$entity_dcid),
+      properties = "name",
+      return_type = "json"
+    )
+
+    entity_names_parsed <- fromJSON(entity_names_raw)
+
+    df2 <- do.call(
+      rbind,
+      lapply(names(entity_names_parsed$data), function(id) {
+        entity <- entity_names_parsed$data[[id]]
+        entity_name <- entity$arcs$name$nodes$value[1]
+        data.frame(
+          entity_dcid = id,
+          entity_name = entity_name,
+          stringsAsFactors = FALSE
+        )
+      })
+    )
+
+    df <- merge(df, df2, by = "entity_dcid", all.x = TRUE)
+
+    variable_names_raw <- dc_get_property_values(
+      unique(df$variable_dcid),
+      properties = "name",
+      return_type = "json"
+    )
+
+    variable_names_parsed <- fromJSON(variable_names_raw)
+
+    df3 <- do.call(
+      rbind,
+      lapply(names(variable_names_parsed$data), function(id) {
+        entity <- variable_names_parsed$data[[id]]
+        variable_name <- entity$arcs$name$nodes$value[1]
+        data.frame(
+          variable_dcid = id,
+          variable_name = variable_name,
+          stringsAsFactors = FALSE
+        )
+      })
+    )
+
+    df <- merge(df, df3, by = "variable_dcid", all.x = TRUE)
+
+    df <- df[, c(
+      "entity_dcid",
+      "entity_name",
+      "variable_dcid",
+      "variable_name",
+      setdiff(
+        names(df),
+        c("entity_dcid", "entity_name", "variable_dcid", "variable_name")
+      )
+    )]
+
     df
   }
 }
