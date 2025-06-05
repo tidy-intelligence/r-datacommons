@@ -20,15 +20,4 @@ knitr::opts_chunk$set(
 library(datacommons)
 ```
 
-
-```{r}
-us_county_observations <- dc_get_observations(
-  variable_dcids = c("Count_Person"),
-  date = 2021,
-  parent_entity = "country/USA",
-  entity_type = "State",
-  return_type = "data.frame"
-)
-```
-
 Coming soon ...
