@@ -1,6 +1,6 @@
 Package: datacommons
 Title: Client for the Google Data Commons API V2
-Version: 0.0.1
+Version: 0.0.1.9000
 Authors@R: 
     person("Christoph", "Scheuch", email = "christoph@tidy-intelligence.com", role = c("aut", "cre"))
 Description: An R client for accessing the Google Data Commons API V2, 
