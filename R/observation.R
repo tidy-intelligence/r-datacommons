@@ -148,7 +148,7 @@ dc_get_observations <- function(
     date <- "LATEST"
   }
 
-  if (!is.null(parent_entity) & !is.null(entity_type)) {
+  if (!is.null(parent_entity) && !is.null(entity_type)) {
     entity_expression <- paste0(
       parent_entity,
       "<-containedInPlace+{typeOf:",
