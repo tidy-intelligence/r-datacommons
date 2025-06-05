@@ -25,6 +25,8 @@ knitr::opts_chunk$set(
 
 Retrieve data from the [Data Commons REST API V2](https://docs.datacommons.org/api/rest/v2/). Data Commons provides harmonized access to dozens of data sources and thousands of datasets organized in a knowledge graph. 
 
+
+
 ## Installation
 
 <!-- You can install `datacommons` from [CRAN](https://cran.r-project.org/package=datacommons) via:
@@ -49,7 +51,7 @@ Load the package:
 library(datacommons)
 ```
 
-Get a data frame with US population data from World Development Indicators:
+Get a data frame with US population data from [World Development Indicators](https://datacommons.org/browser/dc/base/WorldDevelopmentIndicators):
 
 ```{r}
 country_level <- dc_get_observations(
@@ -62,7 +64,7 @@ country_level <- dc_get_observations(
 head(country_level, 5)
 ```
 
-If you want to get different population numbers on the state level:
+If you want to get different population numbers from the [US Census](https://datacommons.org/browser/dc/base/USCensusPEP_Annual_Population) on the state level:
 
 ```{r}
 state_level <- dc_get_observations(
@@ -70,7 +72,8 @@ state_level <- dc_get_observations(
   date = 2021,
   parent_entity = "country/USA",
   entity_type = "State",
-  return_type = "data.frame"
+  return_type = "data.frame",
+  filter_facet_id = 2176550201
 )
 head(state_level, 5)
 ```

@@ -92,7 +92,7 @@
 #'   date = "latest",
 #'   variable_dcids = "Count_Person",
 #'   entity_dcids = "country/USA",
-#'   filter_domains = "www2.census.gov"
+#'   filter_domains = "www.census.gov"
 #' )
 #'
 #' # Get the latest observations for a single entity, filtering for specific
@@ -104,9 +104,9 @@
 #'   filter_facet_ids = "3981252704"
 #' )
 #'
-#' # Get observations for all states of a country
+#' # Get observations for all states of a country as a data frame
 #' dc_get_observations(
-#'   variable_dcids = c("Count_Person"),
+#'   variable_dcids = "Count_Person",
 #'   date = 2021,
 #'   parent_entity = "country/USA",
 #'   entity_type = "State",

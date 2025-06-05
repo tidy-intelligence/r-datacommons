@@ -43,14 +43,14 @@ next_req <- function(resp, req) {
 
 #' @keywords internal
 #' @noRd
-format_response <- function(data, method) {
-  if (method == "json") {
+format_response <- function(data, return_type) {
+  if (return_type == "json") {
     data |>
       resps_data(\(resp) resp_body_string(resp))
-  } else if (method == "list") {
+  } else if (return_type == "list") {
     data |>
       resps_data(\(resp) resp_body_json(resp))
-  } else if (method == "data.frame") {
+  } else if (return_type == "data.frame") {
     raw <- data |>
       resps_data(\(resp) resp_body_json(resp))
 

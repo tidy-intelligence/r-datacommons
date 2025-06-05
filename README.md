@@ -45,8 +45,8 @@ Load the package:
 library(datacommons)
 ```
 
-Get a data frame with US population data from World Development
-Indicators:
+Get a data frame with US population data from [World Development
+Indicators](https://datacommons.org/browser/dc/base/WorldDevelopmentIndicators):
 
 ``` r
 country_level <- dc_get_observations(
@@ -71,7 +71,9 @@ head(country_level, 5)
 #> 5 WorldDevelopmentIndicators
 ```
 
-If you want to get different population numbers on the state level:
+If you want to get different population numbers from the [US
+Census](https://datacommons.org/browser/dc/base/USCensusPEP_Annual_Population)
+on the state level:
 
 ``` r
 state_level <- dc_get_observations(
@@ -79,19 +81,20 @@ state_level <- dc_get_observations(
   date = 2021,
   parent_entity = "country/USA",
   entity_type = "State",
-  return_type = "data.frame"
+  return_type = "data.frame",
+  filter_facet_id = 2176550201
 )
 head(state_level, 5)
-#>   entity_dcid variable_dcid date  value   facet_id
-#> 1    geoId/56  Count_Person 2021 578803 2176550201
-#> 2    geoId/56  Count_Person 2021 576641 1145703171
-#> 3    geoId/56  Count_Person 2021 576641   10983471
-#> 4    geoId/56  Count_Person 2021 576641  196790193
-#> 5    geoId/56  Count_Person 2021 576641 1964317807
-#>                                  facet_name
-#> 1             USCensusPEP_Annual_Population
-#> 2                      CensusACS5YearSurvey
-#> 3 CensusACS5YearSurvey_SubjectTables_S2601A
-#> 4  CensusACS5YearSurvey_SubjectTables_S2602
-#> 5  CensusACS5YearSurvey_SubjectTables_S0101
+#>   entity_dcid variable_dcid date   value   facet_id
+#> 1    geoId/47  Count_Person 2021 6975218 2176550201
+#> 2    geoId/54  Count_Person 2021 1782959 2176550201
+#> 3    geoId/04  Count_Person 2021 7276316 2176550201
+#> 4    geoId/40  Count_Person 2021 3986639 2176550201
+#> 5    geoId/19  Count_Person 2021 3193079 2176550201
+#>                      facet_name
+#> 1 USCensusPEP_Annual_Population
+#> 2 USCensusPEP_Annual_Population
+#> 3 USCensusPEP_Annual_Population
+#> 4 USCensusPEP_Annual_Population
+#> 5 USCensusPEP_Annual_Population
 ```
