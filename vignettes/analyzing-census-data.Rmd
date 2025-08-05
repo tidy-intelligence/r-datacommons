@@ -23,69 +23,65 @@ knitr::opts_chunk$set(
 
 By the end of this vignette, you will be able to:
 
-- Understand what Google Data Commons is and why it offers unique value
-- Navigate the knowledge graph structure using relationships
-- Find and use DCIDs (Data Commons IDs) and statistical variables
-- Retrieve demographic data across different geographic levels
-- Integrate data from multiple sources (the key strength of Data Commons)
-- Handle multiple data sources and select appropriate facets
-- Build progressively complex demographic analyses
+* Understand what Google Data Commons is and why it offers unique value for data integration
+* Navigate the knowledge graph structure using relationships  
+* Find and use DCIDs (Data Commons IDs) and statistical variables
+* Retrieve demographic data across different geographic levels using the `datacommons` R package
+* Integrate data from multiple sources (the key strength of Data Commons)
+* Handle multiple data sources and select appropriate facets
+* Build progressively complex demographic analyses
 
 ## Why Data Commons?
 
-The R ecosystem has excellent packages for specific data sources. For example, 
-the [tidycensus](https://walker-data.com/tidycensus/) package provides 
-fantastic functionality for working with U.S. Census data, with deep 
-dataset-specific features and conveniences.
+The R ecosystem has excellent packages for specific data sources. For example, the [tidycensus](https://walker-data.com/tidycensus/) package provides fantastic functionality for working with U.S. Census data, with deep dataset-specific features and conveniences.
 
 So why use Data Commons? **The real value is in data integration.**
 
-Imagine you want to analyze the relationship between:
-- Census demographics (population, age)
-- CDC health statistics (disease prevalence)
-- EPA environmental data (air quality)
-- Bureau of Labor Statistics (unemployment rates)
+Imagine you're a policy analyst studying the social determinants of health. You need to analyze relationships between:
+
+* Census demographics (population, age, income)
+* CDC health statistics (disease prevalence, obesity rates)  
+* EPA environmental data (air quality indices)
+* Bureau of Labor Statistics (unemployment rates)
 
 With traditional approaches, you'd need to:
+
 1. Learn multiple different APIs
-2. Deal with different geographic coding systems
+2. Deal with different geographic coding systems  
 3. Reconcile different time periods and update cycles
 4. Match entities across datasets (is "Los Angeles County" the same in all datasets?)
 
-Data Commons solves this by providing a **unified knowledge graph** that links 
-all these datasets together. One API, one set of geographic identifiers, one 
-consistent way to access everything.
+Data Commons solves this by providing a **unified knowledge graph** that links all these datasets together. One API, one set of geographic identifiers, one consistent way to access everything. The `datacommons` R package is your gateway to this integrated data ecosystem, enabling reproducible analysis pipelines that seamlessly combine diverse data sources.
 
 ## Understanding the Knowledge Graph
 
-Data Commons organizes information as a graph, similar to how web pages link 
-to each other. Here's the key terminology:
+Data Commons organizes information as a graph, similar to how web pages link to each other. Here's the key terminology:
 
 ### DCIDs (Data Commons IDs)
-Every entity in Data Commons has a unique identifier called a DCID. Think of it 
-like a social security number for data:
-- `country/USA` = United States
-- `geoId/06` = California (using FIPS code 06)
-- `Count_Person` = the statistical variable for population count
+Every entity in Data Commons has a unique identifier called a DCID. Think of it like a social security number for data:
+
+* `country/USA` = United States
+* `geoId/06` = California (using FIPS code 06)  
+* `Count_Person` = the statistical variable for population count
 
 ### Relationships
 Entities are connected by relationships, following the Schema.org standard:
-- California --(`containedInPlace`)--> United States
-- California --(`typeOf`)--> State
-- Los Angeles County --(`containedInPlace`)--> California
 
-This structure lets us traverse the graph to find related information. Want all 
-counties in California? Follow the `containedInPlace` relationships backward.
+* California --(`containedInPlace`)--> United States
+* California --(`typeOf`)--> State
+* Los Angeles County --(`containedInPlace`)--> California
+
+This structure lets us traverse the graph to find related information. Want all counties in California? Follow the `containedInPlace` relationships backward.
 
 ### Statistical Variables
 These are the things we can measure:
-- `Count_Person` = total population
-- `Median_Age_Person` = median age
-- `UnemploymentRate_Person` = unemployment rate
-- `Mean_Temperature` = average temperature
 
-The power comes from being able to query any variable for any place using the 
-same consistent approach.
+* `Count_Person` = total population
+* `Median_Age_Person` = median age
+* `UnemploymentRate_Person` = unemployment rate
+* `Mean_Temperature` = average temperature
+
+The power comes from being able to query any variable for any place using the same consistent approach through the `datacommons` R package.
 
 ## Prerequisites
 
@@ -126,10 +122,10 @@ if (!dc_has_api_key()) {
 The `datacommons` R package requires three key pieces:
 
 1. **Statistical Variables**: What you want to measure
-   - Find these at: https://datacommons.org/tools/statvar
+   * Find these at: https://datacommons.org/tools/statvar
    
 2. **Place DCIDs**: Where you want to measure it
-   - Find these at: https://datacommons.org/place
+   * Find these at: https://datacommons.org/place
    
 3. **Dates**: When you want the measurement
 
@@ -137,7 +133,7 @@ Let's see how to find these in practice.
 
 ## Example 1: National Population Trends
 
-Let's start simple with U.S. population over time:
+**Real-world motivation**: Understanding population growth patterns is fundamental for policy planning, from infrastructure investments to social security projections. Let's examine U.S. population trends to see how growth has changed over time.
 
 ```{r national-population}
 # Get U.S. population data
@@ -160,8 +156,7 @@ unique(us_population$facet_name)
 
 ### Handling Multiple Data Sources
 
-Data Commons aggregates data from multiple sources. This is both a strength 
-(comprehensive data) and a challenge (which source to use?). Let's handle this:
+Data Commons aggregates data from multiple sources. This is both a strength (comprehensive data) and a challenge (which source to use?). Let's handle this:
 
 ```{r clean-population-data}
 # Strategy 1: Use the official Census PEP (Population Estimates Program)
@@ -195,10 +190,18 @@ ggplot(us_pop_clean, aes(x = year, y = population_millions)) +
 # Calculate average annual growth
 growth_rate <- us_pop_clean |>
   mutate(annual_growth = (population_millions / lag(population_millions) - 1) * 100) |>
-  summarize(avg_growth = mean(annual_growth, na.rm = TRUE))
+  summarize(
+    avg_growth = mean(annual_growth, na.rm = TRUE),
+    pre_2020_growth = mean(annual_growth[year < 2020], na.rm = TRUE),
+    post_2020_growth = mean(annual_growth[year >= 2020], na.rm = TRUE)
+  )
 
 sprintf("Average annual growth rate: %.2f%%", growth_rate$avg_growth)
+sprintf("Pre-2020 growth rate: %.2f%%", growth_rate$pre_2020_growth)
+sprintf("Post-2020 growth rate: %.2f%%", growth_rate$post_2020_growth)
 ```
+
+**Key insight**: Notice the marked change in growth patterns around 2020. While pre-2020 showed steady growth, the post-2020 period reveals a significant slowdown. This dramatic shift raises important policy questions: How much is due to COVID-19 mortality versus changes in immigration patterns or birth rates? The `datacommons` package makes it easy to pull in additional variables like death rates, immigration statistics, and birth rates to investigate these questions further.
 
 ### Alternative: Aggregate Across Sources
 
@@ -223,8 +226,7 @@ us_pop_aggregated |>
 
 ## Example 2: Using Relationships to Find States
 
-Now let's use the knowledge graph structure to find all U.S. states and analyze 
-them. We'll use the `containedInPlace` relationship:
+**Real-world motivation**: State-level demographic analysis is crucial for understanding regional variations in aging, which impacts healthcare planning, workforce development, and social services allocation.
 
 ```{r state-analysis}
 # Method 1: Use the parent/child relationship in observations
@@ -283,10 +285,11 @@ state_summary |>
   kable(caption = "States with extreme median ages")
 ```
 
+**Key insight**: The 13-year gap between Maine (44.8) and Utah (31.7) in median age represents dramatically different demographic challenges. Maine faces an aging workforce and increasing healthcare demands, while Utah's younger population suggests different priorities around education and family services. These demographic differences drive fundamentally different policy needs across states.
+
 ## Example 3: Cross-Dataset Integration
 
-Here's where Data Commons really shines. Let's combine Census data with health 
-data to look for patterns:
+**Real-world motivation**: Public health researchers often need to understand how socioeconomic factors relate to health outcomes. Let's explore potential connections between age demographics, obesity rates, and economic conditions at the county level—exactly the type of integrated analysis that would be extremely difficult without Data Commons.
 
 ```{r cross-dataset}
 # Get multiple variables for California counties
@@ -357,9 +360,11 @@ ca_analysis |>
   kable(caption = "Correlations between demographic and health variables")
 ```
 
+**Key insight**: The negative correlation (-0.30) between median age and obesity rates is counterintuitive—we might expect older populations to have higher obesity rates. However, the strong positive correlation (0.61) between unemployment and obesity suggests economic factors may be more important than age. This type of finding, made possible by the `datacommons` package's easy data integration, could inform targeted public health interventions that address economic barriers to healthy living.
+
 ## Example 4: Time Series Across Cities
 
-Let's track how major cities have grown over time:
+**Real-world motivation**: Urban planners and demographers track city growth patterns to inform infrastructure investments, housing policy, and resource allocation. Let's examine how major U.S. cities have grown differently over the past two decades.
 
 ```{r time-series}
 # Major city DCIDs (found using datacommons.org/place)
@@ -431,10 +436,11 @@ city_pop_clean |>
   )
 ```
 
+**Key insight**: The stark contrast between Sun Belt cities (Phoenix +26%, Houston +21%) and Rust Belt Chicago (-6%) reflects major economic and demographic shifts in America. These patterns have profound implications for everything from housing affordability to political representation. The `datacommons` package makes it trivial to extend this analysis—we could easily add variables like temperature, job growth, or housing costs to understand what drives these migration patterns.
+
 ## Working with Data Sources (Facets)
 
-Each data source in Data Commons is identified by a `facet_id` and `facet_name`. 
-Understanding these helps you choose the right data:
+Each data source in Data Commons is identified by a `facet_id` and `facet_name`. Understanding these helps you choose the right data:
 
 ```{r understanding-facets}
 # Example: What sources are available for U.S. population?
@@ -449,63 +455,57 @@ us_population |>
 
 **Common sources and when to use them:**
 
-- `USCensusPEP_Annual_Population`: Annual estimates (good for time series)
-- `CensusACS5YearSurvey`: American Community Survey (good for detailed demographics)
-- `USDecennialCensus`: Official census every 10 years (most authoritative)
-- `CDC_*`: Health data from CDC
-- `BLS_*`: Labor statistics from Bureau of Labor Statistics
-- `EPA_*`: Environmental data from EPA
+* `USCensusPEP_Annual_Population`: Annual estimates (good for time series)
+* `CensusACS5YearSurvey`: American Community Survey (good for detailed demographics)
+* `USDecennialCensus`: Official census every 10 years (most authoritative)
+* `CDC_*`: Health data from CDC
+* `BLS_*`: Labor statistics from Bureau of Labor Statistics
+* `EPA_*`: Environmental data from EPA
 
 ## Tips for Effective Use
 
-1. **Start with the websites**: Use Data Commons web tools to explore what's 
-   available before writing code.
+1. **Start with the websites**: Use Data Commons web tools to explore what's available before writing code.
 
-2. **Use relationships**: The `parent_entity` and `entity_type` parameters are 
-   powerful for traversing the graph.
+2. **Use relationships**: The `parent_entity` and `entity_type` parameters are powerful for traversing the graph.
 
-3. **Be specific about sources**: Filter by `facet_name` when you need 
-   consistency across places or times.
+3. **Be specific about sources**: Filter by `facet_name` when you need consistency across places or times.
 
-4. **Expect messiness**: Real-world data has gaps, multiple sources, and 
-   inconsistencies. Plan for it.
+4. **Expect messiness**: Real-world data has gaps, multiple sources, and inconsistencies. Plan for it.
 
-5. **Leverage integration**: The real power is in combining datasets that would 
-   normally require multiple APIs.
+5. **Leverage integration**: The real power is in combining datasets that would normally require multiple APIs.
 
 ## Going Further
 
-The `datacommons` R package currently focuses on data retrieval, which is the 
-foundation for analysis. While more advanced features may come in future 
-versions, you can already:
+The `datacommons` R package currently focuses on data retrieval, which is the foundation for analysis. While more advanced features may come in future versions, you can already:
 
-- Combine demographic, health, environmental, and economic data
-- Build models that incorporate multiple data sources
-- Create visualizations that would require extensive data wrangling otherwise
-- Track changes across time for any available variable
+* Combine demographic, health, environmental, and economic data
+* Build models that incorporate multiple data sources
+* Create visualizations that would require extensive data wrangling otherwise
+* Track changes across time for any available variable
+
+The package integrates seamlessly with the tidyverse, making it easy to incorporate Data Commons into your existing R workflows and create reproducible analysis pipelines.
 
 Explore more at:
-- **Statistical Variable Explorer**: https://datacommons.org/tools/statvar
-- **Place Explorer**: https://datacommons.org/place
-- **Knowledge Graph Browser**: https://datacommons.org/browser/
+
+* **Statistical Variable Explorer**: https://datacommons.org/tools/statvar
+* **Place Explorer**: https://datacommons.org/place
+* **Knowledge Graph Browser**: https://datacommons.org/browser/
 
 ## Summary
 
-In this vignette, we've explored how Data Commons provides unique value through 
-data integration. While specialized packages like `tidycensus` excel at 
-deep functionality for specific datasets, Data Commons shines when you need to:
+In this vignette, we've explored how the `datacommons` R package provides unique value through data integration. While specialized packages like `tidycensus` excel at deep functionality for specific datasets, the `datacommons` package shines when you need to:
 
-- Combine data from multiple sources
-- Use consistent geographic identifiers across datasets
-- Access a wide variety of variables through one API
-- Navigate relationships in the knowledge graph
+* Combine data from multiple sources
+* Use consistent geographic identifiers across datasets
+* Access a wide variety of variables through one API
+* Navigate relationships in the knowledge graph
 
-The power lies not in any single dataset, but in the connections between them.
+The power lies not in any single dataset, but in the connections between them. By using the `datacommons` package, you can focus on analysis rather than data wrangling, enabling insights that would be difficult or impossible to achieve through traditional approaches.
 
 ## Resources
 
-- **Get API Key**: https://apikeys.datacommons.org/
-- **Statistical Variable Explorer**: https://datacommons.org/tools/statvar
-- **Place Explorer**: https://datacommons.org/place
-- **Knowledge Graph Browser**: https://datacommons.org/browser/
-- **API Documentation**: https://docs.datacommons.org/api/rest/v2/
+* **Get API Key**: https://apikeys.datacommons.org/
+* **Statistical Variable Explorer**: https://datacommons.org/tools/statvar
+* **Place Explorer**: https://datacommons.org/place
+* **Knowledge Graph Browser**: https://datacommons.org/browser/
+* **API Documentation**: https://docs.datacommons.org/api/rest/v2/
