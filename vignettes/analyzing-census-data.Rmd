@@ -1,23 +1,511 @@
 ---
-title: "Analyzing Census Data"
+title: "Analyzing Census Data with Data Commons"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{analyzing-census-data}
+  %\VignetteIndexEntry{Analyzing Census Data with Data Commons}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-<!-- https://github.com/datacommonsorg/api-python/blob/master/notebooks/v2/analyzing_census_data.ipynb -->
-
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  fig.align = "center",
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
-```{r setup}
+## Learning Objectives
+
+By the end of this vignette, you will be able to:
+
+- Understand what Google Data Commons is and why it offers unique value
+- Navigate the knowledge graph structure using relationships
+- Find and use DCIDs (Data Commons IDs) and statistical variables
+- Retrieve demographic data across different geographic levels
+- Integrate data from multiple sources (the key strength of Data Commons)
+- Handle multiple data sources and select appropriate facets
+- Build progressively complex demographic analyses
+
+## Why Data Commons?
+
+The R ecosystem has excellent packages for specific data sources. For example, 
+the [tidycensus](https://walker-data.com/tidycensus/) package provides 
+fantastic functionality for working with U.S. Census data, with deep 
+dataset-specific features and conveniences.
+
+So why use Data Commons? **The real value is in data integration.**
+
+Imagine you want to analyze the relationship between:
+- Census demographics (population, age)
+- CDC health statistics (disease prevalence)
+- EPA environmental data (air quality)
+- Bureau of Labor Statistics (unemployment rates)
+
+With traditional approaches, you'd need to:
+1. Learn multiple different APIs
+2. Deal with different geographic coding systems
+3. Reconcile different time periods and update cycles
+4. Match entities across datasets (is "Los Angeles County" the same in all datasets?)
+
+Data Commons solves this by providing a **unified knowledge graph** that links 
+all these datasets together. One API, one set of geographic identifiers, one 
+consistent way to access everything.
+
+## Understanding the Knowledge Graph
+
+Data Commons organizes information as a graph, similar to how web pages link 
+to each other. Here's the key terminology:
+
+### DCIDs (Data Commons IDs)
+Every entity in Data Commons has a unique identifier called a DCID. Think of it 
+like a social security number for data:
+- `country/USA` = United States
+- `geoId/06` = California (using FIPS code 06)
+- `Count_Person` = the statistical variable for population count
+
+### Relationships
+Entities are connected by relationships, following the Schema.org standard:
+- California --(`containedInPlace`)--> United States
+- California --(`typeOf`)--> State
+- Los Angeles County --(`containedInPlace`)--> California
+
+This structure lets us traverse the graph to find related information. Want all 
+counties in California? Follow the `containedInPlace` relationships backward.
+
+### Statistical Variables
+These are the things we can measure:
+- `Count_Person` = total population
+- `Median_Age_Person` = median age
+- `UnemploymentRate_Person` = unemployment rate
+- `Mean_Temperature` = average temperature
+
+The power comes from being able to query any variable for any place using the 
+same consistent approach.
+
+## Prerequisites
+
+```{r load-packages}
+# Core packages
 library(datacommons)
+library(tidyverse)
+library(scales)
+library(knitr)
+
+# Set a consistent theme for plots
+theme_set(theme_minimal())
 ```
 
-Coming soon ...
+## Setting Up API Access
+
+You'll need a free API key from https://apikeys.datacommons.org/
+
+```{r api-setup, eval=FALSE}
+# Set your API key
+dc_set_api_key("YOUR_API_KEY_HERE")
+
+# Or set it in your .Renviron file to make it permanent:
+# DATACOMMONS_API_KEY=your_actual_key_here
+```
+
+```{r api-check, echo=FALSE}
+# Check for API key
+if (!dc_has_api_key()) {
+  message("This vignette requires a Data Commons API key.")
+  message("Get your free key at: https://apikeys.datacommons.org/")
+  knitr::knit_exit()
+}
+```
+
+## Finding What You Need
+
+The `datacommons` R package requires three key pieces:
+
+1. **Statistical Variables**: What you want to measure
+   - Find these at: https://datacommons.org/tools/statvar
+   
+2. **Place DCIDs**: Where you want to measure it
+   - Find these at: https://datacommons.org/place
+   
+3. **Dates**: When you want the measurement
+
+Let's see how to find these in practice.
+
+## Example 1: National Population Trends
+
+Let's start simple with U.S. population over time:
+
+```{r national-population}
+# Get U.S. population data
+# We found these identifiers using the Data Commons website:
+# - Variable: "Count_Person" (from Statistical Variable Explorer)
+# - Place: "country/USA" (from Place Explorer)
+us_population <- dc_get_observations(
+  variable_dcids = "Count_Person",
+  entity_dcids = "country/USA",
+  date = "all",
+  return_type = "data.frame"
+)
+
+# Examine the structure
+glimpse(us_population)
+
+# Notice we have multiple sources (facets) for the same data
+unique(us_population$facet_name)
+```
+
+### Handling Multiple Data Sources
+
+Data Commons aggregates data from multiple sources. This is both a strength 
+(comprehensive data) and a challenge (which source to use?). Let's handle this:
+
+```{r clean-population-data}
+# Strategy 1: Use the official Census PEP (Population Estimates Program)
+us_pop_clean <- us_population |>
+  filter(facet_name == "USCensusPEP_Annual_Population") |>
+  mutate(
+    year = as.integer(date),
+    population_millions = value / 1e6
+  ) |>
+  filter(year >= 2000) |>
+  select(year, population_millions) |>
+  arrange(year)
+
+# Visualize the clean data
+ggplot(us_pop_clean, aes(x = year, y = population_millions)) +
+  geom_line(color = "steelblue", linewidth = 1.5) +
+  geom_point(color = "steelblue", size = 3) +
+  scale_y_continuous(
+    labels = label_number(suffix = "M"),
+    limits = c(280, 350)
+  ) +
+  scale_x_continuous(breaks = seq(2000, 2025, 5)) +
+  labs(
+    title = "U.S. Population Growth",
+    subtitle = "Using Census Population Estimates Program data",
+    x = "Year",
+    y = "Population (millions)",
+    caption = "Source: U.S. Census Bureau via Data Commons"
+  )
+
+# Calculate average annual growth
+growth_rate <- us_pop_clean |>
+  mutate(annual_growth = (population_millions / lag(population_millions) - 1) * 100) |>
+  summarize(avg_growth = mean(annual_growth, na.rm = TRUE))
+
+sprintf("Average annual growth rate: %.2f%%", growth_rate$avg_growth)
+```
+
+### Alternative: Aggregate Across Sources
+
+```{r aggregate-sources}
+# Strategy 2: Take the median across all sources for each year
+us_pop_aggregated <- us_population |>
+  filter(!is.na(value)) |>
+  mutate(year = as.integer(date)) |>
+  filter(year >= 2000) |>
+  group_by(year) |>
+  summarize(
+    population_millions = median(value) / 1e6,
+    n_sources = n_distinct(facet_name),
+    .groups = "drop"
+  )
+
+# Show which years have the most sources
+us_pop_aggregated |>
+  slice_max(n_sources, n = 5) |>
+  kable(caption = "Years with most data sources")
+```
+
+## Example 2: Using Relationships to Find States
+
+Now let's use the knowledge graph structure to find all U.S. states and analyze 
+them. We'll use the `containedInPlace` relationship:
+
+```{r state-analysis}
+# Method 1: Use the parent/child relationship in observations
+state_data <- dc_get_observations(
+  variable_dcids = c("Count_Person", "Median_Age_Person"),
+  date = "latest",
+  parent_entity = "country/USA",
+  entity_type = "State",
+  return_type = "data.frame"
+)
+
+# This automatically constructs the query:
+# "Find all entities of type State contained in country/USA"
+
+glimpse(state_data)
+
+# Process the data - reshape from long to wide
+state_summary <- state_data |>
+  filter(str_detect(facet_name, "Census")) |>  # Use Census data
+  select(entity = entity_dcid, 
+         state_name = entity_name,
+         variable = variable_dcid,
+         value) |>
+  group_by(entity, state_name, variable) |>
+  summarize(value = first(value), .groups = "drop") |>  # Take first if duplicates
+  pivot_wider(names_from = variable, values_from = value) |>
+  filter(
+    !is.na(Count_Person),
+    !is.na(Median_Age_Person),
+    Count_Person > 500000  # Focus on states, not small territories
+  )
+
+# Visualize the relationship
+ggplot(state_summary, aes(x = Median_Age_Person, y = Count_Person)) +
+  geom_point(aes(size = Count_Person), alpha = 0.6, color = "darkblue") +
+  geom_text(
+    data = state_summary |> filter(Count_Person > 10e6),
+    aes(label = state_name),
+    vjust = -1, hjust = 0.5, size = 3
+  ) +
+  scale_y_log10(labels = label_comma()) +
+  scale_size(range = c(3, 10), guide = "none") +
+  labs(
+    title = "State Demographics: Population vs. Median Age",
+    x = "Median Age (years)",
+    y = "Population (log scale)",
+    caption = "Source: U.S. Census Bureau via Data Commons"
+  )
+
+# Find extremes
+state_summary |>
+  filter(Median_Age_Person == min(Median_Age_Person) | 
+         Median_Age_Person == max(Median_Age_Person)) |>
+  select(state_name, Median_Age_Person, Count_Person) |>
+  mutate(Count_Person = label_comma()(Count_Person)) |>
+  kable(caption = "States with extreme median ages")
+```
+
+## Example 3: Cross-Dataset Integration
+
+Here's where Data Commons really shines. Let's combine Census data with health 
+data to look for patterns:
+
+```{r cross-dataset}
+# Get multiple variables for California counties
+# Notice how we can mix variables from different sources in one query!
+ca_integrated <- dc_get_observations(
+  variable_dcids = c(
+    "Count_Person",           # Census
+    "Median_Age_Person",      # Census
+    "Percent_Person_Obesity", # CDC
+    "UnemploymentRate_Person" # BLS
+  ),
+  date = "latest",
+  parent_entity = "geoId/06",  # California
+  entity_type = "County",
+  return_type = "data.frame"
+)
+
+# Check which sources we're pulling from
+ca_integrated |>
+  group_by(variable_name, facet_name) |>
+  summarize(n = n(), .groups = "drop") |>
+  slice_head(n = 10) |>
+  kable(caption = "Data sources by variable")
+
+# Process the integrated data
+ca_analysis <- ca_integrated |>
+  # Pick one source per variable for consistency
+  filter(
+    (variable_dcid == "Count_Person" & str_detect(facet_name, "CensusACS5Year")) |
+    (variable_dcid == "Median_Age_Person" & str_detect(facet_name, "CensusACS5Year")) |
+    (variable_dcid == "Percent_Person_Obesity" & str_detect(facet_name, "CDC")) |
+    (variable_dcid == "UnemploymentRate_Person" & str_detect(facet_name, "BLS"))
+  ) |>
+  select(entity = entity_dcid,
+         county_name = entity_name,
+         variable = variable_dcid,
+         value) |>
+  group_by(entity, county_name, variable) |>
+  summarize(value = first(value), .groups = "drop") |>
+  pivot_wider(names_from = variable, values_from = value) |>
+  drop_na() |>
+  mutate(
+    county_name = str_remove(county_name, " County$"),
+    population_k = Count_Person / 1000
+  )
+
+# Explore relationships between variables
+ggplot(ca_analysis, aes(x = Median_Age_Person, y = Percent_Person_Obesity)) +
+  geom_point(aes(size = Count_Person, color = UnemploymentRate_Person), 
+             alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
+  scale_size(range = c(2, 10), guide = "none") +
+  scale_color_viridis_c(name = "Unemployment\nRate (%)") +
+  labs(
+    title = "California Counties: Age, Obesity, and Unemployment",
+    subtitle = "Integrating Census, CDC, and BLS data through Data Commons",
+    x = "Median Age (years)",
+    y = "Obesity Rate (%)",
+    caption = "Sources: Census ACS, CDC PLACES, BLS via Data Commons"
+  ) +
+  theme(legend.position = "right")
+
+# Show correlations
+ca_analysis |>
+  select(Median_Age_Person, Percent_Person_Obesity, UnemploymentRate_Person) |>
+  cor() |>
+  round(2) |>
+  kable(caption = "Correlations between demographic and health variables")
+```
+
+## Example 4: Time Series Across Cities
+
+Let's track how major cities have grown over time:
+
+```{r time-series}
+# Major city DCIDs (found using datacommons.org/place)
+major_cities <- c(
+  "geoId/3651000",  # New York City
+  "geoId/0644000",  # Los Angeles
+  "geoId/1714000",  # Chicago
+  "geoId/4835000",  # Houston
+  "geoId/0455000"   # Phoenix
+)
+
+# Get historical population data
+city_populations <- dc_get_observations(
+  variable_dcids = "Count_Person",
+  entity_dcids = major_cities,
+  date = "all",
+  return_type = "data.frame"
+)
+
+# Process - use Census PEP data for consistency
+city_pop_clean <- city_populations |>
+  filter(
+    str_detect(facet_name, "USCensusPEP"),
+    !is.na(value)
+  ) |>
+  mutate(
+    year = as.integer(date),
+    population_millions = value / 1e6,
+    city = str_extract(entity_name, "^[^,]+")
+  ) |>
+  filter(year >= 2000) |>
+  group_by(city, year) |>
+  summarize(
+    population_millions = mean(population_millions),
+    .groups = "drop"
+  )
+
+# Visualize growth trends
+ggplot(city_pop_clean, aes(x = year, y = population_millions, color = city)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  scale_color_brewer(palette = "Set1") +
+  scale_y_continuous(labels = label_number(suffix = "M")) +
+  labs(
+    title = "Population Growth in Major U.S. Cities",
+    x = "Year",
+    y = "Population (millions)",
+    color = "City",
+    caption = "Source: Census Population Estimates Program via Data Commons"
+  ) +
+  theme(legend.position = "bottom")
+
+# Calculate growth rates
+city_pop_clean |>
+  group_by(city) |>
+  filter(year == min(year) | year == max(year)) |>
+  arrange(city, year) |>
+  summarize(
+    years = paste(min(year), "-", max(year)),
+    start_pop = first(population_millions),
+    end_pop = last(population_millions),
+    total_growth_pct = round((end_pop / start_pop - 1) * 100, 1),
+    .groups = "drop"
+  ) |>
+  arrange(desc(total_growth_pct)) |>
+  kable(
+    caption = "City population growth rates",
+    col.names = c("City", "Period", "Start (M)", "End (M)", "Growth %")
+  )
+```
+
+## Working with Data Sources (Facets)
+
+Each data source in Data Commons is identified by a `facet_id` and `facet_name`. 
+Understanding these helps you choose the right data:
+
+```{r understanding-facets}
+# Example: What sources are available for U.S. population?
+us_population |>
+  filter(date == "2020") |>
+  select(facet_name, value) |>
+  distinct() |>
+  mutate(value = label_comma()(value)) |>
+  arrange(desc(value)) |>
+  kable(caption = "Different sources for 2020 U.S. population")
+```
+
+**Common sources and when to use them:**
+
+- `USCensusPEP_Annual_Population`: Annual estimates (good for time series)
+- `CensusACS5YearSurvey`: American Community Survey (good for detailed demographics)
+- `USDecennialCensus`: Official census every 10 years (most authoritative)
+- `CDC_*`: Health data from CDC
+- `BLS_*`: Labor statistics from Bureau of Labor Statistics
+- `EPA_*`: Environmental data from EPA
+
+## Tips for Effective Use
+
+1. **Start with the websites**: Use Data Commons web tools to explore what's 
+   available before writing code.
+
+2. **Use relationships**: The `parent_entity` and `entity_type` parameters are 
+   powerful for traversing the graph.
+
+3. **Be specific about sources**: Filter by `facet_name` when you need 
+   consistency across places or times.
+
+4. **Expect messiness**: Real-world data has gaps, multiple sources, and 
+   inconsistencies. Plan for it.
+
+5. **Leverage integration**: The real power is in combining datasets that would 
+   normally require multiple APIs.
+
+## Going Further
+
+The `datacommons` R package currently focuses on data retrieval, which is the 
+foundation for analysis. While more advanced features may come in future 
+versions, you can already:
+
+- Combine demographic, health, environmental, and economic data
+- Build models that incorporate multiple data sources
+- Create visualizations that would require extensive data wrangling otherwise
+- Track changes across time for any available variable
+
+Explore more at:
+- **Statistical Variable Explorer**: https://datacommons.org/tools/statvar
+- **Place Explorer**: https://datacommons.org/place
+- **Knowledge Graph Browser**: https://datacommons.org/browser/
+
+## Summary
+
+In this vignette, we've explored how Data Commons provides unique value through 
+data integration. While specialized packages like `tidycensus` excel at 
+deep functionality for specific datasets, Data Commons shines when you need to:
+
+- Combine data from multiple sources
+- Use consistent geographic identifiers across datasets
+- Access a wide variety of variables through one API
+- Navigate relationships in the knowledge graph
+
+The power lies not in any single dataset, but in the connections between them.
+
+## Resources
+
+- **Get API Key**: https://apikeys.datacommons.org/
+- **Statistical Variable Explorer**: https://datacommons.org/tools/statvar
+- **Place Explorer**: https://datacommons.org/place
+- **Knowledge Graph Browser**: https://datacommons.org/browser/
+- **API Documentation**: https://docs.datacommons.org/api/rest/v2/
