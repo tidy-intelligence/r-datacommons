@@ -24,18 +24,32 @@ knitr::opts_chunk$set(
 By the end of this vignette, you will be able to:
 
 * Understand what Google Data Commons is and why it offers unique value for data integration
-* Navigate the knowledge graph structure using relationships  
+* Navigate the knowledge graph structure using relationships between geographic entities
 * Find and use DCIDs (Data Commons IDs) and statistical variables
 * Retrieve demographic data across different geographic levels using the `datacommons` R package
-* Integrate data from multiple sources (the key strength of Data Commons)
-* Handle multiple data sources and select appropriate facets
-* Build progressively complex demographic analyses
+* Integrate data from multiple sources through the unified Data Commons API
+* Handle multiple data sources (facets) and select appropriate ones for your analysis
+* Build progressively complex demographic analyses that combine disparate datasets
+
+## Why Start with Census Data?
+
+Census data provides an ideal introduction to Data Commons for several reasons:
+
+1. **Familiar territory**: Many analysts have worked with census data, making it easier to focus on learning the Data Commons approach rather than the data itself.
+
+2. **Rich relationships**: Census data showcases the power of the knowledge graph through natural hierarchies (country → state → county → city), demonstrating how Data Commons connects entities.
+
+3. **Integration opportunities**: Census demographics become even more valuable when combined with health, environmental, and economic data—showing the true power of Data Commons.
+
+4. **Real-world relevance**: The examples we'll explore address actual policy questions that require integrated data to answer properly.
 
 ## Why Data Commons?
 
 The R ecosystem has excellent packages for specific data sources. For example, the [tidycensus](https://walker-data.com/tidycensus/) package provides fantastic functionality for working with U.S. Census data, with deep dataset-specific features and conveniences.
 
 So why use Data Commons? **The real value is in data integration.**
+
+Data Commons is part of Google.org's philanthropic initiatives, designed to democratize access to public data by combining datasets from organizations like the UN, World Bank, and U.S. Census into a unified knowledge graph.
 
 Imagine you're a policy analyst studying the social determinants of health. You need to analyze relationships between:
 
@@ -61,11 +75,11 @@ Data Commons organizes information as a graph, similar to how web pages link to 
 Every entity in Data Commons has a unique identifier called a DCID. Think of it like a social security number for data:
 
 * `country/USA` = United States
-* `geoId/06` = California (using FIPS code 06)  
+* `geoId/06` = California (using FIPS code 06—Federal Information Processing Standards codes are essentially ZIP codes for governments, providing standard numeric identifiers for states, counties, and other geographic areas)  
 * `Count_Person` = the statistical variable for population count
 
 ### Relationships
-Entities are connected by relationships, following the Schema.org standard:
+Entities are connected by relationships, following the [Schema.org](https://schema.org) standard—a collaborative effort to create structured data vocabularies that help machines understand web content. For Data Commons, this means consistent, machine-readable relationships between places and data:
 
 * California --(`containedInPlace`)--> United States
 * California --(`typeOf`)--> State
@@ -128,6 +142,10 @@ The `datacommons` R package requires three key pieces:
    * Find these at: https://datacommons.org/place
    
 3. **Dates**: When you want the measurement
+   * Use `"all"` to retrieve the entire time series
+   * Use `"latest"` for the most recent available data
+   * Use specific years like `"2020"` or date ranges
+   * See the [API documentation](https://docs.datacommons.org/api/rest/v2/) for advanced date options
 
 Let's see how to find these in practice.
 
@@ -199,6 +217,11 @@ growth_rate <- us_pop_clean |>
 sprintf("Average annual growth rate: %.2f%%", growth_rate$avg_growth)
 sprintf("Pre-2020 growth rate: %.2f%%", growth_rate$pre_2020_growth)
 sprintf("Post-2020 growth rate: %.2f%%", growth_rate$post_2020_growth)
+
+# Note for statistics enthusiasts: We're using arithmetic mean here for simplicity.
+# For compound growth rates, geometric mean would be more precise:
+# geometric_mean_growth = (last_value/first_value)^(1/n_years) - 1
+# But given the small annual changes (~0.7%), the difference is negligible.
 ```
 
 **Key insight**: Notice the marked change in growth patterns around 2020. While pre-2020 showed steady growth, the post-2020 period reveals a significant slowdown. This dramatic shift raises important policy questions: How much is due to COVID-19 mortality versus changes in immigration patterns or birth rates? The `datacommons` package makes it easy to pull in additional variables like death rates, immigration statistics, and birth rates to investigate these questions further.
