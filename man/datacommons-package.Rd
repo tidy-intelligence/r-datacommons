@@ -6,7 +6,7 @@
 \alias{datacommons-package}
 \title{datacommons: Client for the Google Data Commons API V2}
 \description{
-An R client for accessing the Google Data Commons API V2, providing programmatic access to statistical and demographic data from various sources. This package wraps the API endpoints described at \url{https://docs.datacommons.org/api/rest/v2/}.
+Access the Google Data Commons API V2 \url{https://docs.datacommons.org/api/rest/v2/}. Data Commons provides programmatic access to statistical and demographic data from various sources.
 }
 \seealso{
 Useful links:
@@ -16,7 +16,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Christoph Scheuch \email{christoph@tidy-intelligence.com}
+\strong{Maintainer}: Christoph Scheuch \email{christoph@tidy-intelligence.com} (\href{https://orcid.org/0009-0004-0423-6819}{ORCID}) [copyright holder]
+
+Authors:
+\itemize{
+  \item Teal Emery \email{lte@tealinsights.com}
+}
 
 }
 \keyword{internal}

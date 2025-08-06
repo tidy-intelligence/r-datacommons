@@ -49,7 +49,7 @@ The R ecosystem has excellent packages for specific data sources. For example, t
 
 So why use Data Commons? **The real value is in data integration.**
 
-Data Commons is part of Google.org's philanthropic initiatives, designed to democratize access to public data by combining datasets from organizations like the UN, World Bank, and U.S. Census into a unified knowledge graph.
+Data Commons is part of Google's philanthropic initiatives, designed to democratize access to public data by combining datasets from organizations like the UN, World Bank, and U.S. Census into a unified knowledge graph.
 
 Imagine you're a policy analyst studying the social determinants of health. You need to analyze relationships between:
 
@@ -72,6 +72,7 @@ Data Commons solves this by providing a **unified knowledge graph** that links a
 Data Commons organizes information as a graph, similar to how web pages link to each other. Here's the key terminology:
 
 ### DCIDs (Data Commons IDs)
+
 Every entity in Data Commons has a unique identifier called a DCID. Think of it like a social security number for data:
 
 * `country/USA` = United States
@@ -79,6 +80,7 @@ Every entity in Data Commons has a unique identifier called a DCID. Think of it 
 * `Count_Person` = the statistical variable for population count
 
 ### Relationships
+
 Entities are connected by relationships, following the [Schema.org](https://schema.org) standard—a collaborative effort to create structured data vocabularies that help machines understand web content. For Data Commons, this means consistent, machine-readable relationships between places and data:
 
 * California --(`containedInPlace`)--> United States
@@ -88,6 +90,7 @@ Entities are connected by relationships, following the [Schema.org](https://sche
 This structure lets us traverse the graph to find related information. Want all counties in California? Follow the `containedInPlace` relationships backward.
 
 ### Statistical Variables
+
 These are the things we can measure:
 
 * `Count_Person` = total population
@@ -102,7 +105,10 @@ The power comes from being able to query any variable for any place using the sa
 ```{r load-packages}
 # Core packages
 library(datacommons)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
 library(scales)
 library(knitr)
 
@@ -118,9 +124,10 @@ You'll need a free API key from https://apikeys.datacommons.org/
 # Set your API key
 dc_set_api_key("YOUR_API_KEY_HERE")
 
-# Or set it in your .Renviron file to make it permanent:
-# DATACOMMONS_API_KEY=your_actual_key_here
+# Or manually set DATACOMMONS_API_KEY in your .Renviron file
 ```
+
+Don't forget to restart your R session after setting the key to automatically load it.
 
 ```{r api-check, echo=FALSE}
 # Check for API key
@@ -217,16 +224,15 @@ growth_rate <- us_pop_clean |>
     post_2020_growth = mean(annual_growth[year >= 2020], na.rm = TRUE)
   )
 
-sprintf("Average annual growth rate: %.2f%%", growth_rate$avg_growth)
-sprintf("Pre-2020 growth rate: %.2f%%", growth_rate$pre_2020_growth)
-sprintf(
-  "Post-2020 growth rate: %.2f%%", growth_rate$post_2020_growth
+message(
+  "Average annual growth rate: ", round(growth_rate$avg_growth, 2), "%\n",
+  "Pre-2020 growth rate: ", round(growth_rate$pre_2020_growth, 2), "%\n",
+  "Post-2020 growth rate: ", round(growth_rate$post_2020_growth, 2), "%"
 )
 
-# Note for statistics enthusiasts: We're using arithmetic mean 
-# here for simplicity.
-# For compound growth rates, geometric mean would be more precise:
-# geometric_mean_growth = (last_value/first_value)^(1/n_years) - 1
+# Note for statistics enthusiasts: We're using arithmetic mean for simplicity.
+# For compound growth rates, geometric mean would be more precise, which you can
+# calculate as geometric_mean_growth = (last_value/first_value)^(1/n_years) - 1.
 # But given the small annual changes (~0.7%), the difference is negligible.
 ```
 
@@ -267,8 +273,8 @@ state_data <- dc_get_observations(
   return_type = "data.frame"
 )
 
-# This automatically constructs the query:
-# "Find all entities of type State contained in country/USA"
+# The code automatically constructs the following query:
+# Find all entities of type State contained in country/USA
 
 glimpse(state_data)
 
@@ -282,7 +288,8 @@ state_summary <- state_data |>
     value
   ) |>
   group_by(entity, state_name, variable) |>
-  summarize(value = first(value), .groups = "drop") |> # Take first if duplicates
+  # Take first if duplicates
+  summarize(value = first(value), .groups = "drop") |>
   pivot_wider(names_from = variable, values_from = value) |>
   filter(
     !is.na(Count_Person),
@@ -312,7 +319,7 @@ state_summary |>
   filter(
     Median_Age_Person == min(Median_Age_Person) |
       Median_Age_Person == max(Median_Age_Person)
-    ) |>
+  ) |>
   select(state_name, Median_Age_Person, Count_Person) |>
   mutate(Count_Person = label_comma()(Count_Person)) |>
   kable(caption = "States with extreme median ages")
@@ -352,13 +359,13 @@ ca_analysis <- ca_integrated |>
   # Pick one source per variable for consistency
   filter(
     (variable_dcid == "Count_Person" &
-      str_detect(facet_name, "CensusACS5Year")) |
+       str_detect(facet_name, "CensusACS5Year")) |
       (variable_dcid == "Median_Age_Person" &
-        str_detect(facet_name, "CensusACS5Year")) |
+         str_detect(facet_name, "CensusACS5Year")) |
       (variable_dcid == "Percent_Person_Obesity" &
-        str_detect(facet_name, "CDC")) |
+         str_detect(facet_name, "CDC")) |
       (variable_dcid == "UnemploymentRate_Person" &
-        str_detect(facet_name, "BLS"))
+         str_detect(facet_name, "BLS"))
   ) |>
   select(
     entity = entity_dcid,
