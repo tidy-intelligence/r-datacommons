@@ -207,7 +207,10 @@ ggplot(us_pop_clean, aes(x = year, y = population_millions)) +
 
 # Calculate average annual growth
 growth_rate <- us_pop_clean |>
-  mutate(annual_growth = (population_millions / lag(population_millions) - 1) * 100) |>
+  mutate(
+    annual_growth =
+      (population_millions / lag(population_millions) - 1) * 100
+  ) |>
   summarize(
     avg_growth = mean(annual_growth, na.rm = TRUE),
     pre_2020_growth = mean(annual_growth[year < 2020], na.rm = TRUE),
@@ -216,9 +219,12 @@ growth_rate <- us_pop_clean |>
 
 sprintf("Average annual growth rate: %.2f%%", growth_rate$avg_growth)
 sprintf("Pre-2020 growth rate: %.2f%%", growth_rate$pre_2020_growth)
-sprintf("Post-2020 growth rate: %.2f%%", growth_rate$post_2020_growth)
+sprintf(
+  "Post-2020 growth rate: %.2f%%", growth_rate$post_2020_growth
+)
 
-# Note for statistics enthusiasts: We're using arithmetic mean here for simplicity.
+# Note for statistics enthusiasts: We're using arithmetic mean 
+# here for simplicity.
 # For compound growth rates, geometric mean would be more precise:
 # geometric_mean_growth = (last_value/first_value)^(1/n_years) - 1
 # But given the small annual changes (~0.7%), the difference is negligible.
@@ -268,18 +274,20 @@ glimpse(state_data)
 
 # Process the data - reshape from long to wide
 state_summary <- state_data |>
-  filter(str_detect(facet_name, "Census")) |>  # Use Census data
-  select(entity = entity_dcid, 
-         state_name = entity_name,
-         variable = variable_dcid,
-         value) |>
+  filter(str_detect(facet_name, "Census")) |> # Use Census data
+  select(
+    entity = entity_dcid,
+    state_name = entity_name,
+    variable = variable_dcid,
+    value
+  ) |>
   group_by(entity, state_name, variable) |>
-  summarize(value = first(value), .groups = "drop") |>  # Take first if duplicates
+  summarize(value = first(value), .groups = "drop") |> # Take first if duplicates
   pivot_wider(names_from = variable, values_from = value) |>
   filter(
     !is.na(Count_Person),
     !is.na(Median_Age_Person),
-    Count_Person > 500000  # Focus on states, not small territories
+    Count_Person > 500000 # Focus on states, not small territories
   )
 
 # Visualize the relationship
@@ -301,8 +309,10 @@ ggplot(state_summary, aes(x = Median_Age_Person, y = Count_Person)) +
 
 # Find extremes
 state_summary |>
-  filter(Median_Age_Person == min(Median_Age_Person) | 
-         Median_Age_Person == max(Median_Age_Person)) |>
+  filter(
+    Median_Age_Person == min(Median_Age_Person) |
+      Median_Age_Person == max(Median_Age_Person)
+    ) |>
   select(state_name, Median_Age_Person, Count_Person) |>
   mutate(Count_Person = label_comma()(Count_Person)) |>
   kable(caption = "States with extreme median ages")
@@ -319,13 +329,13 @@ state_summary |>
 # Notice how we can mix variables from different sources in one query!
 ca_integrated <- dc_get_observations(
   variable_dcids = c(
-    "Count_Person",           # Census
-    "Median_Age_Person",      # Census
+    "Count_Person", # Census
+    "Median_Age_Person", # Census
     "Percent_Person_Obesity", # CDC
     "UnemploymentRate_Person" # BLS
   ),
   date = "latest",
-  parent_entity = "geoId/06",  # California
+  parent_entity = "geoId/06", # California
   entity_type = "County",
   return_type = "data.frame"
 )
@@ -341,15 +351,21 @@ ca_integrated |>
 ca_analysis <- ca_integrated |>
   # Pick one source per variable for consistency
   filter(
-    (variable_dcid == "Count_Person" & str_detect(facet_name, "CensusACS5Year")) |
-    (variable_dcid == "Median_Age_Person" & str_detect(facet_name, "CensusACS5Year")) |
-    (variable_dcid == "Percent_Person_Obesity" & str_detect(facet_name, "CDC")) |
-    (variable_dcid == "UnemploymentRate_Person" & str_detect(facet_name, "BLS"))
+    (variable_dcid == "Count_Person" &
+      str_detect(facet_name, "CensusACS5Year")) |
+      (variable_dcid == "Median_Age_Person" &
+        str_detect(facet_name, "CensusACS5Year")) |
+      (variable_dcid == "Percent_Person_Obesity" &
+        str_detect(facet_name, "CDC")) |
+      (variable_dcid == "UnemploymentRate_Person" &
+        str_detect(facet_name, "BLS"))
   ) |>
-  select(entity = entity_dcid,
-         county_name = entity_name,
-         variable = variable_dcid,
-         value) |>
+  select(
+    entity = entity_dcid,
+    county_name = entity_name,
+    variable = variable_dcid,
+    value
+  ) |>
   group_by(entity, county_name, variable) |>
   summarize(value = first(value), .groups = "drop") |>
   pivot_wider(names_from = variable, values_from = value) |>
@@ -361,8 +377,9 @@ ca_analysis <- ca_integrated |>
 
 # Explore relationships between variables
 ggplot(ca_analysis, aes(x = Median_Age_Person, y = Percent_Person_Obesity)) +
-  geom_point(aes(size = Count_Person, color = UnemploymentRate_Person), 
-             alpha = 0.7) +
+  geom_point(aes(size = Count_Person, color = UnemploymentRate_Person),
+    alpha = 0.7
+  ) +
   geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
   scale_size(range = c(2, 10), guide = "none") +
   scale_color_viridis_c(name = "Unemployment\nRate (%)") +
@@ -392,11 +409,11 @@ ca_analysis |>
 ```{r time-series}
 # Major city DCIDs (found using datacommons.org/place)
 major_cities <- c(
-  "geoId/3651000",  # New York City
-  "geoId/0644000",  # Los Angeles
-  "geoId/1714000",  # Chicago
-  "geoId/4835000",  # Houston
-  "geoId/0455000"   # Phoenix
+  "geoId/3651000", # New York City
+  "geoId/0644000", # Los Angeles
+  "geoId/1714000", # Chicago
+  "geoId/4835000", # Houston
+  "geoId/0455000" # Phoenix
 )
 
 # Get historical population data
@@ -426,7 +443,10 @@ city_pop_clean <- city_populations |>
   )
 
 # Visualize growth trends
-ggplot(city_pop_clean, aes(x = year, y = population_millions, color = city)) +
+ggplot(
+  city_pop_clean,
+  aes(x = year, y = population_millions, color = city)
+) +
   geom_line(linewidth = 1.2) +
   geom_point(size = 2) +
   scale_color_brewer(palette = "Set1") +
