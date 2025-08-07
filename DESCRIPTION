@@ -1,6 +1,6 @@
 Package: datacommons
 Title: Client for the Google Data Commons API V2
-Version: 0.0.1.9001
+Version: 0.0.1.9002
 Authors@R: 
     c(person("Christoph", "Scheuch", , "christoph@tidy-intelligence.com",
              role = c("aut", "cre", "cph"), comment = c(ORCID = "0009-0004-0423-6819")),
@@ -27,4 +27,5 @@ Suggests:
     scales
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://tidy-intelligence.github.io/r-datacommons/
+URL: https://github.com/tidy-intelligence/r-datacommons, https://tidy-intelligence.github.io/r-datacommons/
+BugReports: https://github.com/tidy-intelligence/r-datacommons/issues

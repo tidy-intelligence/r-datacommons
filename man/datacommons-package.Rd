@@ -11,7 +11,9 @@ Access the Google Data Commons API V2 \url{https://docs.datacommons.org/api/rest
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/tidy-intelligence/r-datacommons}
   \item \url{https://tidy-intelligence.github.io/r-datacommons/}
+  \item Report bugs at \url{https://github.com/tidy-intelligence/r-datacommons/issues}
 }
 
 }

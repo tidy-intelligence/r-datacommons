@@ -95,7 +95,7 @@ on the state level:
 
 ``` r
 state_level <- dc_get_observations(
-  variable_dcids = c("Count_Person"),
+  variable_dcids = "Count_Person",
   date = 2021,
   parent_entity = "country/USA",
   entity_type = "State",
@@ -116,3 +116,20 @@ head(state_level, 5)
 #> 4 2176550201 USCensusPEP_Annual_Population
 #> 5 2176550201 USCensusPEP_Annual_Population
 ```
+
+## Contributing
+
+Contributions to `oecdoda` are welcome! If you’d like to contribute,
+please follow these steps:
+
+1.  **Create an issue**: Before making changes, create an issue
+    describing the bug or feature you’re addressing.
+2.  **Fork the repository**: After receiving supportive feedback from
+    the package authors, fork the repository to your GitHub account.
+3.  **Create a branch**: Create a branch for your changes with a
+    descriptive name.
+4.  **Make your changes**: Implement your bug fix or feature.
+5.  **Test your changes**: Run tests to ensure your changes don’t break
+    existing functionality.
+6.  **Submit a pull request**: Push your changes to your fork and submit
+    a pull request to the main repository.
