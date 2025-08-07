@@ -10,3 +10,5 @@ cran-comments.md
 ^CRAN-SUBMISSION$
 ^doc$
 ^Meta$
+^datacommons\.Rproj$
+^\.Rproj\.user$

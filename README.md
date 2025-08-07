@@ -15,10 +15,10 @@ Check](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/R-CM
 coverage](https://codecov.io/gh/tidy-intelligence/r-datacommons/graph/badge.svg)](https://app.codecov.io/gh/tidy-intelligence/r-datacommons)
 <!-- badges: end -->
 
-Retrieve data from the [Data Commons REST API
+Access the Google [Data Commons API
 V2](https://docs.datacommons.org/api/rest/v2/). Data Commons provides
-harmonized access to dozens of data sources and thousands of datasets
-organized in a knowledge graph.
+programmatic access to statistical and demographic data from dozens of
+sources organized in a knowldege graph.
 
 ## Installation
 
@@ -76,11 +76,11 @@ country_level <- dc_get_observations(
 )
 head(country_level, 5)
 #>   entity_dcid              entity_name variable_dcid    variable_name date
-#> 1 country/USA United States of America  Count_Person Total Population 1960
-#> 2 country/USA United States of America  Count_Person Total Population 1961
-#> 3 country/USA United States of America  Count_Person Total Population 1962
-#> 4 country/USA United States of America  Count_Person Total Population 1963
-#> 5 country/USA United States of America  Count_Person Total Population 1964
+#> 1 country/USA United States of America  Count_Person Total population 1960
+#> 2 country/USA United States of America  Count_Person Total population 1961
+#> 3 country/USA United States of America  Count_Person Total population 1962
+#> 4 country/USA United States of America  Count_Person Total population 1963
+#> 5 country/USA United States of America  Count_Person Total population 1964
 #>       value   facet_id                 facet_name
 #> 1 180671000 3981252704 WorldDevelopmentIndicators
 #> 2 183691000 3981252704 WorldDevelopmentIndicators
@@ -104,11 +104,11 @@ state_level <- dc_get_observations(
 )
 head(state_level, 5)
 #>   entity_dcid entity_name variable_dcid    variable_name date    value
-#> 1    geoId/01     Alabama  Count_Person Total Population 2021  5039877
-#> 2    geoId/02      Alaska  Count_Person Total Population 2021   732673
-#> 3    geoId/04     Arizona  Count_Person Total Population 2021  7276316
-#> 4    geoId/05    Arkansas  Count_Person Total Population 2021  3025891
-#> 5    geoId/06  California  Count_Person Total Population 2021 39237836
+#> 1    geoId/01     Alabama  Count_Person Total population 2021  5039877
+#> 2    geoId/02      Alaska  Count_Person Total population 2021   732673
+#> 3    geoId/04     Arizona  Count_Person Total population 2021  7276316
+#> 4    geoId/05    Arkansas  Count_Person Total population 2021  3025891
+#> 5    geoId/06  California  Count_Person Total population 2021 39237836
 #>     facet_id                    facet_name
 #> 1 2176550201 USCensusPEP_Annual_Population
 #> 2 2176550201 USCensusPEP_Annual_Population

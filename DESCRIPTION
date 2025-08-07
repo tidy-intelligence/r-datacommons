@@ -1,12 +1,13 @@
 Package: datacommons
 Title: Client for the Google Data Commons API V2
-Version: 0.0.1.9000
+Version: 0.0.1.9001
 Authors@R: 
-    person("Christoph", "Scheuch", email = "christoph@tidy-intelligence.com", role = c("aut", "cre"))
-Description: An R client for accessing the Google Data Commons API V2, 
-    providing programmatic access to statistical and demographic data from
-    various sources. This package wraps the API endpoints described at 
-    <https://docs.datacommons.org/api/rest/v2/>.
+    c(person("Christoph", "Scheuch", , "christoph@tidy-intelligence.com",
+             role = c("aut", "cre", "cph"), comment = c(ORCID = "0009-0004-0423-6819")),
+      person("Teal", "Emery", , "lte@tealinsights.com", role = c("aut")))
+Description: Access the Google Data Commons API V2 <https://docs.datacommons.org/api/rest/v2/>.
+    Data Commons provides programmatic access to statistical and demographic data from
+    dozens of sources organized in a knowldege graph. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -18,7 +19,12 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    dplyr,
+    tidyr,
+    stringr,
+    ggplot2,
+    scales
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://tidy-intelligence.github.io/r-datacommons/
