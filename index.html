@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">datacommons</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.9002</span>
       </span>
     </div>
 
@@ -55,7 +55,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/tidy-intelligence/r-datacommons/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -94,7 +101,7 @@ install.packages("datacommons")
 </h2>
 <p>Load the package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidy-intelligence.github.io/r-datacommons/">datacommons</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidy-intelligence/r-datacommons" class="external-link">datacommons</a></span><span class="op">)</span></span></code></pre></div>
 <p>Get a free API key for Data Commons <a href="https://apikeys.datacommons.org/" class="external-link">here</a>. Set the Data Commons API key as the <code>DATACOMMONS_API_KEY</code> environment variable using the helper function and restart your R session to load the key:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/dc_set_api_key.html">dc_set_api_key</a></span><span class="op">(</span><span class="st">"YOUR_API_KEY"</span><span class="op">)</span></span></code></pre></div>
@@ -126,7 +133,7 @@ install.packages("datacommons")
 <p>If you want to get different population numbers from the <a href="https://datacommons.org/browser/dc/base/USCensusPEP_Annual_Population" class="external-link">US Census</a> on the state level:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">state_level</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dc_get_observations.html">dc_get_observations</a></span><span class="op">(</span></span>
-<span>  variable_dcids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Count_Person"</span><span class="op">)</span>,</span>
+<span>  variable_dcids <span class="op">=</span> <span class="st">"Count_Person"</span>,</span>
 <span>  date <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  parent_entity <span class="op">=</span> <span class="st">"country/USA"</span>,</span>
 <span>  entity_type <span class="op">=</span> <span class="st">"State"</span>,</span>
@@ -147,11 +154,38 @@ install.packages("datacommons")
 <span><span class="co">#&gt; 4 2176550201 USCensusPEP_Annual_Population</span></span>
 <span><span class="co">#&gt; 5 2176550201 USCensusPEP_Annual_Population</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>Contributions to <code>oecdoda</code> are welcome! If you’d like to contribute, please follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Create an issue</strong>: Before making changes, create an issue describing the bug or feature you’re addressing.</li>
+<li>
+<strong>Fork the repository</strong>: After receiving supportive feedback from the package authors, fork the repository to your GitHub account.</li>
+<li>
+<strong>Create a branch</strong>: Create a branch for your changes with a descriptive name.</li>
+<li>
+<strong>Make your changes</strong>: Implement your bug fix or feature.</li>
+<li>
+<strong>Test your changes</strong>: Run tests to ensure your changes don’t break existing functionality.</li>
+<li>
+<strong>Submit a pull request</strong>: Push your changes to your fork and submit a pull request to the main repository.</li>
+</ol>
+</div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/tidy-intelligence/r-datacommons/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/tidy-intelligence/r-datacommons/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
