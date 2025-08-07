@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analyzing Census Data • datacommons</title>
+<title>Analyzing Census Data with Data Commons • datacommons</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Analyzing Census Data">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Analyzing Census Data with Data Commons">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datacommons</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.9001</span>
       </span>
     </div>
 
@@ -49,13 +49,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/analyzing-census-data.html">Analyzing Census Data</a>
-    </li>
-    <li>
-      <a href="../articles/analyzing-income-distribution.html">Analyzing Income Distribution</a>
-    </li>
-    <li>
-      <a href="../articles/analyzing-obesity-prevalence.html">Predicting Obesity Prevalence in US Counties</a>
+      <a href="../articles/analyzing-census-data.html">Analyzing Census Data with Data Commons</a>
     </li>
   </ul>
 </li>
@@ -73,7 +67,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Analyzing Census Data</h1>
+      <h1 data-toc-skip>Analyzing Census Data with Data Commons</h1>
             
       
 
@@ -83,10 +77,173 @@
 
     
     
-<!-- https://github.com/datacommonsorg/api-python/blob/master/notebooks/v2/analyzing_census_data.ipynb -->
+<div class="section level2">
+<h2 id="learning-objectives">Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"></a>
+</h2>
+<p>By the end of this vignette, you will be able to:</p>
+<ul>
+<li>Understand what Google Data Commons is and why it offers unique
+value for data integration</li>
+<li>Navigate the knowledge graph structure using relationships between
+geographic entities</li>
+<li>Find and use DCIDs (Data Commons IDs) and statistical variables</li>
+<li>Retrieve demographic data across different geographic levels using
+the <code>datacommons</code> R package</li>
+<li>Integrate data from multiple sources through the unified Data
+Commons API</li>
+<li>Handle multiple data sources (facets) and select appropriate ones
+for your analysis</li>
+<li>Build progressively complex demographic analyses that combine
+disparate datasets</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="why-start-with-census-data">Why Start with Census Data?<a class="anchor" aria-label="anchor" href="#why-start-with-census-data"></a>
+</h2>
+<p>Census data provides an ideal introduction to Data Commons for
+several reasons:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Familiar territory</strong>: Many analysts have worked
+with census data, making it easier to focus on learning the Data Commons
+approach rather than the data itself.</p></li>
+<li><p><strong>Rich relationships</strong>: Census data showcases the
+power of the knowledge graph through natural hierarchies (country →
+state → county → city), demonstrating how Data Commons connects
+entities.</p></li>
+<li><p><strong>Integration opportunities</strong>: Census demographics
+become even more valuable when combined with health, environmental, and
+economic data—showing the true power of Data Commons.</p></li>
+<li><p><strong>Real-world relevance</strong>: The examples we’ll explore
+address actual policy questions that require integrated data to answer
+properly.</p></li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="why-data-commons">Why Data Commons?<a class="anchor" aria-label="anchor" href="#why-data-commons"></a>
+</h2>
+<p>The R ecosystem has excellent packages for specific data sources. For
+example, the <a href="https://walker-data.com/tidycensus/" class="external-link">tidycensus</a> package
+provides fantastic functionality for working with U.S. Census data, with
+deep dataset-specific features and conveniences.</p>
+<p>So why use Data Commons? <strong>The real value is in data
+integration.</strong></p>
+<p>Data Commons is part of Google’s philanthropic initiatives, designed
+to democratize access to public data by combining datasets from
+organizations like the UN, World Bank, and U.S. Census into a unified
+knowledge graph.</p>
+<p>Imagine you’re a policy analyst studying the social determinants of
+health. You need to analyze relationships between:</p>
+<ul>
+<li>Census demographics (population, age, income)</li>
+<li>CDC health statistics (disease prevalence, obesity rates)<br>
+</li>
+<li>EPA environmental data (air quality indices)</li>
+<li>Bureau of Labor Statistics (unemployment rates)</li>
+</ul>
+<p>With traditional approaches, you’d need to:</p>
+<ol style="list-style-type: decimal">
+<li>Learn multiple different APIs</li>
+<li>Deal with different geographic coding systems<br>
+</li>
+<li>Reconcile different time periods and update cycles</li>
+<li>Match entities across datasets (is “Los Angeles County” the same in
+all datasets?)</li>
+</ol>
+<p>Data Commons solves this by providing a <strong>unified knowledge
+graph</strong> that links all these datasets together. One API, one set
+of geographic identifiers, one consistent way to access everything. The
+<code>datacommons</code> R package is your gateway to this integrated
+data ecosystem, enabling reproducible analysis pipelines that seamlessly
+combine diverse data sources.</p>
+</div>
+<div class="section level2">
+<h2 id="understanding-the-knowledge-graph">Understanding the Knowledge Graph<a class="anchor" aria-label="anchor" href="#understanding-the-knowledge-graph"></a>
+</h2>
+<p>Data Commons organizes information as a graph, similar to how web
+pages link to each other. Here’s the key terminology:</p>
+<div class="section level3">
+<h3 id="dcids-data-commons-ids">DCIDs (Data Commons IDs)<a class="anchor" aria-label="anchor" href="#dcids-data-commons-ids"></a>
+</h3>
+<p>Every entity in Data Commons has a unique identifier called a DCID.
+Think of it like a social security number for data:</p>
+<ul>
+<li>
+<code>country/USA</code> = United States</li>
+<li>
+<code>geoId/06</code> = California (using FIPS code 06—Federal
+Information Processing Standards codes are essentially ZIP codes for
+governments, providing standard numeric identifiers for states,
+counties, and other geographic areas)<br>
+</li>
+<li>
+<code>Count_Person</code> = the statistical variable for population
+count</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="relationships">Relationships<a class="anchor" aria-label="anchor" href="#relationships"></a>
+</h3>
+<p>Entities are connected by relationships, following the <a href="https://schema.org" class="external-link">Schema.org</a> standard—a collaborative effort
+to create structured data vocabularies that help machines understand web
+content. For Data Commons, this means consistent, machine-readable
+relationships between places and data:</p>
+<ul>
+<li>California –(<code>containedInPlace</code>)–&gt; United States</li>
+<li>California –(<code>typeOf</code>)–&gt; State</li>
+<li>Los Angeles County –(<code>containedInPlace</code>)–&gt;
+California</li>
+</ul>
+<p>This structure lets us traverse the graph to find related
+information. Want all counties in California? Follow the
+<code>containedInPlace</code> relationships backward.</p>
+</div>
+<div class="section level3">
+<h3 id="statistical-variables">Statistical Variables<a class="anchor" aria-label="anchor" href="#statistical-variables"></a>
+</h3>
+<p>These are the things we can measure:</p>
+<ul>
+<li>
+<code>Count_Person</code> = total population</li>
+<li>
+<code>Median_Age_Person</code> = median age</li>
+<li>
+<code>UnemploymentRate_Person</code> = unemployment rate</li>
+<li>
+<code>Mean_Temperature</code> = average temperature</li>
+</ul>
+<p>The power comes from being able to query any variable for any place
+using the same consistent approach through the <code>datacommons</code>
+R package.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidy-intelligence.github.io/r-datacommons/">datacommons</a></span><span class="op">)</span></span></code></pre></div>
-<p>Coming soon …</p>
+<code class="sourceCode R"><span><span class="co"># Core packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidy-intelligence.github.io/r-datacommons/">datacommons</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set a consistent theme for plots</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="setting-up-api-access">Setting Up API Access<a class="anchor" aria-label="anchor" href="#setting-up-api-access"></a>
+</h2>
+<p>You’ll need a free API key from <a href="https://apikeys.datacommons.org/" class="external-link uri">https://apikeys.datacommons.org/</a></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set your API key</span></span>
+<span><span class="fu"><a href="../reference/dc_set_api_key.html">dc_set_api_key</a></span><span class="op">(</span><span class="st">"YOUR_API_KEY_HERE"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or manually set DATACOMMONS_API_KEY in your .Renviron file</span></span></code></pre></div>
+<p>Don’t forget to restart your R session after setting the key to
+automatically load it.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -99,7 +256,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Christoph Scheuch.</p>
+<p>Developed by Christoph Scheuch, Teal Emery.</p>
 </div>
 
 <div class="pkgdown">
