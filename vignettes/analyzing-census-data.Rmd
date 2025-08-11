@@ -133,7 +133,9 @@ Don't forget to restart your R session after setting the key to automatically lo
 # Check for API key
 if (!dc_has_api_key()) {
   message("This vignette requires a Data Commons API key.")
-  message("Get your free key at: https://docs.datacommons.org/api/#obtain-an-api-key")
+  message(
+    "Get your free key at: https://docs.datacommons.org/api/#obtain-an-api-key"
+  )
   knitr::knit_exit()
 }
 ```
