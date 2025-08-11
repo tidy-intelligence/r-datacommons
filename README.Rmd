@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/tidy-intelligence/r-datacommons/graph/badge.svg)](https://app.codecov.io/gh/tidy-intelligence/r-datacommons)
 <!-- badges: end -->
 
-Access the Google [Data Commons API V2](https://docs.datacommons.org/api/rest/v2/). Data Commons provides programmatic access to statistical and demographic data from dozens of sources organized in a knowldege graph. 
+Access the Google [Data Commons API V2](https://docs.datacommons.org/api/rest/v2/). Data Commons provides programmatic access to statistical and demographic data from dozens of sources organized in a knowledge graph. 
 
 ## Installation
 

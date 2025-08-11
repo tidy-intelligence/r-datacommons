@@ -15,7 +15,7 @@ coverage](https://codecov.io/gh/tidy-intelligence/r-datacommons/graph/badge.svg)
 Access the Google [Data Commons API
 V2](https://docs.datacommons.org/api/rest/v2/). Data Commons provides
 programmatic access to statistical and demographic data from dozens of
-sources organized in a knowldege graph.
+sources organized in a knowledge graph.
 
 ## Installation
 

@@ -7,7 +7,7 @@ Authors@R:
       person("Teal", "Emery", , "lte@tealinsights.com", role = c("aut")))
 Description: Access the Google Data Commons API V2 <https://docs.datacommons.org/api/rest/v2/>.
     Data Commons provides programmatic access to statistical and demographic data from
-    dozens of sources organized in a knowldege graph. 
+    dozens of sources organized in a knowledge graph. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
