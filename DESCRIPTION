@@ -25,7 +25,8 @@ Suggests:
     stringr,
     ggplot2,
     scales,
-    withr
+    withr,
+    httpuv
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/tidy-intelligence/r-datacommons, https://tidy-intelligence.github.io/r-datacommons/
