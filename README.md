@@ -5,9 +5,6 @@
 
 <!-- badges: start -->
 
-<!-- [![CRAN status](https://www.r-pkg.org/badges/version/uisapi)](https://cran.r-project.org/package=datacommons)
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/uisapi)](https://cran.r-project.org/package=datacommons) -->
-
 ![R CMD
 Check](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/R-CMD-check.yaml/badge.svg)
 ![Lint](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/lint.yaml/badge.svg)
@@ -22,12 +19,11 @@ sources organized in a knowldege graph.
 
 ## Installation
 
-<!-- You can install `datacommons` from [CRAN](https://cran.r-project.org/package=datacommons) via:
-&#10;
+You can install `datacommons` from CRAN via:
+
 ``` r
 install.packages("datacommons")
 ```
--->
 
 You can install the development version of `datacommons` from GitHub
 with:
@@ -46,9 +42,9 @@ library(datacommons)
 ```
 
 Get a free API key for Data Commons
-[here](https://apikeys.datacommons.org/). Set the Data Commons API key
-as the `DATACOMMONS_API_KEY` environment variable using the helper
-function and restart your R session to load the key:
+[here](https://docs.datacommons.org/api/#obtain-an-api-key). Set the
+Data Commons API key as the `DATACOMMONS_API_KEY` environment variable
+using the helper function and restart your R session to load the key:
 
 ``` r
 dc_set_api_key("YOUR_API_KEY")

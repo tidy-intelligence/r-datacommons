@@ -1,6 +1,6 @@
 Package: datacommons
 Title: Client for the Google Data Commons API V2
-Version: 0.0.1.9002
+Version: 0.1.0
 Authors@R: 
     c(person("Christoph", "Scheuch", , "christoph@tidy-intelligence.com",
              role = c("aut", "cre", "cph"), comment = c(ORCID = "0009-0004-0423-6819")),
