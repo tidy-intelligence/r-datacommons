@@ -1,26 +1,39 @@
-#' Is a Data Commons API key avaiable?
+#' Check if a Data Commons API key is available
 #'
-#' Used for examples/testing.
+#' Checks whether the `DATACOMMONS_API_KEY` environment variable has been set.
+#' Useful for examples, tests, or conditional execution of functions requiring
+#' authentication.
 #'
-#' @keywords internal
+#' @return A logical value: `TRUE` if an API key is set, `FALSE` otherwise.
 #'
 #' @export
 dc_has_api_key <- function() {
   Sys.getenv("DATACOMMONS_API_KEY") != ""
 }
 
-#' Set environment variable for Data Commons API key
+#' Set the Data Commons API key
 #'
-#' @param api_key description
+#' Stores the provided API key in the `DATACOMMONS_API_KEY` environment
+#' variable, which is used for authentication in API calls.
+#'
+#' @param api_key A string containing a valid Data Commons API key.
+#'
+#' @return No return value, called for side effects.
 #'
 #' @export
 dc_set_api_key <- function(api_key) {
   Sys.setenv("DATACOMMONS_API_KEY" = api_key)
 }
 
-#' Set environment variable for Data Commons base URL
+
+#' Set the Data Commons base URL
 #'
-#' @param base_url description
+#' Stores the provided base URL in the `DATACOMMONS_BASE_URL` environment
+#' variable. Useful for pointing to alternative or testing endpoints.
+#'
+#' @param base_url A string containing the base URL for the Data Commons API.
+#'
+#' @return No return value, called for side effects.
 #'
 #' @export
 dc_set_base_url <- function(base_url) {

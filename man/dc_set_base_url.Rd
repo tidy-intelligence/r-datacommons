@@ -2,13 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{dc_set_base_url}
 \alias{dc_set_base_url}
-\title{Set environment variable for Data Commons base URL}
+\title{Set the Data Commons base URL}
 \usage{
 dc_set_base_url(base_url)
 }
 \arguments{
-\item{base_url}{description}
+\item{base_url}{A string containing the base URL for the Data Commons API.}
+}
+\value{
+Invisibly returns \code{NULL}. Called for its side effect of setting an
+environment variable.
 }
 \description{
-Set environment variable for Data Commons base URL
+Stores the provided base URL in the \code{DATACOMMONS_BASE_URL} environment
+variable. Useful for pointing to alternative or testing endpoints.
 }

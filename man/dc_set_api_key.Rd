@@ -2,13 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{dc_set_api_key}
 \alias{dc_set_api_key}
-\title{Set environment variable for Data Commons API key}
+\title{Set the Data Commons API key}
 \usage{
 dc_set_api_key(api_key)
 }
 \arguments{
-\item{api_key}{description}
+\item{api_key}{A string containing a valid Data Commons API key.}
+}
+\value{
+Invisibly returns \code{NULL}. Called for its side effect of setting an
+environment variable.
 }
 \description{
-Set environment variable for Data Commons API key
+Stores the provided API key in the \code{DATACOMMONS_API_KEY} environment
+variable, which is used for authentication in API calls.
 }
