@@ -1,11 +1,11 @@
 Package: datacommons
-Title: Client for the Google Data Commons API V2
+Title: Client for the 'Google Data Commons API V2'
 Version: 0.1.0
 Authors@R: 
     c(person("Christoph", "Scheuch", , "christoph@tidy-intelligence.com",
              role = c("aut", "cre", "cph"), comment = c(ORCID = "0009-0004-0423-6819")),
       person("Teal", "Emery", , "lte@tealinsights.com", role = c("aut")))
-Description: Access the Google Data Commons API V2 <https://docs.datacommons.org/api/rest/v2/>.
+Description: Access the 'Google Data Commons API V2' <https://docs.datacommons.org/api/rest/v2/>.
     Data Commons provides programmatic access to statistical and demographic data from
     dozens of sources organized in a knowledge graph. 
 License: MIT + file LICENSE

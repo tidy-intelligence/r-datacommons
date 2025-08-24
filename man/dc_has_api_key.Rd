@@ -2,11 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{dc_has_api_key}
 \alias{dc_has_api_key}
-\title{Is a Data Commons API key avaiable?}
+\title{Check if a Data Commons API key is available}
 \usage{
 dc_has_api_key()
 }
-\description{
-Used for examples/testing.
+\value{
+A logical value: \code{TRUE} if an API key is set, \code{FALSE} otherwise.
 }
-\keyword{internal}
+\description{
+Checks whether the \code{DATACOMMONS_API_KEY} environment variable has been set.
+Useful for examples, tests, or conditional execution of functions requiring
+authentication.
+}
