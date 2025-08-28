@@ -4,9 +4,9 @@
 \name{datacommons-package}
 \alias{datacommons}
 \alias{datacommons-package}
-\title{datacommons: Client for the Google Data Commons API V2}
+\title{datacommons: Client for the 'Google Data Commons API V2'}
 \description{
-Access the Google Data Commons API V2 \url{https://docs.datacommons.org/api/rest/v2/}. Data Commons provides programmatic access to statistical and demographic data from dozens of sources organized in a knowldege graph.
+Access the 'Google Data Commons API V2' \url{https://docs.datacommons.org/api/rest/v2/}. Data Commons provides programmatic access to statistical and demographic data from dozens of sources organized in a knowledge graph.
 }
 \seealso{
 Useful links:
