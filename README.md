@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+![CRAN
+status](https://www.r-pkg.org/badges/version/datacommons)\](<https://cran.r-project.org/package=datacommons>)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/datacommons)](https://cran.r-project.org/package=datacommons)
 ![R CMD
 Check](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/R-CMD-check.yaml/badge.svg)
 ![Lint](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/lint.yaml/badge.svg)
@@ -19,7 +23,8 @@ sources organized in a knowledge graph.
 
 ## Installation
 
-You can install `datacommons` from CRAN via:
+You can install `datacommons` from
+[CRAN](https://CRAN.R-project.org/package=datacommons) via:
 
 ``` r
 install.packages("datacommons")
