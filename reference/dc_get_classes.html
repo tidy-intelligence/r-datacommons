@@ -19,7 +19,7 @@ with nodes = "Class" and expression = "&amp;lt;-typeOf".'><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datacommons</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@ with nodes = "Class" and expression = "&amp;lt;-typeOf".'><!-- mathjax --><scrip
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get All Available Classes from Data Commons</h1>
-    <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/v0.1.0/R/node.R" class="external-link"><code>R/node.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/main/R/node.R" class="external-link"><code>R/node.R</code></a></small>
     <div class="hidden name"><code>dc_get_classes.Rd</code></div>
     </div>
 
@@ -102,10 +102,8 @@ endpoint. For custom deployments, it must end with "/core/api/v2/".</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># dc_has_api_key()</span></span></span>
-<span class="r-in"><span><span class="co"># Get all entity classes</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get all entity classes</span></span></span>
 <span class="r-in"><span><span class="va">all_classes</span> <span class="op">&lt;-</span> <span class="fu">dc_get_classes</span><span class="op">(</span>return_type <span class="op">=</span> <span class="st">"json"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>

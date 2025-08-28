@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datacommons</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <h1 data-toc-skip>Analyzing Census Data with Data Commons</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/v0.1.0/vignettes/analyzing-census-data.Rmd" class="external-link"><code>vignettes/analyzing-census-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/main/vignettes/analyzing-census-data.Rmd" class="external-link"><code>vignettes/analyzing-census-data.Rmd</code></a></small>
       <div class="hidden name"><code>analyzing-census-data.Rmd</code></div>
 
     </div>
@@ -253,6 +253,836 @@ R package.</p>
 <span><span class="co"># Or manually set DATACOMMONS_API_KEY in your .Renviron file</span></span></code></pre></div>
 <p>Don’t forget to restart your R session after setting the key to
 automatically load it.</p>
+</div>
+<div class="section level2">
+<h2 id="finding-what-you-need">Finding What You Need<a class="anchor" aria-label="anchor" href="#finding-what-you-need"></a>
+</h2>
+<p>The <code>datacommons</code> R package requires three key pieces:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Statistical Variables</strong>: What you want to measure
+<ul>
+<li>Find these at: <a href="https://datacommons.org/tools/statvar" class="external-link uri">https://datacommons.org/tools/statvar</a>
+</li>
+</ul>
+</li>
+<li>
+<strong>Place DCIDs</strong>: Where you want to measure it
+<ul>
+<li>Find these at: <a href="https://datacommons.org/place" class="external-link uri">https://datacommons.org/place</a>
+</li>
+</ul>
+</li>
+<li>
+<strong>Dates</strong>: When you want the measurement
+<ul>
+<li>Use <code>"all"</code> to retrieve the entire time series</li>
+<li>Use <code>"latest"</code> for the most recent available data</li>
+<li>Use specific years like <code>"2020"</code> or date ranges</li>
+<li>See the <a href="https://docs.datacommons.org/api/rest/v2/" class="external-link">API
+documentation</a> for advanced date options</li>
+</ul>
+</li>
+</ol>
+<p>Let’s see how to find these in practice.</p>
+</div>
+<div class="section level2">
+<h2 id="example-1-national-population-trends">Example 1: National Population Trends<a class="anchor" aria-label="anchor" href="#example-1-national-population-trends"></a>
+</h2>
+<p><strong>Real-world motivation</strong>: Understanding population
+growth patterns is fundamental for policy planning, from infrastructure
+investments to social security projections. Let’s examine U.S.
+population trends to see how growth has changed over time.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get U.S. population data</span></span>
+<span><span class="co"># We found these identifiers using the Data Commons website:</span></span>
+<span><span class="co"># - Variable: "Count_Person" (from Statistical Variable Explorer)</span></span>
+<span><span class="co"># - Place: "country/USA" (from Place Explorer)</span></span>
+<span><span class="va">us_population</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dc_get_observations.html">dc_get_observations</a></span><span class="op">(</span></span>
+<span>  variable_dcids <span class="op">=</span> <span class="st">"Count_Person"</span>,</span>
+<span>  entity_dcids <span class="op">=</span> <span class="st">"country/USA"</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  return_type <span class="op">=</span> <span class="st">"data.frame"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Examine the structure</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">us_population</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 490</span></span>
+<span><span class="co">#&gt; Columns: 8</span></span>
+<span><span class="co">#&gt; $ entity_dcid   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "country/USA"<span style="color: #949494;">, </span>"country/USA"<span style="color: #949494;">, </span>"country/USA"<span style="color: #949494;">, </span>"country/US…</span></span>
+<span><span class="co">#&gt; $ entity_name   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "United States of America"<span style="color: #949494;">, </span>"United States of America"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ variable_dcid <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Count_Person"<span style="color: #949494;">, </span>"Count_Person"<span style="color: #949494;">, </span>"Count_Person"<span style="color: #949494;">, </span>"Count_P…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Total population"<span style="color: #949494;">, </span>"Total population"<span style="color: #949494;">, </span>"Total populatio…</span></span>
+<span><span class="co">#&gt; $ date          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1900"<span style="color: #949494;">, </span>"1901"<span style="color: #949494;">, </span>"1902"<span style="color: #949494;">, </span>"1903"<span style="color: #949494;">, </span>"1904"<span style="color: #949494;">, </span>"1905"<span style="color: #949494;">, </span>"1906"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ value         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 76094000<span style="color: #949494;">, </span>77584000<span style="color: #949494;">, </span>79163000<span style="color: #949494;">, </span>80632000<span style="color: #949494;">, </span>82166000<span style="color: #949494;">, </span>838220…</span></span>
+<span><span class="co">#&gt; $ facet_id      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2176550201"<span style="color: #949494;">, </span>"2176550201"<span style="color: #949494;">, </span>"2176550201"<span style="color: #949494;">, </span>"2176550201"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ facet_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "USCensusPEP_Annual_Population"<span style="color: #949494;">, </span>"USCensusPEP_Annual_Pop…</span></span>
+<span></span>
+<span><span class="co"># Notice we have multiple sources (facets) for the same data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">us_population</span><span class="op">$</span><span class="va">facet_name</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "USCensusPEP_Annual_Population"            </span></span>
+<span><span class="co">#&gt;  [2] "CensusACS5YearSurvey_AggCountry"          </span></span>
+<span><span class="co">#&gt;  [3] "CensusACS5YearSurvey"                     </span></span>
+<span><span class="co">#&gt;  [4] "USDecennialCensus_RedistrictingRelease"   </span></span>
+<span><span class="co">#&gt;  [5] "WorldDevelopmentIndicators"               </span></span>
+<span><span class="co">#&gt;  [6] "USCensusPEP_AgeSexRaceHispanicOrigin"     </span></span>
+<span><span class="co">#&gt;  [7] "OECDRegionalDemography_Population"        </span></span>
+<span><span class="co">#&gt;  [8] "CensusACS5YearSurvey_SubjectTables_S0101" </span></span>
+<span><span class="co">#&gt;  [9] "CensusACS5YearSurvey_SubjectTables_S2601A"</span></span>
+<span><span class="co">#&gt; [10] "CensusACS5YearSurvey_SubjectTables_S2602" </span></span>
+<span><span class="co">#&gt; [11] "CensusACS5YearSurvey_SubjectTables_S2603" </span></span>
+<span><span class="co">#&gt; [12] "CDC_Mortality_UnderlyingCause"            </span></span>
+<span><span class="co">#&gt; [13] "CensusPEP"                                </span></span>
+<span><span class="co">#&gt; [14] "CensusACS1YearSurvey"                     </span></span>
+<span><span class="co">#&gt; [15] "WikidataPopulation"</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="handling-multiple-data-sources">Handling Multiple Data Sources<a class="anchor" aria-label="anchor" href="#handling-multiple-data-sources"></a>
+</h3>
+<p>Data Commons aggregates data from multiple sources. This is both a
+strength (comprehensive data) and a challenge (which source to use?).
+Let’s handle this:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Strategy 1: Use the official Census PEP (Population Estimates Program)</span></span>
+<span><span class="va">us_pop_clean</span> <span class="op">&lt;-</span> <span class="va">us_population</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">facet_name</span> <span class="op">==</span> <span class="st">"USCensusPEP_Annual_Population"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>,</span>
+<span>    population_millions <span class="op">=</span> <span class="va">value</span> <span class="op">/</span> <span class="fl">1e6</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">2000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">population_millions</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Visualize the clean data</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">us_pop_clean</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">population_millions</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_number</a></span><span class="op">(</span>suffix <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>,</span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">280</span>, <span class="fl">350</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2025</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"U.S. Population Growth"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Using Census Population Estimates Program data"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Year"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Population (millions)"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source: U.S. Census Bureau via Data Commons"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="analyzing-census-data_files/figure-html/clean-population-data-1.png" width="672" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Calculate average annual growth</span></span>
+<span><span class="va">growth_rate</span> <span class="op">&lt;-</span> <span class="va">us_pop_clean</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    annual_growth <span class="op">=</span></span>
+<span>      <span class="op">(</span><span class="va">population_millions</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">population_millions</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    avg_growth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">annual_growth</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    pre_2020_growth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">annual_growth</span><span class="op">[</span><span class="va">year</span> <span class="op">&lt;</span> <span class="fl">2020</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    post_2020_growth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">annual_growth</span><span class="op">[</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">2020</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Average annual growth rate: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">growth_rate</span><span class="op">$</span><span class="va">avg_growth</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"%\n"</span>,</span>
+<span>  <span class="st">"Pre-2020 growth rate: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">growth_rate</span><span class="op">$</span><span class="va">pre_2020_growth</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"%\n"</span>,</span>
+<span>  <span class="st">"Post-2020 growth rate: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">growth_rate</span><span class="op">$</span><span class="va">post_2020_growth</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"%"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Note for statistics enthusiasts: We're using arithmetic mean for simplicity.</span></span>
+<span><span class="co"># For compound growth rates, geometric mean would be more precise, which you can</span></span>
+<span><span class="co"># calculate as geometric_mean_growth = (last_value/first_value)^(1/n_years) - 1.</span></span>
+<span><span class="co"># But given the small annual changes (~0.7%), the difference is negligible.</span></span></code></pre></div>
+<p><strong>Key insight</strong>: Notice the marked change in growth
+patterns around 2020. While pre-2020 showed steady growth, the post-2020
+period reveals a significant slowdown. This dramatic shift raises
+important policy questions: How much is due to COVID-19 mortality versus
+changes in immigration patterns or birth rates? The
+<code>datacommons</code> package makes it easy to pull in additional
+variables like death rates, immigration statistics, and birth rates to
+investigate these questions further.</p>
+</div>
+<div class="section level3">
+<h3 id="alternative-aggregate-across-sources">Alternative: Aggregate Across Sources<a class="anchor" aria-label="anchor" href="#alternative-aggregate-across-sources"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Strategy 2: Take the median across all sources for each year</span></span>
+<span><span class="va">us_pop_aggregated</span> <span class="op">&lt;-</span> <span class="va">us_population</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">2000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    population_millions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1e6</span>,</span>
+<span>    n_sources <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">facet_name</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show which years have the most sources</span></span>
+<span><span class="va">us_pop_aggregated</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">n_sources</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Years with most data sources"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Years with most data sources</caption>
+<thead><tr class="header">
+<th align="right">year</th>
+<th align="right">population_millions</th>
+<th align="right">n_sources</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">2017</td>
+<td align="right">325.0538</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">328.2395</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="right">2018</td>
+<td align="right">326.6875</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="right">2020</td>
+<td align="right">329.8250</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="right">2021</td>
+<td align="right">331.9714</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="right">2022</td>
+<td align="right">332.1845</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="right">2023</td>
+<td align="right">333.6512</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example-2-using-relationships-to-find-states">Example 2: Using Relationships to Find States<a class="anchor" aria-label="anchor" href="#example-2-using-relationships-to-find-states"></a>
+</h2>
+<p><strong>Real-world motivation</strong>: State-level demographic
+analysis is crucial for understanding regional variations in aging,
+which impacts healthcare planning, workforce development, and social
+services allocation.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Method 1: Use the parent/child relationship in observations</span></span>
+<span><span class="va">state_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dc_get_observations.html">dc_get_observations</a></span><span class="op">(</span></span>
+<span>  variable_dcids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Count_Person"</span>, <span class="st">"Median_Age_Person"</span><span class="op">)</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"latest"</span>,</span>
+<span>  parent_entity <span class="op">=</span> <span class="st">"country/USA"</span>,</span>
+<span>  entity_type <span class="op">=</span> <span class="st">"State"</span>,</span>
+<span>  return_type <span class="op">=</span> <span class="st">"data.frame"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The code automatically constructs the following query:</span></span>
+<span><span class="co"># Find all entities of type State contained in country/USA</span></span>
+<span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">state_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 724</span></span>
+<span><span class="co">#&gt; Columns: 8</span></span>
+<span><span class="co">#&gt; $ entity_dcid   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "geoId/01"<span style="color: #949494;">, </span>"geoId/04"<span style="color: #949494;">, </span>"geoId/02"<span style="color: #949494;">, </span>"geoId/01"<span style="color: #949494;">, </span>"geoId/0…</span></span>
+<span><span class="co">#&gt; $ entity_name   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Alabama"<span style="color: #949494;">, </span>"Arizona"<span style="color: #949494;">, </span>"Alaska"<span style="color: #949494;">, </span>"Alabama"<span style="color: #949494;">, </span>"Arizona"<span style="color: #949494;">, </span>"A…</span></span>
+<span><span class="co">#&gt; $ variable_dcid <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Count_Person"<span style="color: #949494;">, </span>"Count_Person"<span style="color: #949494;">, </span>"Count_Person"<span style="color: #949494;">, </span>"Count_P…</span></span>
+<span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Total population"<span style="color: #949494;">, </span>"Total population"<span style="color: #949494;">, </span>"Total populatio…</span></span>
+<span><span class="co">#&gt; $ date          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2024"<span style="color: #949494;">, </span>"2024"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ value         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 5054253<span style="color: #949494;">, </span>7268175<span style="color: #949494;">, </span>740133<span style="color: #949494;">, </span>5157699<span style="color: #949494;">, </span>7268175<span style="color: #949494;">, </span>3032651<span style="color: #949494;">, </span>303…</span></span>
+<span><span class="co">#&gt; $ facet_id      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "196790193"<span style="color: #949494;">, </span>"1964317807"<span style="color: #949494;">, </span>"2176550201"<span style="color: #949494;">, </span>"2176550201"<span style="color: #949494;">, </span>"…</span></span>
+<span><span class="co">#&gt; $ facet_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "CensusACS5YearSurvey_SubjectTables_S2602"<span style="color: #949494;">, </span>"CensusACS5Y…</span></span>
+<span></span>
+<span><span class="co"># Process the data - reshape from long to wide</span></span>
+<span><span class="va">state_summary</span> <span class="op">&lt;-</span> <span class="va">state_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="st">"Census"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Use Census data</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    entity <span class="op">=</span> <span class="va">entity_dcid</span>,</span>
+<span>    state_name <span class="op">=</span> <span class="va">entity_name</span>,</span>
+<span>    variable <span class="op">=</span> <span class="va">variable_dcid</span>,</span>
+<span>    <span class="va">value</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">entity</span>, <span class="va">state_name</span>, <span class="va">variable</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># Take first if duplicates</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">variable</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Count_Person</span><span class="op">)</span>,</span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Median_Age_Person</span><span class="op">)</span>,</span>
+<span>    <span class="va">Count_Person</span> <span class="op">&gt;</span> <span class="fl">500000</span> <span class="co"># Focus on states, not small territories</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Visualize the relationship</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">state_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Median_Age_Person</span>, y <span class="op">=</span> <span class="va">Count_Person</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="va">Count_Person</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>, color <span class="op">=</span> <span class="st">"darkblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">state_summary</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Count_Person</span> <span class="op">&gt;</span> <span class="fl">10e6</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">state_name</span><span class="op">)</span>,</span>
+<span>    vjust <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">0.5</span>, size <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_comma</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"State Demographics: Population vs. Median Age"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Median Age (years)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Population (log scale)"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source: U.S. Census Bureau via Data Commons"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="analyzing-census-data_files/figure-html/state-analysis-1.png" width="672" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Find extremes</span></span>
+<span><span class="va">state_summary</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">Median_Age_Person</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">Median_Age_Person</span><span class="op">)</span> <span class="op">|</span></span>
+<span>      <span class="va">Median_Age_Person</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Median_Age_Person</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">state_name</span>, <span class="va">Median_Age_Person</span>, <span class="va">Count_Person</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Count_Person <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_comma</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="va">Count_Person</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"States with extreme median ages"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>States with extreme median ages</caption>
+<thead><tr class="header">
+<th align="left">state_name</th>
+<th align="right">Median_Age_Person</th>
+<th align="left">Count_Person</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Maine</td>
+<td align="right">44.8</td>
+<td align="left">1,362,359</td>
+</tr>
+<tr class="even">
+<td align="left">Utah</td>
+<td align="right">31.7</td>
+<td align="left">3,271,616</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight</strong>: The 13-year gap between Maine (44.8)
+and Utah (31.7) in median age represents dramatically different
+demographic challenges. Maine faces an aging workforce and increasing
+healthcare demands, while Utah’s younger population suggests different
+priorities around education and family services. These demographic
+differences drive fundamentally different policy needs across
+states.</p>
+</div>
+<div class="section level2">
+<h2 id="example-3-cross-dataset-integration">Example 3: Cross-Dataset Integration<a class="anchor" aria-label="anchor" href="#example-3-cross-dataset-integration"></a>
+</h2>
+<p><strong>Real-world motivation</strong>: Public health researchers
+often need to understand how socioeconomic factors relate to health
+outcomes. Let’s explore potential connections between age demographics,
+obesity rates, and economic conditions at the county level—exactly the
+type of integrated analysis that would be extremely difficult without
+Data Commons.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get multiple variables for California counties</span></span>
+<span><span class="co"># Notice how we can mix variables from different sources in one query!</span></span>
+<span><span class="va">ca_integrated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dc_get_observations.html">dc_get_observations</a></span><span class="op">(</span></span>
+<span>  variable_dcids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Count_Person"</span>, <span class="co"># Census</span></span>
+<span>    <span class="st">"Median_Age_Person"</span>, <span class="co"># Census</span></span>
+<span>    <span class="st">"Percent_Person_Obesity"</span>, <span class="co"># CDC</span></span>
+<span>    <span class="st">"UnemploymentRate_Person"</span> <span class="co"># BLS</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"latest"</span>,</span>
+<span>  parent_entity <span class="op">=</span> <span class="st">"geoId/06"</span>, <span class="co"># California</span></span>
+<span>  entity_type <span class="op">=</span> <span class="st">"County"</span>,</span>
+<span>  return_type <span class="op">=</span> <span class="st">"data.frame"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Check which sources we're pulling from</span></span>
+<span><span class="va">ca_integrated</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">variable_name</span>, <span class="va">facet_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Data sources by variable"</span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<caption>Data sources by variable</caption>
+<colgroup>
+<col width="50%">
+<col width="45%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">variable_name</th>
+<th align="left">facet_name</th>
+<th align="right">n</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Median age of population</td>
+<td align="left">CensusACS5YearSurvey</td>
+<td align="right">58</td>
+</tr>
+<tr class="even">
+<td align="left">Median age of population</td>
+<td align="left">CensusACS5YearSurvey_SubjectTables_S0101</td>
+<td align="right">58</td>
+</tr>
+<tr class="odd">
+<td align="left">Percentage of Adult Population That Is Obese</td>
+<td align="left">CDC500</td>
+<td align="right">232</td>
+</tr>
+<tr class="even">
+<td align="left">Total population</td>
+<td align="left">CDC_Mortality_UnderlyingCause</td>
+<td align="right">58</td>
+</tr>
+<tr class="odd">
+<td align="left">Total population</td>
+<td align="left">CDC_Social_Vulnerability_Index</td>
+<td align="right">58</td>
+</tr>
+<tr class="even">
+<td align="left">Total population</td>
+<td align="left">CensusACS1YearSurvey</td>
+<td align="right">41</td>
+</tr>
+<tr class="odd">
+<td align="left">Total population</td>
+<td align="left">CensusACS5YearSurvey</td>
+<td align="right">58</td>
+</tr>
+<tr class="even">
+<td align="left">Total population</td>
+<td align="left">CensusACS5YearSurvey_SubjectTables_S0101</td>
+<td align="right">58</td>
+</tr>
+<tr class="odd">
+<td align="left">Total population</td>
+<td align="left">CensusPEP</td>
+<td align="right">56</td>
+</tr>
+<tr class="even">
+<td align="left">Total population</td>
+<td align="left">USCensusPEP_AgeSexRaceHispanicOrigin</td>
+<td align="right">58</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Process the integrated data</span></span>
+<span><span class="va">ca_analysis</span> <span class="op">&lt;-</span> <span class="va">ca_integrated</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># Pick one source per variable for consistency</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="op">(</span><span class="va">variable_dcid</span> <span class="op">==</span> <span class="st">"Count_Person"</span> <span class="op">&amp;</span></span>
+<span>       <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="st">"CensusACS5Year"</span><span class="op">)</span><span class="op">)</span> <span class="op">|</span></span>
+<span>      <span class="op">(</span><span class="va">variable_dcid</span> <span class="op">==</span> <span class="st">"Median_Age_Person"</span> <span class="op">&amp;</span></span>
+<span>         <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="st">"CensusACS5Year"</span><span class="op">)</span><span class="op">)</span> <span class="op">|</span></span>
+<span>      <span class="op">(</span><span class="va">variable_dcid</span> <span class="op">==</span> <span class="st">"Percent_Person_Obesity"</span> <span class="op">&amp;</span></span>
+<span>         <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="st">"CDC"</span><span class="op">)</span><span class="op">)</span> <span class="op">|</span></span>
+<span>      <span class="op">(</span><span class="va">variable_dcid</span> <span class="op">==</span> <span class="st">"UnemploymentRate_Person"</span> <span class="op">&amp;</span></span>
+<span>         <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="st">"BLS"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    entity <span class="op">=</span> <span class="va">entity_dcid</span>,</span>
+<span>    county_name <span class="op">=</span> <span class="va">entity_name</span>,</span>
+<span>    variable <span class="op">=</span> <span class="va">variable_dcid</span>,</span>
+<span>    <span class="va">value</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">entity</span>, <span class="va">county_name</span>, <span class="va">variable</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">variable</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    county_name <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">county_name</span>, <span class="st">" County$"</span><span class="op">)</span>,</span>
+<span>    population_k <span class="op">=</span> <span class="va">Count_Person</span> <span class="op">/</span> <span class="fl">1000</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Explore relationships between variables</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ca_analysis</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Median_Age_Person</span>, y <span class="op">=</span> <span class="va">Percent_Person_Obesity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="va">Count_Person</span>, color <span class="op">=</span> <span class="va">UnemploymentRate_Person</span><span class="op">)</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.7</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">10</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Unemployment\nRate (%)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"California Counties: Age, Obesity, and Unemployment"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Integrating Census, CDC, and BLS data through Data Commons"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Median Age (years)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Obesity Rate (%)"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Sources: Census ACS, CDC PLACES, BLS via Data Commons"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="analyzing-census-data_files/figure-html/cross-dataset-1.png" width="672" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Show correlations</span></span>
+<span><span class="va">ca_analysis</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Median_Age_Person</span>, <span class="va">Percent_Person_Obesity</span>, <span class="va">UnemploymentRate_Person</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Correlations between demographic and health variables"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Correlations between demographic and health variables</caption>
+<colgroup>
+<col width="26%">
+<col width="20%">
+<col width="25%">
+<col width="26%">
+</colgroup>
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">Median_Age_Person</th>
+<th align="right">Percent_Person_Obesity</th>
+<th align="right">UnemploymentRate_Person</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Median_Age_Person</td>
+<td align="right">1.00</td>
+<td align="right">-0.29</td>
+<td align="right">-0.42</td>
+</tr>
+<tr class="even">
+<td align="left">Percent_Person_Obesity</td>
+<td align="right">-0.29</td>
+<td align="right">1.00</td>
+<td align="right">0.58</td>
+</tr>
+<tr class="odd">
+<td align="left">UnemploymentRate_Person</td>
+<td align="right">-0.42</td>
+<td align="right">0.58</td>
+<td align="right">1.00</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight</strong>: The negative correlation (-0.30)
+between median age and obesity rates is counterintuitive—we might expect
+older populations to have higher obesity rates. However, the strong
+positive correlation (0.61) between unemployment and obesity suggests
+economic factors may be more important than age. This type of finding,
+made possible by the <code>datacommons</code> package’s easy data
+integration, could inform targeted public health interventions that
+address economic barriers to healthy living.</p>
+</div>
+<div class="section level2">
+<h2 id="example-4-time-series-across-cities">Example 4: Time Series Across Cities<a class="anchor" aria-label="anchor" href="#example-4-time-series-across-cities"></a>
+</h2>
+<p><strong>Real-world motivation</strong>: Urban planners and
+demographers track city growth patterns to inform infrastructure
+investments, housing policy, and resource allocation. Let’s examine how
+major U.S. cities have grown differently over the past two decades.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Major city DCIDs (found using datacommons.org/place)</span></span>
+<span><span class="va">major_cities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"geoId/3651000"</span>, <span class="co"># New York City</span></span>
+<span>  <span class="st">"geoId/0644000"</span>, <span class="co"># Los Angeles</span></span>
+<span>  <span class="st">"geoId/1714000"</span>, <span class="co"># Chicago</span></span>
+<span>  <span class="st">"geoId/4835000"</span>, <span class="co"># Houston</span></span>
+<span>  <span class="st">"geoId/0455000"</span> <span class="co"># Phoenix</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get historical population data</span></span>
+<span><span class="va">city_populations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dc_get_observations.html">dc_get_observations</a></span><span class="op">(</span></span>
+<span>  variable_dcids <span class="op">=</span> <span class="st">"Count_Person"</span>,</span>
+<span>  entity_dcids <span class="op">=</span> <span class="va">major_cities</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  return_type <span class="op">=</span> <span class="st">"data.frame"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Process - use Census PEP data for consistency</span></span>
+<span><span class="va">city_pop_clean</span> <span class="op">&lt;-</span> <span class="va">city_populations</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="st">"USCensusPEP"</span><span class="op">)</span>,</span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>,</span>
+<span>    population_millions <span class="op">=</span> <span class="va">value</span> <span class="op">/</span> <span class="fl">1e6</span>,</span>
+<span>    city <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html" class="external-link">str_extract</a></span><span class="op">(</span><span class="va">entity_name</span>, <span class="st">"^[^,]+"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">2000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">city</span>, <span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    population_millions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">population_millions</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Visualize growth trends</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
+<span>  <span class="va">city_pop_clean</span>,</span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">population_millions</span>, color <span class="op">=</span> <span class="va">city</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_number</a></span><span class="op">(</span>suffix <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Population Growth in Major U.S. Cities"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Year"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Population (millions)"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"City"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source: Census Population Estimates Program via Data Commons"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="analyzing-census-data_files/figure-html/time-series-1.png" width="672" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Calculate growth rates</span></span>
+<span><span class="va">city_pop_clean</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">city</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">|</span> <span class="va">year</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">city</span>, <span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span>, <span class="st">"-"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    start_pop <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">population_millions</span><span class="op">)</span>,</span>
+<span>    end_pop <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">last</a></span><span class="op">(</span><span class="va">population_millions</span><span class="op">)</span>,</span>
+<span>    total_growth_pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">end_pop</span> <span class="op">/</span> <span class="va">start_pop</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">total_growth_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>    caption <span class="op">=</span> <span class="st">"City population growth rates"</span>,</span>
+<span>    col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"City"</span>, <span class="st">"Period"</span>, <span class="st">"Start (M)"</span>, <span class="st">"End (M)"</span>, <span class="st">"Growth %"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>City population growth rates</caption>
+<thead><tr class="header">
+<th align="left">City</th>
+<th align="left">Period</th>
+<th align="right">Start (M)</th>
+<th align="right">End (M)</th>
+<th align="right">Growth %</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Phoenix</td>
+<td align="left">2000 - 2024</td>
+<td align="right">1.327196</td>
+<td align="right">1.673164</td>
+<td align="right">26.1</td>
+</tr>
+<tr class="even">
+<td align="left">Houston</td>
+<td align="left">2000 - 2024</td>
+<td align="right">1.977408</td>
+<td align="right">2.390125</td>
+<td align="right">20.9</td>
+</tr>
+<tr class="odd">
+<td align="left">New York City</td>
+<td align="left">2000 - 2024</td>
+<td align="right">8.015209</td>
+<td align="right">8.478072</td>
+<td align="right">5.8</td>
+</tr>
+<tr class="even">
+<td align="left">Los Angeles</td>
+<td align="left">2000 - 2024</td>
+<td align="right">3.702574</td>
+<td align="right">3.878704</td>
+<td align="right">4.8</td>
+</tr>
+<tr class="odd">
+<td align="left">Chicago</td>
+<td align="left">2000 - 2024</td>
+<td align="right">2.895723</td>
+<td align="right">2.721308</td>
+<td align="right">-6.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight</strong>: The stark contrast between Sun Belt
+cities (Phoenix +26%, Houston +21%) and Rust Belt Chicago (-6%) reflects
+major economic and demographic shifts in America. These patterns have
+profound implications for everything from housing affordability to
+political representation. The <code>datacommons</code> package makes it
+trivial to extend this analysis—we could easily add variables like
+temperature, job growth, or housing costs to understand what drives
+these migration patterns.</p>
+</div>
+<div class="section level2">
+<h2 id="working-with-data-sources-facets">Working with Data Sources (Facets)<a class="anchor" aria-label="anchor" href="#working-with-data-sources-facets"></a>
+</h2>
+<p>Each data source in Data Commons is identified by a
+<code>facet_id</code> and <code>facet_name</code>. Understanding these
+helps you choose the right data:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example: What sources are available for U.S. population?</span></span>
+<span><span class="va">us_population</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">==</span> <span class="st">"2020"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">facet_name</span>, <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_comma</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Different sources for 2020 U.S. population"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Different sources for 2020 U.S. population</caption>
+<thead><tr class="header">
+<th align="left">facet_name</th>
+<th align="left">value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">WorldDevelopmentIndicators</td>
+<td align="left">331,577,720</td>
+</tr>
+<tr class="even">
+<td align="left">USCensusPEP_AgeSexRaceHispanicOrigin</td>
+<td align="left">331,577,720</td>
+</tr>
+<tr class="odd">
+<td align="left">USCensusPEP_Annual_Population</td>
+<td align="left">331,526,933</td>
+</tr>
+<tr class="even">
+<td align="left">OECDRegionalDemography_Population</td>
+<td align="left">331,526,933</td>
+</tr>
+<tr class="odd">
+<td align="left">USDecennialCensus_RedistrictingRelease</td>
+<td align="left">331,449,281</td>
+</tr>
+<tr class="even">
+<td align="left">CensusACS5YearSurvey_AggCountry</td>
+<td align="left">329,824,950</td>
+</tr>
+<tr class="odd">
+<td align="left">CDC_Mortality_UnderlyingCause</td>
+<td align="left">329,484,123</td>
+</tr>
+<tr class="even">
+<td align="left">CensusACS5YearSurvey_SubjectTables_S0101</td>
+<td align="left">326,569,308</td>
+</tr>
+<tr class="odd">
+<td align="left">CensusACS5YearSurvey_SubjectTables_S2601A</td>
+<td align="left">326,569,308</td>
+</tr>
+<tr class="even">
+<td align="left">CensusACS5YearSurvey_SubjectTables_S2602</td>
+<td align="left">326,569,308</td>
+</tr>
+<tr class="odd">
+<td align="left">CensusACS5YearSurvey_SubjectTables_S2603</td>
+<td align="left">326,569,308</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Common sources and when to use them:</strong></p>
+<ul>
+<li>
+<code>USCensusPEP_Annual_Population</code>: Annual estimates (good
+for time series)</li>
+<li>
+<code>CensusACS5YearSurvey</code>: American Community Survey (good
+for detailed demographics)</li>
+<li>
+<code>USDecennialCensus</code>: Official census every 10 years (most
+authoritative)</li>
+<li>
+<code>CDC_*</code>: Health data from CDC</li>
+<li>
+<code>BLS_*</code>: Labor statistics from Bureau of Labor
+Statistics</li>
+<li>
+<code>EPA_*</code>: Environmental data from EPA</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="tips-for-effective-use">Tips for Effective Use<a class="anchor" aria-label="anchor" href="#tips-for-effective-use"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>Start with the websites</strong>: Use Data Commons web
+tools to explore what’s available before writing code.</p></li>
+<li><p><strong>Use relationships</strong>: The
+<code>parent_entity</code> and <code>entity_type</code> parameters are
+powerful for traversing the graph.</p></li>
+<li><p><strong>Be specific about sources</strong>: Filter by
+<code>facet_name</code> when you need consistency across places or
+times.</p></li>
+<li><p><strong>Expect messiness</strong>: Real-world data has gaps,
+multiple sources, and inconsistencies. Plan for it.</p></li>
+<li><p><strong>Leverage integration</strong>: The real power is in
+combining datasets that would normally require multiple APIs.</p></li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="going-further">Going Further<a class="anchor" aria-label="anchor" href="#going-further"></a>
+</h2>
+<p>The <code>datacommons</code> R package currently focuses on data
+retrieval, which is the foundation for analysis. While more advanced
+features may come in future versions, you can already:</p>
+<ul>
+<li>Combine demographic, health, environmental, and economic data</li>
+<li>Build models that incorporate multiple data sources</li>
+<li>Create visualizations that would require extensive data wrangling
+otherwise</li>
+<li>Track changes across time for any available variable</li>
+</ul>
+<p>The package integrates seamlessly with the tidyverse, making it easy
+to incorporate Data Commons into your existing R workflows and create
+reproducible analysis pipelines.</p>
+<p>Explore more at:</p>
+<ul>
+<li>
+<strong>Statistical Variable Explorer</strong>: <a href="https://datacommons.org/tools/statvar" class="external-link uri">https://datacommons.org/tools/statvar</a>
+</li>
+<li>
+<strong>Place Explorer</strong>: <a href="https://datacommons.org/place" class="external-link uri">https://datacommons.org/place</a>
+</li>
+<li>
+<strong>Knowledge Graph Browser</strong>: <a href="https://datacommons.org/browser/" class="external-link uri">https://datacommons.org/browser/</a>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h2>
+<p>In this vignette, we’ve explored how the <code>datacommons</code> R
+package provides unique value through data integration. While
+specialized packages like <code>tidycensus</code> excel at deep
+functionality for specific datasets, the <code>datacommons</code>
+package shines when you need to:</p>
+<ul>
+<li>Combine data from multiple sources</li>
+<li>Use consistent geographic identifiers across datasets</li>
+<li>Access a wide variety of variables through one API</li>
+<li>Navigate relationships in the knowledge graph</li>
+</ul>
+<p>The power lies not in any single dataset, but in the connections
+between them. By using the <code>datacommons</code> package, you can
+focus on analysis rather than data wrangling, enabling insights that
+would be difficult or impossible to achieve through traditional
+approaches.</p>
+</div>
+<div class="section level2">
+<h2 id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
+</h2>
+<ul>
+<li>
+<strong>Get API Key</strong>: <a href="https://docs.datacommons.org/api/#obtain-an-api-key" class="external-link uri">https://docs.datacommons.org/api/#obtain-an-api-key</a>
+</li>
+<li>
+<strong>Statistical Variable Explorer</strong>: <a href="https://datacommons.org/tools/statvar" class="external-link uri">https://datacommons.org/tools/statvar</a>
+</li>
+<li>
+<strong>Place Explorer</strong>: <a href="https://datacommons.org/place" class="external-link uri">https://datacommons.org/place</a>
+</li>
+<li>
+<strong>Knowledge Graph Browser</strong>: <a href="https://datacommons.org/browser/" class="external-link uri">https://datacommons.org/browser/</a>
+</li>
+<li>
+<strong>API Documentation</strong>: <a href="https://docs.datacommons.org/api/rest/v2/" class="external-link uri">https://docs.datacommons.org/api/rest/v2/</a>
+</li>
+</ul>
 </div>
   </div>
 

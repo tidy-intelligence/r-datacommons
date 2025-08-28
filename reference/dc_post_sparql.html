@@ -18,7 +18,7 @@ request."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datacommons</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@ request."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute a SPARQL Query via POST to the Data Commons API</h1>
-    <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/v0.1.0/R/sparql.R" class="external-link"><code>R/sparql.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/main/R/sparql.R" class="external-link"><code>R/sparql.R</code></a></small>
     <div class="hidden name"><code>dc_post_sparql.Rd</code></div>
     </div>
 
@@ -104,8 +104,7 @@ endpoint. For custom deployments, must end with <code>/core/api/v2/</code>.</p><
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># dc_has_api_key()</span></span></span>
-<span class="r-in"><span><span class="co"># Get a list of all cities with a particular property</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get a list of all cities with a particular property</span></span></span>
 <span class="r-in"><span><span class="va">query</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"SELECT DISTINCT ?subject "</span>,</span></span>
@@ -113,6 +112,8 @@ endpoint. For custom deployments, must end with <code>/core/api/v2/</code>.</p><
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">dc_post_sparql</span><span class="op">(</span><span class="va">query</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> iterating <span style="color: #00BB00;">■■■                             </span>   5% | ETA:  1m</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "{\"header\":[\"?subject\"],\"rows\":[{\"cells\":[{\"value\":\"wikidataId/Q44237\"}]},{\"cells\":[{\"value\":\"wikidataId/Q41843\"}]},{\"cells\":[{\"value\":\"wikidataId/Q13377\"}]},{\"cells\":[{\"value\":\"wikidataId/Q55630\"}]},{\"cells\":[{\"value\":\"wikidataId/Q2028\"}]},{\"cells\":[{\"value\":\"wikidataId/Q203380\"}]},{\"cells\":[{\"value\":\"geoId/3916000\"}]},{\"cells\":[{\"value\":\"wikidataId/Q2887\"}]},{\"cells\":[{\"value\":\"wikidataId/Q30617\"}]},{\"cells\":[{\"value\":\"wikidataId/Q995297\"}]}]}"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get a list of biological specimens</span></span></span>
 <span class="r-in"><span><span class="va">query</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
@@ -125,7 +126,7 @@ endpoint. For custom deployments, must end with <code>/core/api/v2/</code>.</p><
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">dc_post_sparql</span><span class="op">(</span><span class="va">query</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "{\"header\":[\"?name\"],\"rows\":[{\"cells\":[{\"value\":\"x Triticosecale\"}]},{\"cells\":[{\"value\":\"x Silene\"}]},{\"cells\":[{\"value\":\"x Pseudelymus saxicola (Scribn. &amp; J.G.Sm.) Barkworth &amp; D.R.Dewey\"}]},{\"cells\":[{\"value\":\"x Pleopodium leucosporum (Klotzsch) Mickel &amp; Beitel\"}]},{\"cells\":[{\"value\":\"x Grindelia\"}]},{\"cells\":[{\"value\":\"x Elyleymus ungavensis (Louis-Marie) Barkworth\"}]},{\"cells\":[{\"value\":\"x Elyleymus aristatus (Merr.) Barkworth &amp; D.R.Dewey\"}]},{\"cells\":[{\"value\":\"x Elyhordeum stebbinsianum (Bowden) Bowden\"}]},{\"cells\":[{\"value\":\"x Elyhordeum schaackianum (Bowden) Bowden\"}]},{\"cells\":[{\"value\":\"x Elyhordeum pilosilemma (W.W.Mitch. &amp; H.J.Hodgs.) Barkworth\"}]}]}"</span>
 </code></pre></div>
     </div>
   </div>
