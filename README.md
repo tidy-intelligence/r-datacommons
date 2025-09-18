@@ -40,6 +40,10 @@ pak::pak("tidy-intelligence/r-datacommons")
 
 ## Usage
 
+> :bulb: A detailed walkthrough of census data analysis using
+> `datacommons` is available in the corresponding
+> [vignette](https://tidy-intelligence.github.io/r-datacommons/articles/analyzing-census-data.html).
+
 Load the package:
 
 ``` r
