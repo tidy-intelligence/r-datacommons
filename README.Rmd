@@ -95,7 +95,7 @@ head(state_level, 5)
 
 ## Contributing
 
-Contributions to `oecdoda` are welcome! If you'd like to contribute, please follow these steps:
+Contributions to `datacommons` are welcome! If you'd like to contribute, please follow these steps:
 
 1. **Create an issue**: Before making changes, create an issue describing the bug or feature you're addressing.
 2. **Fork the repository**: After receiving supportive feedback from the package authors, fork the repository to your GitHub account.
