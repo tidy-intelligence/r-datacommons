@@ -124,7 +124,7 @@ head(state_level, 5)
 
 ## Contributing
 
-Contributions to `oecdoda` are welcome! If you’d like to contribute,
+Contributions to `datacommons` are welcome! If you’d like to contribute,
 please follow these steps:
 
 1.  **Create an issue**: Before making changes, create an issue
