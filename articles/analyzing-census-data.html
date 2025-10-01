@@ -493,14 +493,14 @@ services allocation.</p>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">state_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 724</span></span>
 <span><span class="co">#&gt; Columns: 8</span></span>
-<span><span class="co">#&gt; $ entity_dcid   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "geoId/01"<span style="color: #949494;">, </span>"geoId/01"<span style="color: #949494;">, </span>"geoId/01"<span style="color: #949494;">, </span>"geoId/01"<span style="color: #949494;">, </span>"geoId/0…</span></span>
-<span><span class="co">#&gt; $ entity_name   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Alabama"<span style="color: #949494;">, </span>"Alabama"<span style="color: #949494;">, </span>"Alabama"<span style="color: #949494;">, </span>"Alabama"<span style="color: #949494;">, </span>"Alabama"<span style="color: #949494;">, </span>"…</span></span>
+<span><span class="co">#&gt; $ entity_dcid   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "geoId/01"<span style="color: #949494;">, </span>"geoId/10"<span style="color: #949494;">, </span>"geoId/17"<span style="color: #949494;">, </span>"geoId/06"<span style="color: #949494;">, </span>"geoId/0…</span></span>
+<span><span class="co">#&gt; $ entity_name   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Alabama"<span style="color: #949494;">, </span>"Delaware"<span style="color: #949494;">, </span>"Illinois"<span style="color: #949494;">, </span>"California"<span style="color: #949494;">, </span>"Alabam…</span></span>
 <span><span class="co">#&gt; $ variable_dcid <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Count_Person"<span style="color: #949494;">, </span>"Count_Person"<span style="color: #949494;">, </span>"Count_Person"<span style="color: #949494;">, </span>"Count_P…</span></span>
 <span><span class="co">#&gt; $ variable_name <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Total population"<span style="color: #949494;">, </span>"Total population"<span style="color: #949494;">, </span>"Total populatio…</span></span>
-<span><span class="co">#&gt; $ date          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2019"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2020"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>…</span></span>
-<span><span class="co">#&gt; $ value         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 4903185<span style="color: #949494;">, </span>5054253<span style="color: #949494;">, </span>4921532<span style="color: #949494;">, </span>5054253<span style="color: #949494;">, </span>5054253<span style="color: #949494;">, </span>5054253<span style="color: #949494;">, </span>21…</span></span>
-<span><span class="co">#&gt; $ facet_id      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1226172227"<span style="color: #949494;">, </span>"196790193"<span style="color: #949494;">, </span>"2825511676"<span style="color: #949494;">, </span>"1145703171"<span style="color: #949494;">, </span>"…</span></span>
-<span><span class="co">#&gt; $ facet_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "CensusACS1YearSurvey"<span style="color: #949494;">, </span>"CensusACS5YearSurvey_SubjectTab…</span></span>
+<span><span class="co">#&gt; $ date          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2020"<span style="color: #949494;">, </span>"2020"<span style="color: #949494;">, </span>"2019"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2023"<span style="color: #949494;">, </span>"2020"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ value         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 5024279<span style="color: #949494;">, </span>989948<span style="color: #949494;">, </span>12671821<span style="color: #949494;">, </span>39242785<span style="color: #949494;">, </span>5054253<span style="color: #949494;">, </span>21928881<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ facet_id      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1541763368"<span style="color: #949494;">, </span>"1541763368"<span style="color: #949494;">, </span>"2517965213"<span style="color: #949494;">, </span>"196790193"<span style="color: #949494;">, </span>"…</span></span>
+<span><span class="co">#&gt; $ facet_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "USDecennialCensus_RedistrictingRelease"<span style="color: #949494;">, </span>"USDecennialCe…</span></span>
 <span></span>
 <span><span class="co"># Process the data - reshape from long to wide</span></span>
 <span><span class="va">state_summary</span> <span class="op">&lt;-</span> <span class="va">state_data</span> <span class="op">|&gt;</span></span>
@@ -560,12 +560,12 @@ services allocation.</p>
 <tr class="odd">
 <td align="left">Maine</td>
 <td align="right">44.8</td>
-<td align="left">1,377,400</td>
+<td align="left">1,362,359</td>
 </tr>
 <tr class="even">
 <td align="left">Utah</td>
 <td align="right">31.7</td>
-<td align="left">3,205,958</td>
+<td align="left">3,503,613</td>
 </tr>
 </tbody>
 </table>
@@ -746,19 +746,19 @@ Data Commons.</p>
 <tr class="odd">
 <td align="left">Median_Age_Person</td>
 <td align="right">1.00</td>
-<td align="right">-0.32</td>
+<td align="right">-0.37</td>
 <td align="right">-0.36</td>
 </tr>
 <tr class="even">
 <td align="left">Percent_Person_Obesity</td>
-<td align="right">-0.32</td>
+<td align="right">-0.37</td>
 <td align="right">1.00</td>
-<td align="right">0.58</td>
+<td align="right">0.59</td>
 </tr>
 <tr class="odd">
 <td align="left">UnemploymentRate_Person</td>
 <td align="right">-0.36</td>
-<td align="right">0.58</td>
+<td align="right">0.59</td>
 <td align="right">1.00</td>
 </tr>
 </tbody>
