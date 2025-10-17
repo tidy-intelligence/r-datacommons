@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 # datacommons
 
 <!-- badges: start -->
-![CRAN
-status](https://www.r-pkg.org/badges/version/datacommons)(https://cran.r-project.org/package=datacommons)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/datacommons)](https://cran.r-project.org/package=datacommons)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/datacommons)](https://cran.r-project.org/package=datacommons)
 ![R CMD Check](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/R-CMD-check.yaml/badge.svg)
