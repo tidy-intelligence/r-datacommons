@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 ![CRAN
-status](https://www.r-pkg.org/badges/version/datacommons)](https://cran.r-project.org/package=datacommons)
+status](https://www.r-pkg.org/badges/version/datacommons)(https://cran.r-project.org/package=datacommons)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/datacommons)](https://cran.r-project.org/package=datacommons)
 ![R CMD Check](https://github.com/tidy-intelligence/r-datacommons/actions/workflows/R-CMD-check.yaml/badge.svg)
@@ -90,8 +90,6 @@ state_level <- dc_get_observations(
 )
 head(state_level, 5)
 ```
-
-
 
 ## Contributing
 

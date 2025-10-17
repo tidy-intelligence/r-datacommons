@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 ![CRAN
-status](https://www.r-pkg.org/badges/version/datacommons)\](<https://cran.r-project.org/package=datacommons>)
+status](https://www.r-pkg.org/badges/version/datacommons)(<https://cran.r-project.org/package=datacommons>)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/datacommons)](https://cran.r-project.org/package=datacommons)
 ![R CMD
