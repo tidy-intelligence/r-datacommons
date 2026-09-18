@@ -10,8 +10,7 @@ dc_set_base_url(base_url)
 \item{base_url}{A string containing the base URL for the Data Commons API.}
 }
 \value{
-Invisibly returns \code{NULL}. Called for its side effect of setting an
-environment variable.
+No return value, called for side effects.
 }
 \description{
 Stores the provided base URL in the \code{DATACOMMONS_BASE_URL} environment

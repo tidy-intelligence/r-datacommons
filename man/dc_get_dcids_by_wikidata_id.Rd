@@ -32,7 +32,7 @@ Resolves Wikidata identifiers (e.g., \code{"Q30"} for the United States) to
 Data Commons DCIDs using the wikidataId property.
 }
 \examples{
-\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (dc_has_api_key()) withAutoprint(\{ # examplesIf}
 # Get the DCID for the United States (Wikidata ID "Q30")
 dc_get_dcids_by_wikidata_id("Q30")
 

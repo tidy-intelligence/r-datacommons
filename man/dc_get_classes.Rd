@@ -31,7 +31,7 @@ entity classes in Data Commons. This is equivalent to calling \code{\link[=dc_ge
 with \code{nodes = "Class"} and \code{expression = "<-typeOf"}.
 }
 \examples{
-\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (dc_has_api_key()) withAutoprint(\{ # examplesIf}
 # Get all entity classes
 all_classes <- dc_get_classes(return_type = "json")
 \dontshow{\}) # examplesIf}

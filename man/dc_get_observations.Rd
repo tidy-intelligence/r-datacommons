@@ -67,7 +67,7 @@ A list (if \code{return_type = "list"}), JSON string (if
 Retrieve Observations from Data Commons
 }
 \examples{
-\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (dc_has_api_key()) withAutoprint(\{ # examplesIf}
 # Look up the statistical variables available for a given entity (place)
 dc_get_observations(
   date = "latest",
