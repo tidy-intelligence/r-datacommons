@@ -185,6 +185,10 @@ construct_request <- function(
   filter_facet_ids = NULL,
   query = NULL
 ) {
+  if (is.null(key) || key == "") {
+    key <- NULL
+  }
+
   query_params <- list(
     key = key,
     nodes = nodes,
@@ -212,12 +216,18 @@ construct_request <- function(
         )
       )
   } else if (request_type == "post") {
-    request(base_url) |>
+    req <- request(base_url) |>
       req_url_path_append(path) |>
-      req_method("POST") |>
-      req_headers(
-        "X-API-Key" = key
-      ) |>
+      req_method("POST")
+
+    if (!is.null(key)) {
+      req <- req |>
+        req_headers(
+          "X-API-Key" = key
+        )
+    }
+
+    req |>
       req_body_json(list(query = query)) |>
       req_user_agent(
         paste(
