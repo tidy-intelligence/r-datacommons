@@ -80,8 +80,11 @@ format_response <- function(data, return_type) {
           facet_id <- facet$facetId
           observations <- facet$observations
 
-          if (!is.null(facets_info[[facet_id]]$importName)) {
-            facet_name <- facets_info[[facet_id]]$importName[[1]]
+          facet_info <- facets_info[[facet_id]]
+          if (!is.null(facet_info$importName)) {
+            facet_name <- facet_info$importName[[1]]
+          } else if (!is.null(facet_info$provenanceId)) {
+            facet_name <- sub("^dc/base/", "", facet_info$provenanceId[[1]])
           } else {
             facet_name <- NA
           }

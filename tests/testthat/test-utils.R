@@ -342,3 +342,66 @@ test_that("%||% returns lhs when not NULL, else rhs", {
   expect_equal(`%||%`(1, 2), 1)
   expect_equal(`%||%`(NULL, 2), 2)
 })
+
+test_that("format_response() derives facet_name from provenanceId", {
+  raw <- list(
+    byVariable = list(
+      "Count_Person" = list(
+        byEntity = list(
+          "geoId/06" = list(
+            orderedFacets = list(
+              list(
+                facetId = "f_prov",
+                observations = list(
+                  list(date = "2022", value = 10)
+                )
+              )
+            )
+          )
+        )
+      )
+    ),
+    facets = list(
+      f_prov = list(provenanceId = "dc/base/USCensusPEP_Annual_Population")
+    )
+  )
+
+  ent_json <- jsonlite::toJSON(
+    list(
+      data = list(
+        "geoId/06" = list(
+          arcs = list(name = list(nodes = list(list(value = "California"))))
+        )
+      )
+    ),
+    auto_unbox = TRUE
+  )
+
+  var_json <- jsonlite::toJSON(
+    list(
+      data = list(
+        "Count_Person" = list(
+          arcs = list(name = list(nodes = list(list(value = "Population"))))
+        )
+      )
+    ),
+    auto_unbox = TRUE
+  )
+
+  testthat::with_mocked_bindings(
+    resps_data = function(data, f) raw,
+    dc_get_property_values = function(ids, properties, return_type) {
+      if (identical(properties, "name") && any(grepl("^geoId/", ids))) {
+        return(ent_json)
+      }
+      if (identical(properties, "name")) {
+        return(var_json)
+      }
+      stop("unexpected call")
+    },
+    {
+      df <- format_response(data = "ignored", return_type = "data.frame")
+      expect_equal(df$facet_name, "USCensusPEP_Annual_Population")
+    }
+  )
+})

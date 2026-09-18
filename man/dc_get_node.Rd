@@ -36,7 +36,7 @@ Queries the Data Commons API for specified property relationships of given
 nodes.
 }
 \examples{
-\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (dc_has_api_key()) withAutoprint(\{ # examplesIf}
 # Get all property labels for a given node
 dc_get_node(nodes = "country/USA", expression = "<-")
 

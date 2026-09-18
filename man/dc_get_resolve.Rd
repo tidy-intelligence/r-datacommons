@@ -35,7 +35,7 @@ A list or JSON string, depending on \code{return_type}.
 Resolve Nodes from Data Commons
 }
 \examples{
-\dontshow{if (dc_has_api_key()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (dc_has_api_key()) withAutoprint(\{ # examplesIf}
 # Find the DCID of a place by another known ID
 dc_get_resolve(
   nodes = "Q30",

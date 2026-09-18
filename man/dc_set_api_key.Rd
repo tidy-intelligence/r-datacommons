@@ -10,8 +10,7 @@ dc_set_api_key(api_key)
 \item{api_key}{A string containing a valid Data Commons API key.}
 }
 \value{
-Invisibly returns \code{NULL}. Called for its side effect of setting an
-environment variable.
+No return value, called for side effects.
 }
 \description{
 Stores the provided API key in the \code{DATACOMMONS_API_KEY} environment

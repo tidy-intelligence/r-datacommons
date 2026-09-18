@@ -1,7 +1,15 @@
 #' Execute a SPARQL Query via POST to the Data Commons API
 #'
+#' `r lifecycle::badge("deprecated")`
+#'
 #' Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST
 #' request.
+#'
+#' This function is deprecated because the public Data Commons API
+#' (`https://api.datacommons.org/v2/`) has retired its SPARQL endpoint and
+#' now responds with HTTP 410 Gone. It still works against custom Data Commons
+#' deployments that support SPARQL queries, but will be removed in a future
+#' release.
 #'
 #' @param query A character string containing a valid SPARQL query.
 #' @param api_key Your Data Commons API key. If not provided, uses the
@@ -13,7 +21,8 @@
 #'
 #' @return A list or JSON string, depending on `return_type`.
 #'
-#' @examplesIf dc_has_api_key()
+#' @examples
+#' \dontrun{
 #' # Get a list of all cities with a particular property
 #' query <- c(
 #'   paste0(
@@ -34,6 +43,7 @@
 #'   )
 #' )
 #' dc_post_sparql(query)
+#' }
 #'
 #' @export
 dc_post_sparql <- function(
@@ -45,6 +55,15 @@ dc_post_sparql <- function(
   ),
   return_type = "json"
 ) {
+  lifecycle::deprecate_warn(
+    when = "0.1.1",
+    what = "dc_post_sparql()",
+    details = paste(
+      "The public Data Commons API has retired its SPARQL endpoint.",
+      "The function still works against custom deployments that support it."
+    )
+  )
+
   validate_api_key(api_key)
   validate_base_url(base_url)
   validate_return_type(return_type)
