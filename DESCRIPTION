@@ -17,7 +17,8 @@ Depends:
 Imports: 
     httr2,
     jsonlite,
-    cli
+    cli,
+    lifecycle
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

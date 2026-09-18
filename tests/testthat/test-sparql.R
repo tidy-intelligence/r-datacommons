@@ -1,4 +1,5 @@
 test_that("dc_post_sparql wires calls correctly & returns formatted output", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   rec <- new.env(parent = emptyenv())
 
   withr::local_envvar(
@@ -78,6 +79,7 @@ test_that("dc_post_sparql wires calls correctly & returns formatted output", {
 })
 
 test_that("dc_post_sparql respects explicit base_url & return_type = 'list'", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   rec <- new.env(parent = emptyenv())
 
   testthat::with_mocked_bindings(
@@ -137,6 +139,7 @@ test_that("dc_post_sparql respects explicit base_url & return_type = 'list'", {
 })
 
 test_that("dc_post_sparql propagates validation errors", {
+  withr::local_options(lifecycle_verbosity = "quiet")
   testthat::with_mocked_bindings(
     validate_api_key = function(api_key) cli::cli_abort("bad key"),
     validate_base_url = function(base_url) stop("should not be reached"),
@@ -153,6 +156,20 @@ test_that("dc_post_sparql propagates validation errors", {
     format_response = function(...) stop("should not be reached"),
     {
       expect_error(dc_post_sparql("SELECT 1 WHERE {}"), "bad key")
+    }
+  )
+})
+
+test_that("dc_post_sparql is deprecated", {
+  testthat::with_mocked_bindings(
+    construct_request = function(...) "req",
+    perform_request = function(req) "resps",
+    handle_failures = function(resps) invisible(NULL),
+    handle_successes = function(resps) "succ",
+    format_response = function(successes, return_type) "out",
+    {
+      withr::local_options(lifecycle_verbosity = "warning")
+      lifecycle::expect_deprecated(dc_post_sparql("SELECT * WHERE {}"))
     }
   )
 })

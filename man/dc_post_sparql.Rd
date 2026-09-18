@@ -28,11 +28,20 @@ endpoint. For custom deployments, must end with \verb{/core/api/v2/}.}
 A list or JSON string, depending on \code{return_type}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+}
+\details{
 Sends a SPARQL query to the Data Commons SPARQL endpoint using a POST
 request.
+
+This function is deprecated because the public Data Commons API
+(\verb{https://api.datacommons.org/v2/}) has retired its SPARQL endpoint and
+now responds with HTTP 410 Gone. It still works against custom Data Commons
+deployments that support SPARQL queries, but will be removed in a future
+release.
 }
 \examples{
-\dontshow{if (dc_has_api_key()) withAutoprint(\{ # examplesIf}
+\dontrun{
 # Get a list of all cities with a particular property
 query <- c(
   paste0(
@@ -53,5 +62,6 @@ query <- c(
   )
 )
 dc_post_sparql(query)
-\dontshow{\}) # examplesIf}
+}
+
 }
