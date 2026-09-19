@@ -104,6 +104,21 @@ format_response <- function(data, return_type) {
       }
     }
 
+    if (length(rows) == 0) {
+      cli::cli_warn("No observations found for the given query.")
+      return(data.frame(
+        entity_dcid = character(),
+        entity_name = character(),
+        variable_dcid = character(),
+        variable_name = character(),
+        date = character(),
+        value = numeric(),
+        facet_id = character(),
+        facet_name = character(),
+        stringsAsFactors = FALSE
+      ))
+    }
+
     df <- as.data.frame(do.call(
       rbind,
       lapply(rows, as.data.frame, stringsAsFactors = FALSE)
