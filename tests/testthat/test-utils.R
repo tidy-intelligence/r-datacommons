@@ -238,6 +238,44 @@ test_that("format_response() sets facet_name = NA when importName is NULL", {
   )
 })
 
+test_that("format_response() returns an empty data frame for no observations", {
+  raw <- list(
+    byVariable = list(
+      "Count_Person" = list(
+        byEntity = list(
+          "country/USA" = setNames(list(), character())
+        )
+      )
+    )
+  )
+
+  testthat::with_mocked_bindings(
+    resps_data = function(data, f) raw,
+    dc_get_property_values = function(...) stop("should not be reached"),
+    {
+      expect_warning(
+        df <- format_response(data = "ignored", return_type = "data.frame"),
+        "No observations"
+      )
+      expect_s3_class(df, "data.frame")
+      expect_equal(nrow(df), 0)
+      expect_named(
+        df,
+        c(
+          "entity_dcid",
+          "entity_name",
+          "variable_dcid",
+          "variable_name",
+          "date",
+          "value",
+          "facet_id",
+          "facet_name"
+        )
+      )
+    }
+  )
+})
+
 test_that("construct_request builds GET requests", {
   req <- construct_request(
     request_type = "get",
