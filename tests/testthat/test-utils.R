@@ -291,6 +291,41 @@ test_that("construct_request builds POST requests", {
   )
 })
 
+test_that("construct_request omits key when NULL or empty", {
+  req_null <- construct_request(
+    request_type = "get",
+    base_url = "https://example.org/core/api/v2/",
+    path = "node/property-values",
+    key = NULL,
+    nodes = "a"
+  )
+  out_null <- paste(capture.output(req_null), collapse = "\n")
+  expect_no_match(out_null, "key=")
+
+  req_empty <- construct_request(
+    request_type = "get",
+    base_url = "https://example.org/core/api/v2/",
+    path = "node/property-values",
+    key = "",
+    nodes = "a"
+  )
+  out_empty <- paste(capture.output(req_empty), collapse = "\n")
+  expect_no_match(out_empty, "key=")
+
+  req_post <- construct_request(
+    request_type = "post",
+    base_url = "https://example.org/core/api/v2/",
+    path = "search",
+    key = "",
+    query = "hello"
+  )
+  out_post <- paste(
+    capture.output(httr2::req_dry_run(req_post)),
+    collapse = "\n"
+  )
+  expect_no_match(out_post, "(?i)x-api-key", perl = TRUE)
+})
+
 test_that("construct_request errors on invalid request_type", {
   expect_error(
     construct_request(
