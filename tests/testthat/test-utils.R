@@ -238,7 +238,7 @@ test_that("format_response() sets facet_name = NA when importName is NULL", {
   )
 })
 
-test_that("format_response() returns an empty data frame without observations", {
+test_that("format_response() returns an empty data frame for no observations", {
   raw <- list(
     byVariable = list(
       "Count_Person" = list(
