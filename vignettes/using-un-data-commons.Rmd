@@ -61,14 +61,19 @@ This deployment answers requests without an API key, so there is no equivalent o
 ```{r un-check, echo=FALSE}
 un_reachable <- tryCatch(
   {
-    dc_get_node(nodes = "country/RWA", expression = "->name", return_type = "list")
+    dc_get_node(
+      nodes = "country/RWA",
+      expression = "->name", return_type = "list"
+    )
     TRUE
   },
   error = function(e) FALSE
 )
 
 if (!un_reachable) {
-  message("This vignette requires network access to the UN System Data Commons.")
+  message(
+    "This vignette requires network access to the UN System Data Commons."
+  )
   knitr::knit_exit()
 }
 ```
@@ -87,7 +92,10 @@ rwanda_regions <- dc_get_node(
 )
 
 rwanda_regions$data$`country/RWA`$arcs$containedInPlace$nodes |>
-  lapply(\(x) data.frame(name = x$name, types = paste(x$types, collapse = ", "))) |>
+  lapply(\(x) data.frame(
+    name = x$name,
+    types = paste(x$types, collapse = ", ")
+  )) |>
   bind_rows() |>
   kable(caption = "Places containing Rwanda")
 ```
@@ -108,11 +116,20 @@ dc_get_node(
 **Real-world motivation**: UNICEF's demographic series break population down by sex, age, and other dimensions. Let's compare the female and male population of a group of East African countries.
 
 ```{r population-by-sex}
-east_africa <- c("country/BDI", "country/KEN", "country/RWA", "country/TZA", "country/UGA")
+east_africa <- c(
+  "country/BDI",
+  "country/KEN",
+  "country/RWA",
+  "country/TZA",
+  "country/UGA"
+)
 
 pop_by_sex <- dc_get_observations(
   date = "latest",
-  variable_dcids = c("undata/unicef/DM_POP.SEX--F", "undata/unicef/DM_POP.SEX--M"),
+  variable_dcids = c(
+    "undata/unicef/DM_POP.SEX--F",
+    "undata/unicef/DM_POP.SEX--M"
+  ),
   entity_dcids = east_africa,
   return_type = "data.frame"
 ) |>
@@ -125,7 +142,10 @@ pop_by_sex |>
 ```
 
 ```{r population-by-sex-plot}
-ggplot(pop_by_sex, aes(x = reorder(entity_name, value), y = value, fill = sex)) +
+ggplot(
+  pop_by_sex,
+  aes(x = reorder(entity_name, value), y = value, fill = sex)
+) +
   geom_col(position = "dodge") +
   coord_flip() +
   scale_y_continuous(labels = label_comma()) +
