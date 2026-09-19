@@ -92,10 +92,12 @@ rwanda_regions <- dc_get_node(
 )
 
 rwanda_regions$data$`country/RWA`$arcs$containedInPlace$nodes |>
-  lapply(\(x) data.frame(
-    name = x$name,
-    types = paste(x$types, collapse = ", ")
-  )) |>
+  lapply(\(x) {
+    data.frame(
+      name = x$name,
+      types = paste(x$types, collapse = ", ")
+    )
+  }) |>
   bind_rows() |>
   kable(caption = "Places containing Rwanda")
 ```
