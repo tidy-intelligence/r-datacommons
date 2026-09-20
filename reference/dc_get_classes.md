@@ -43,8 +43,6 @@ A list (if `return_type = "list"`) or JSON string (if
 ## Examples
 
 ``` r
-if (FALSE) { # dc_has_api_key()
 # Get all entity classes
 all_classes <- dc_get_classes(return_type = "json")
-}
 ```

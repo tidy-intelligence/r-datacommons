@@ -48,11 +48,11 @@ A list or JSON string, depending on `return_type`.
 ## Examples
 
 ``` r
-if (FALSE) { # dc_has_api_key()
 # Get the DCID for a coordinate
 dc_get_dcid_by_coordinates(37.42, -122.08)
+#> [1] "{\"entities\":[{\"node\":\"37.42#-122.08\"}]}"
 
 # Batch query for multiple coordinates
 dc_get_dcid_by_coordinates(c(34.05, 40.71), c(-118.25, -74.01))
-}
+#> [1] "{\"entities\":[{\"node\":\"34.05#-118.25\",\"candidates\":[{\"dcid\":\"geoId/06037\",\"dominantType\":\"County\"},{\"dcid\":\"geoId/06\",\"dominantType\":\"State\"},{\"dcid\":\"country/USA\",\"dominantType\":\"Country\"}]},{\"node\":\"40.71#-74.01\",\"candidates\":[{\"dcid\":\"geoId/36047\",\"dominantType\":\"County\"},{\"dcid\":\"geoId/36\",\"dominantType\":\"State\"},{\"dcid\":\"country/USA\",\"dominantType\":\"Country\"}]}]}"
 ```

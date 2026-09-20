@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">datacommons</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,21 +92,21 @@
 <span>  variable_dcids <span class="op">=</span> <span class="st">"Count_Person"</span>,</span>
 <span>  entity_dcids <span class="op">=</span> <span class="st">"country/USA"</span>,</span>
 <span>  return_type <span class="op">=</span> <span class="st">"data.frame"</span>,</span>
-<span>  filter_facet_id <span class="op">=</span> <span class="fl">3981252704</span></span>
+<span>  filter_facet_ids <span class="op">=</span> <span class="st">"18369491376878146239"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">country_level</span>, <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   entity_dcid              entity_name variable_dcid    variable_name date</span></span>
-<span><span class="co">#&gt; 1 country/USA United States of America  Count_Person Total population 1960</span></span>
-<span><span class="co">#&gt; 2 country/USA United States of America  Count_Person Total population 1961</span></span>
-<span><span class="co">#&gt; 3 country/USA United States of America  Count_Person Total population 1962</span></span>
-<span><span class="co">#&gt; 4 country/USA United States of America  Count_Person Total population 1963</span></span>
-<span><span class="co">#&gt; 5 country/USA United States of America  Count_Person Total population 1964</span></span>
-<span><span class="co">#&gt;       value   facet_id                 facet_name</span></span>
-<span><span class="co">#&gt; 1 180671000 3981252704 WorldDevelopmentIndicators</span></span>
-<span><span class="co">#&gt; 2 183691000 3981252704 WorldDevelopmentIndicators</span></span>
-<span><span class="co">#&gt; 3 186538000 3981252704 WorldDevelopmentIndicators</span></span>
-<span><span class="co">#&gt; 4 189242000 3981252704 WorldDevelopmentIndicators</span></span>
-<span><span class="co">#&gt; 5 191889000 3981252704 WorldDevelopmentIndicators</span></span></code></pre></div>
+<span><span class="co">#&gt;   entity_dcid   entity_name variable_dcid    variable_name date     value</span></span>
+<span><span class="co">#&gt; 1 country/USA United States  Count_Person Total population 1960 180671000</span></span>
+<span><span class="co">#&gt; 2 country/USA United States  Count_Person Total population 1961 183691000</span></span>
+<span><span class="co">#&gt; 3 country/USA United States  Count_Person Total population 1962 186538000</span></span>
+<span><span class="co">#&gt; 4 country/USA United States  Count_Person Total population 1963 189242000</span></span>
+<span><span class="co">#&gt; 5 country/USA United States  Count_Person Total population 1964 191889000</span></span>
+<span><span class="co">#&gt;               facet_id                 facet_name</span></span>
+<span><span class="co">#&gt; 1 18369491376878146239 WorldDevelopmentIndicators</span></span>
+<span><span class="co">#&gt; 2 18369491376878146239 WorldDevelopmentIndicators</span></span>
+<span><span class="co">#&gt; 3 18369491376878146239 WorldDevelopmentIndicators</span></span>
+<span><span class="co">#&gt; 4 18369491376878146239 WorldDevelopmentIndicators</span></span>
+<span><span class="co">#&gt; 5 18369491376878146239 WorldDevelopmentIndicators</span></span></code></pre></div>
 <p>If you want to get different population numbers from the <a href="https://datacommons.org/browser/dc/base/USCensusPEP_Annual_Population" class="external-link">US Census</a> on the state level:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">state_level</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dc_get_observations.html">dc_get_observations</a></span><span class="op">(</span></span>
@@ -115,7 +115,7 @@
 <span>  parent_entity <span class="op">=</span> <span class="st">"country/USA"</span>,</span>
 <span>  entity_type <span class="op">=</span> <span class="st">"State"</span>,</span>
 <span>  return_type <span class="op">=</span> <span class="st">"data.frame"</span>,</span>
-<span>  filter_facet_id <span class="op">=</span> <span class="fl">2176550201</span></span>
+<span>  filter_facet_ids <span class="op">=</span> <span class="st">"8912910856362438925"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">state_level</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   entity_dcid entity_name variable_dcid    variable_name date    value</span></span>
@@ -124,12 +124,12 @@
 <span><span class="co">#&gt; 3    geoId/04     Arizona  Count_Person Total population 2021  7276316</span></span>
 <span><span class="co">#&gt; 4    geoId/05    Arkansas  Count_Person Total population 2021  3025891</span></span>
 <span><span class="co">#&gt; 5    geoId/06  California  Count_Person Total population 2021 39237836</span></span>
-<span><span class="co">#&gt;     facet_id                    facet_name</span></span>
-<span><span class="co">#&gt; 1 2176550201 USCensusPEP_Annual_Population</span></span>
-<span><span class="co">#&gt; 2 2176550201 USCensusPEP_Annual_Population</span></span>
-<span><span class="co">#&gt; 3 2176550201 USCensusPEP_Annual_Population</span></span>
-<span><span class="co">#&gt; 4 2176550201 USCensusPEP_Annual_Population</span></span>
-<span><span class="co">#&gt; 5 2176550201 USCensusPEP_Annual_Population</span></span></code></pre></div>
+<span><span class="co">#&gt;              facet_id                    facet_name</span></span>
+<span><span class="co">#&gt; 1 8912910856362438925 USCensusPEP_Annual_Population</span></span>
+<span><span class="co">#&gt; 2 8912910856362438925 USCensusPEP_Annual_Population</span></span>
+<span><span class="co">#&gt; 3 8912910856362438925 USCensusPEP_Annual_Population</span></span>
+<span><span class="co">#&gt; 4 8912910856362438925 USCensusPEP_Annual_Population</span></span>
+<span><span class="co">#&gt; 5 8912910856362438925 USCensusPEP_Annual_Population</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>

@@ -43,11 +43,11 @@ A list or JSON string, depending on `return_type`.
 ## Examples
 
 ``` r
-if (FALSE) { # dc_has_api_key()
 # Get the DCID for the United States (Wikidata ID "Q30")
 dc_get_dcids_by_wikidata_id("Q30")
+#> [1] "{\"entities\":[{\"node\":\"Q30\",\"candidates\":[{\"dcid\":\"country/USA\"}]}]}"
 
 # Batch query for multiple Wikidata IDs
 dc_get_dcids_by_wikidata_id(c("Q30", "Q60"))
-}
+#> [1] "{\"entities\":[{\"node\":\"Q60\",\"candidates\":[{\"dcid\":\"geoId/3651000\"}]},{\"node\":\"Q30\",\"candidates\":[{\"dcid\":\"country/USA\"}]}]}"
 ```

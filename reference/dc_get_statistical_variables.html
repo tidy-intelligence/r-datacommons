@@ -13,7 +13,7 @@ expression = "&amp;lt;-typeOf".'></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">datacommons</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@ expression = "&amp;lt;-typeOf".'></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get Available Statistical Variables from Data Commons</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/main/R/node.R" class="external-link"><code>R/node.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidy-intelligence/r-datacommons/blob/v0.1.1/R/node.R" class="external-link"><code>R/node.R</code></a></small>
       <div class="d-none name"><code>dc_get_statistical_variables.Rd</code></div>
     </div>
 
@@ -88,10 +88,10 @@ endpoint. For custom deployments, it must end with "/core/api/v2/".</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># dc_has_api_key()</span></span></span>
-<span class="r-in"><span><span class="co"># Get all statistical variables</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get all statistical variables</span></span></span>
 <span class="r-in"><span><span class="va">statistical_vars</span> <span class="op">&lt;-</span> <span class="fu">dc_get_statistical_variables</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> iterating <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span>  85% | ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> iterating <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | ETA:  0s</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

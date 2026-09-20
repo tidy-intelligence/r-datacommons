@@ -10,16 +10,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/tidy-intelligence/r-datacommons/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/tidy-intelligence/r-datacommons/blob/v0.1.1/DESCRIPTION)
 
 Scheuch C, Emery T (2026). *datacommons: Client for the 'Google Data
-Commons API V2'*. R package version 0.1.0.9002,
+Commons API V2'*. R package version 0.1.1,
 <https://github.com/tidy-intelligence/r-datacommons>.
 
     @Manual{,
       title = {datacommons: Client for the 'Google Data Commons API V2'},
       author = {Christoph Scheuch and Teal Emery},
       year = {2026},
-      note = {R package version 0.1.0.9002},
+      note = {R package version 0.1.1},
       url = {https://github.com/tidy-intelligence/r-datacommons},
     }

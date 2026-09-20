@@ -49,20 +49,22 @@ A list or JSON string, depending on `return_type`.
 ## Examples
 
 ``` r
-if (FALSE) { # dc_has_api_key()
 # Get the DCID of "Georgia" (ambiguous without type)
 dc_get_dcids_by_name(names = "Georgia")
+#> [1] "{\"entities\":[{\"node\":\"Georgia\",\"candidates\":[{\"dcid\":\"geoId/13\"},{\"dcid\":\"country/GEO\"},{\"dcid\":\"geoId/5027700\"}]}]}"
 
 # Get the DCID of "Georgia" as a state
 dc_get_dcids_by_name(names = "Georgia", entity_type = "State")
+#> [1] "{\"entities\":[{\"node\":\"Georgia\",\"candidates\":[{\"dcid\":\"geoId/13\"}]}]}"
 
 # Get the DCID of "New York City" as a city
 dc_get_dcids_by_name(names = "New York City", entity_type = "City")
+#> [1] "{\"entities\":[{\"node\":\"New York City\",\"candidates\":[{\"dcid\":\"geoId/3651000\"}]}]}"
 
 # Query multiple cities
 dc_get_dcids_by_name(
   names = c("Mountain View, CA", "New York City"),
   entity_type = "City"
 )
-}
+#> [1] "{\"entities\":[{\"node\":\"Mountain View, CA\",\"candidates\":[{\"dcid\":\"geoId/0649670\"},{\"dcid\":\"geoId/0649651\"}]},{\"node\":\"New York City\",\"candidates\":[{\"dcid\":\"geoId/3651000\"}]}]}"
 ```

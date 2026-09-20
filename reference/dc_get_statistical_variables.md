@@ -43,8 +43,8 @@ A list (if `return_type = "list"`) or JSON string (if
 ## Examples
 
 ``` r
-if (FALSE) { # dc_has_api_key()
 # Get all statistical variables
 statistical_vars <- dc_get_statistical_variables()
-}
+#> iterating ■■■■■■■■■■■■■■■■■■■■■■■■■■■       85% | ETA:  0s
+#> iterating ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
 ```
