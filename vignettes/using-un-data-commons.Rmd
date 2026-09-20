@@ -59,6 +59,16 @@ dc_set_base_url(un_base_url)
 This deployment answers requests without an API key, so there is no equivalent of `dc_set_api_key()` to call here. If that ever changes, or if you use a different Data Commons Core deployment that does require one, pass `api_key` the same way you would for the public API.
 
 ```{r un-check, echo=FALSE}
+# Skip live queries during R CMD check on CRAN. R CMD build doesn't set
+# _R_CHECK_PACKAGE_NAME_, so the vignette shipped in the tarball still renders
+# fully.
+on_cran_check <- nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_")) &&
+  !identical(Sys.getenv("NOT_CRAN"), "true")
+
+if (on_cran_check) {
+  knitr::knit_exit()
+}
+
 un_reachable <- tryCatch(
   {
     dc_get_node(

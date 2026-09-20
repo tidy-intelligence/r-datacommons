@@ -77,21 +77,21 @@ country_level <- dc_get_observations(
   variable_dcids = "Count_Person",
   entity_dcids = "country/USA",
   return_type = "data.frame",
-  filter_facet_id = 3981252704
+  filter_facet_ids = "18369491376878146239"
 )
 head(country_level, 5)
-#>   entity_dcid              entity_name variable_dcid    variable_name date
-#> 1 country/USA United States of America  Count_Person Total population 1960
-#> 2 country/USA United States of America  Count_Person Total population 1961
-#> 3 country/USA United States of America  Count_Person Total population 1962
-#> 4 country/USA United States of America  Count_Person Total population 1963
-#> 5 country/USA United States of America  Count_Person Total population 1964
-#>       value   facet_id                 facet_name
-#> 1 180671000 3981252704 WorldDevelopmentIndicators
-#> 2 183691000 3981252704 WorldDevelopmentIndicators
-#> 3 186538000 3981252704 WorldDevelopmentIndicators
-#> 4 189242000 3981252704 WorldDevelopmentIndicators
-#> 5 191889000 3981252704 WorldDevelopmentIndicators
+#>   entity_dcid   entity_name variable_dcid    variable_name date     value
+#> 1 country/USA United States  Count_Person Total population 1960 180671000
+#> 2 country/USA United States  Count_Person Total population 1961 183691000
+#> 3 country/USA United States  Count_Person Total population 1962 186538000
+#> 4 country/USA United States  Count_Person Total population 1963 189242000
+#> 5 country/USA United States  Count_Person Total population 1964 191889000
+#>               facet_id                 facet_name
+#> 1 18369491376878146239 WorldDevelopmentIndicators
+#> 2 18369491376878146239 WorldDevelopmentIndicators
+#> 3 18369491376878146239 WorldDevelopmentIndicators
+#> 4 18369491376878146239 WorldDevelopmentIndicators
+#> 5 18369491376878146239 WorldDevelopmentIndicators
 ```
 
 If you want to get different population numbers from the [US
@@ -105,7 +105,7 @@ state_level <- dc_get_observations(
   parent_entity = "country/USA",
   entity_type = "State",
   return_type = "data.frame",
-  filter_facet_id = 2176550201
+  filter_facet_ids = "8912910856362438925"
 )
 head(state_level, 5)
 #>   entity_dcid entity_name variable_dcid    variable_name date    value
@@ -114,12 +114,12 @@ head(state_level, 5)
 #> 3    geoId/04     Arizona  Count_Person Total population 2021  7276316
 #> 4    geoId/05    Arkansas  Count_Person Total population 2021  3025891
 #> 5    geoId/06  California  Count_Person Total population 2021 39237836
-#>     facet_id                    facet_name
-#> 1 2176550201 USCensusPEP_Annual_Population
-#> 2 2176550201 USCensusPEP_Annual_Population
-#> 3 2176550201 USCensusPEP_Annual_Population
-#> 4 2176550201 USCensusPEP_Annual_Population
-#> 5 2176550201 USCensusPEP_Annual_Population
+#>              facet_id                    facet_name
+#> 1 8912910856362438925 USCensusPEP_Annual_Population
+#> 2 8912910856362438925 USCensusPEP_Annual_Population
+#> 3 8912910856362438925 USCensusPEP_Annual_Population
+#> 4 8912910856362438925 USCensusPEP_Annual_Population
+#> 5 8912910856362438925 USCensusPEP_Annual_Population
 ```
 
 ## Contributing

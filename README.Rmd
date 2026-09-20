@@ -72,7 +72,7 @@ country_level <- dc_get_observations(
   variable_dcids = "Count_Person",
   entity_dcids = "country/USA",
   return_type = "data.frame",
-  filter_facet_id = 3981252704
+  filter_facet_ids = "18369491376878146239"
 )
 head(country_level, 5)
 ```
@@ -86,7 +86,7 @@ state_level <- dc_get_observations(
   parent_entity = "country/USA",
   entity_type = "State",
   return_type = "data.frame",
-  filter_facet_id = 2176550201
+  filter_facet_ids = "8912910856362438925"
 )
 head(state_level, 5)
 ```

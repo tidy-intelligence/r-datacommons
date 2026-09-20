@@ -25,5 +25,10 @@ Authors:
   \item Teal Emery \email{lte@tealinsights.com}
 }
 
+Other contributors:
+\itemize{
+  \item Novica Nakov \email{nnovica@gmail.com} (\href{https://orcid.org/0009-0005-7773-7718}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}
